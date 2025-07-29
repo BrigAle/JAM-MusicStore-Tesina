@@ -28,6 +28,6 @@
   <div id="footer">
     <p>&copy; 2025 JAM Music Store - Tutti i diritti riservati</p>
   </div>
-
+<div><p>can</p></div>
 </body>
 </html>
