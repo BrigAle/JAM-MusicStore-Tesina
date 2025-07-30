@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jam Music Store</title>
   <link rel="stylesheet" href="risorse\CSS\style.css" />
-  <link rel="shortcut icon" href="risorse\IMG\jam.ico" type="image/x-ico" />
 </head>
 
 <body>
@@ -14,20 +13,16 @@
     <div class="logo">
       <img src="risorse/IMG/JAM_logo.png" alt="JAM Music Store" />
     </div>
-
     <div class="navSearch">
-      <input type="text" placeholder="Cerca brani, artisti..." />
+      <input type="text" placeholder="Cerca brani, artisti, album..." />
       <button type="submit">🔍</button>
     </div>
-
     <div class="navLink">
-      <a href="#"><img src="risorse/IMG/home.png" alt="casetta"></a>
-      <a href="#">Barra di ricerca</a>
-      <a href="#">Login</a>
-      <a href="#">Carrello</a>
+      <a href="#"><img src="risorse\IMG\home.png" alt="casetta"></a>
       <a href="#">Catalogo</a>
+      <a href="#">Contatti</a>
+      <a href="#">Login</a>
     </div>
-
   </div>
 
   <div class="content">
