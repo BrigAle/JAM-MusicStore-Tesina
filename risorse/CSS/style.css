@@ -1,76 +1,162 @@
+/* Base pagina */
 html,
 body {
+  margin: 0;
+  padding: 0;
   background-color: #121212;
   color: #F5F5F5;
-  font-family: "Arial", sans-serif;
+  font-family: Arial, sans-serif;
   line-height: 1.6;
 }
 
+/* Header */
 .header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   background-color: #1F1F1F;
   padding: 10px 20px;
   border-bottom: 2px solid #E50914;
-  flex-wrap: wrap;
 }
-.logo {
-  border-radius: 25px;
-}
+
+/* Logo */
 .logo img {
-  height: 100px;
+  height: 80px;
 }
+
+/* Form di ricerca */
 .navSearch {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-  max-width: 800px;
+  flex: 1;
   margin: 0 20px;
 }
 
-.navSearch input {
-  flex-grow: 1;
-  padding: 10px;
-  font-size: 18px;
-  border: none;
-  border-radius: 5px 0 0 5px;
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+/* Select categoria */
+.searchContainer select {
   background-color: #2C2C2C;
   color: #F5F5F5;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
 }
-.navSearch input:focus {
+
+/* Input di ricerca */
+.searchContainer input[type="text"] {
+  max-width: 600px;
+  flex: 1;
+  background-color: #2C2C2C;
+  color: #F5F5F5;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.searchContainer input[type="text"]:focus {
   outline: none;
   background-color: #3C3C3C;
 }
-.navSearch button {
- padding: 10px 15px;
-  background-color: #2C2C2C;
-  font-size: 16px;
+
+/* Bottone cerca */
+.searchContainer button {
+  background-color: #E50914;
+  color: #F5F5F5;
   border: none;
-  border-radius: 0 5px 5px 0;
-  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 14px;
 }
-.navSearch button:hover {
+
+.searchContainer button:hover {
   background-color: #b4060e;
 }
+
+/* Label commutatore */
+.label_commutator {
+  cursor: pointer;
+  color: #F5F5F5;
+  background-color: #2C2C2C;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  user-select: none;
+}
+
+.label_commutator:hover {
+  background-color: #3C3C3C;
+}
+
+/* Checkbox nascosto */
+#advanced_commutator {
+  display: none;
+}
+
+/* Contenitore filtri avanzati (centro in riga) */
+.advanced_filters {
+  width: 300px;
+  display: none;
+  position: absolute;
+  left: 40%;
+  transform: translateX(-50%);
+  top: 70px;
+  background-color: #1F1F1F;
+  color: #F5F5F5;
+  padding: 2px 20px;
+  border: 2px solid #E50914;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 10;
+}
+.advanced_filters h3{
+  margin-top: 5px;
+}
+
+/* Mostra se checkbox checked */
+#advanced_commutator:checked+.label_commutator+.advanced_filters {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Stile singoli filtri */
+.filters_container label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+/* Nav links */
 .navLink {
-display: flex;
+  display: flex;
   gap: 15px;
 }
+
 .navLink a {
   color: #F5F5F5;
   text-decoration: none;
-  padding: 6px 12px;
+  padding: 6px 10px;
   border-radius: 4px;
-  transition: background 0.3s ease;
-}
-.navLink a:hover {
-  background-color: #E50914;
-  color: #ffffff;
+  transition: background 0.3s;
+  font-size: 14px;
 }
 
-/* Contenuto */
+.navLink a:hover {
+  background-color: #E50914;
+}
+
+/* Sezione contenuti */
 .content {
   padding: 40px 20px;
   max-width: 800px;
