@@ -89,12 +89,45 @@
 
 
   <div class="content">
-    <div class="contenuti">
-      <h1>Benvenuti su JAM Music Store</h1>
-      <p>Scopri la nostra vasta selezione di musica, dagli ultimi album ai classici intramontabili. Sia che tu sia un appassionato di CD o un collezionista di vinili, abbiamo qualcosa per te!</p>
-      <h2>Novità in Catalogo</h2>
+    <div class="prodotti">
+      <h2>I tuoi prodotti</h2>
+      <ul>
+        <li>Prodotto 1</li>
+        <li>Prodotto 2</li>
+        <li>Prodotto 3</li>
+      </ul>
+    </div>
+    <div class="prodotti">
+      <h2>I tuoi prodotti</h2>
+      <ul>
+        <li>Prodotto 1</li>
+        <li>Prodotto 2</li>
+        <li>Prodotto 3</li>
+      </ul>
+    </div>
+    <div class="prodotti">
+      <h2>I tuoi prodotti</h2>
+      <ul>
+        <li>Prodotto 1</li>
+        <li>Prodotto 2</li>
+        <li>Prodotto 3</li>
+      </ul>
+    </div>
+    <div class="prodotti">
+      <h2>I tuoi prodotti</h2>
+      <ul>
+        <li>Prodotto 1</li>
+        <li>Prodotto 2</li>
+        <li>Prodotto 3</li>
+      </ul>
+    </div>
+    <div class="totale">
+      <h2>Totale</h2>
+      <p>€ 0,00</p>
+      <button type="button">Procedi al checkout</button>
     </div>
   </div>
+
 
   <div class="pdp">
     <div class="pdp-center">
@@ -104,6 +137,6 @@
       <a href="FAQs.php">FAQs</a>
     </div>
   </div>
-
 </body>
+
 </html>

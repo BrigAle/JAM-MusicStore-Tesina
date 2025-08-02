@@ -87,15 +87,23 @@
 
   </div>
 
-
+  <!-- contenuto per login -->
   <div class="content">
-    <div class="contenuti">
-      <h1>Benvenuti su JAM Music Store</h1>
-      <p>Scopri la nostra vasta selezione di musica, dagli ultimi album ai classici intramontabili. Sia che tu sia un appassionato di CD o un collezionista di vinili, abbiamo qualcosa per te!</p>
-      <h2>Novità in Catalogo</h2>
-    </div>
+    <!-- login -->
+    <form action="login.php" method="post">
+      <div class="login_container">
+        <h2>Accedi al tuo account</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+        <!-- submit button -->
+        <button type="submit">Accedi</button>
+      </div>
+    </form>
+    <p>Non sei registrato? <a href="register.php">Registrati qui</a></p>
   </div>
-
+  
   <div class="pdp">
     <div class="pdp-center">
       <p>&copy; 2025 JAM Music Store</p>
@@ -104,6 +112,6 @@
       <a href="FAQs.php">FAQs</a>
     </div>
   </div>
-
 </body>
+
 </html>

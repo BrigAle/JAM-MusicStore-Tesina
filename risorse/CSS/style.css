@@ -53,15 +53,8 @@ body {
   flex-direction: row;
 }
 
-/* Select categoria */
-.searchContainer select {
-  background-color: #2C2C2C;
-  color: #F5F5F5;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-}
+
+
 
 /* Input di ricerca */
 .searchContainer input[type="text"] {
@@ -117,12 +110,12 @@ body {
 
 /* Contenitore filtri avanzati (centro in riga) */
 .advanced_filters {
-  width: 300px;
+  width: -webkit-fill-available;
   display: none;
   position: absolute;
-  left: 40%;
+  left: 50%;
   transform: translateX(-50%);
-  top: 70px;
+  top: 100px;
   background-color: #1F1F1F;
   color: #F5F5F5;
   padding: 2px 20px;
@@ -132,17 +125,27 @@ body {
   z-index: 10;
 }
 
-.advanced_filters h3 {
-  margin-top: 5px;
+.filters_title {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
 }
-
 /* Mostra se checkbox checked */
 #advanced_commutator:checked+.label_commutator+.advanced_filters {
-  display: flex;
-  gap: 20px;
-  align-items: center;
+  display: inline-flex;      /* 1. diventa un contenitore che si ridimensiona in larghezza */
+  flex-wrap: wrap;           /* 2. se non ci stanno più colonne, vanno su una nuova riga */
+  width: auto;               /* 3. larghezza solo quanto servono i figli */
+  max-width: 100%;           /* per non uscire mai fuori dallo schermo */
+  border: 2px solid red;
+  padding: 1rem;
 }
-
+.filters_container {
+  flex: 0 0 auto;            /* non si allunga né si restringe */
+  margin-right: 2rem;        /* spazio orizzontale fra le colonne */
+  margin-bottom: 1rem;       /* spazio verticale quando wrap */
+}
 /* Stile singoli filtri */
 .filters_container label {
   display: flex;
@@ -173,15 +176,15 @@ body {
 /* Sezione contenuti */
 
 .content {
-  margin-top: 100px;
+  margin-top: 130px;
   /* Spazio per il fixed header */
   padding: 20px;
-  display: flex;
   min-height: 100vh;
 }
 
 /* voglio inserire i contenuti in riga*/
 .contenuti {
+  margin-top: 100px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -191,11 +194,29 @@ body {
 }
 
 /* Footer */
+
 .pdp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #2A2A2A;
   color: #CCCCCC;
-  text-align: center;
-  padding: 5px;
+  padding: 10px 20px;
   font-size: 15px;
   margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.pdp-right a {
+  color: #CCCCCC;
+  text-decoration: none;
+}
+
+.pdp-right a:hover {
+  text-decoration: underline;
+}
+
+.pdp-center {
+  text-align: center;
+  flex: 1;
 }

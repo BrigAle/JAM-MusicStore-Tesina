@@ -89,11 +89,19 @@
 
 
   <div class="content">
-    <div class="contenuti">
-      <h1>Benvenuti su JAM Music Store</h1>
-      <p>Scopri la nostra vasta selezione di musica, dagli ultimi album ai classici intramontabili. Sia che tu sia un appassionato di CD o un collezionista di vinili, abbiamo qualcosa per te!</p>
-      <h2>Novità in Catalogo</h2>
-    </div>
+      <ul>
+        <li><p>Domanda 1: Come posso effettuare un ordine?</p></li>
+        <li><p>Domanda 2: Quali metodi di pagamento accettate?</p></li>
+        <li><p>Domanda 3: Posso restituire un prodotto?</p></li>
+        <li><p>Domanda 4: Come posso contattare il servizio clienti?</p></li>
+        <li><p>Domanda 5: Come posso modificare i miei dati personali?</p></li>
+        <li><p>Domanda 6: Come posso cancellare il mio account?</p></li>
+        <li><p>Domanda 7: Come posso recuperare la mia password?</p></li>
+        <li><p>Domanda 8: Come posso visualizzare la mia cronologia ordini?</p></li>
+        <li><p>Domanda 9: Come posso aggiornare le mie informazioni di spedizione?</p></li>
+        <li><p>Domanda 10: Come posso segnalare un problema con un prodotto?</p></li>
+        <li><p>Domanda 11: Come posso iscrivermi alla newsletter?</p></li>
+      </ul>
   </div>
 
   <div class="pdp">

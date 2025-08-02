@@ -19,6 +19,7 @@
       <form action="index.php" method="get">
         <div class="searchContainer">
 
+
           <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
           <button type="submit">🔍</button>
 
@@ -87,14 +88,42 @@
 
   </div>
 
-
+  <!-- contenuto per login -->
   <div class="content">
-    <div class="contenuti">
-      <h1>Benvenuti su JAM Music Store</h1>
-      <p>Scopri la nostra vasta selezione di musica, dagli ultimi album ai classici intramontabili. Sia che tu sia un appassionato di CD o un collezionista di vinili, abbiamo qualcosa per te!</p>
-      <h2>Novità in Catalogo</h2>
-    </div>
+    <!-- login -->
+    <form action="login.php" method="post">
+      <div class="login_container">
+        <h2>Accedi al tuo account</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required />
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
+        <label for="confirm_password">Conferma Password:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required />
+        <label for="phone">Telefono:</label>
+        <input type="tel" id="phone" name="phone" required />
+        <label for="address">Indirizzo:</label>
+        <input type="text" id="address" name="address" required />
+        <label for="city">Città:</label>
+        <input type="text" id="city" name="city" required />
+        <label for="postal_code">Codice Postale:</label>
+        <input type="text" id="postal_code" name="postal_code" required />
+        <label for="country">Paese:</label>
+        <input type="text" id="country" name="country" required />
+        <label for="terms">
+            <input type="checkbox" id="terms" name="terms" required />
+            Accetto i termini e le condizioni
+        </label>
+        <!-- submit button -->
+        <button type="submit">Registrati</button>
+      </div>
+    </form>
+    <p>Già registrato? <a href="login.php">Accedi qui</a></p>
   </div>
+  
 
   <div class="pdp">
     <div class="pdp-center">
@@ -104,6 +133,6 @@
       <a href="FAQs.php">FAQs</a>
     </div>
   </div>
-
 </body>
+
 </html>
