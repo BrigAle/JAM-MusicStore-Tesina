@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+ <xsd:element name="richiesteCrediti">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="richiesta" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="richiesta">
+   <xsd:complexType>
+    <xsd:sequence>
+     <xsd:element ref="id_utente" minOccurs="1" maxOccurs="1"/>
+     <xsd:element ref="importo" minOccurs="1" maxOccurs="1"/>
+     <xsd:element ref="data" minOccurs="1" maxOccurs="1"/>
+     <xsd:element ref="stato" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name ="id" type ="xsd:integer" use="required"/>
+   </xsd:complexType>
+  </xsd:element>
+    
+  <xsd:element name="id_utente" type="xsd:integer"/>
+  <xsd:element name="importo" type="xsd:integer"/> 
+  <xsd:element name="data" type="xsd:date"/>
+  <xsd:element name="stato">
+   <xsd:simpleType>
+    <xsd:restriction base="xsd:string">
+     <xsd:enumeration value="in attesa"/>
+     <xsd:enumeration value="approvata"/>
+     <xsd:enumeration value="rifiutata"/>
+    </xsd:restriction>
+   </xsd:simpleType>
+  </xsd:element>
+</xsd:schema>

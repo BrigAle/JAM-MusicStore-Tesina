@@ -7,22 +7,35 @@ body {
   color: #F5F5F5;
   font-family: Arial, sans-serif;
   line-height: 1.6;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Header */
 .header {
+  position: fixed;
+  width: -webkit-fill-available;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   background-color: #1F1F1F;
-  padding: 10px 20px;
-  border-bottom: 2px solid #E50914;
+  padding: 5px 15px;
+  border-bottom: 1px solid #2C2C2C;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: auto;
+  height: 100px;
+  width: 107px;
 }
 
 /* Logo */
 .logo img {
-  height: 80px;
+  height: 100px;
 }
 
 /* Form di ricerca */
@@ -118,7 +131,8 @@ body {
   white-space: nowrap;
   z-index: 10;
 }
-.advanced_filters h3{
+
+.advanced_filters h3 {
   margin-top: 5px;
 }
 
@@ -157,10 +171,23 @@ body {
 }
 
 /* Sezione contenuti */
+
 .content {
-  padding: 40px 20px;
-  max-width: 800px;
-  margin: auto;
+  margin-top: 100px;
+  /* Spazio per il fixed header */
+  padding: 20px;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* voglio inserire i contenuti in riga*/
+.contenuti {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  flex-wrap: wrap;
 }
 
 /* Footer */
@@ -168,7 +195,7 @@ body {
   background-color: #2A2A2A;
   color: #CCCCCC;
   text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  margin-top: 40px;
+  padding: 5px;
+  font-size: 15px;
+  margin-top: 15px;
 }

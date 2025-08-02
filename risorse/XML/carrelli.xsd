@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:element name="carrelli">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="carrello" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="carrello">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="id_utente" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="prodotti" minOccurs="0" maxOccurs="1"/>
+        <xsd:element ref="prezzo_totale_carrello" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+      <xsd:attribute name="id" type="xsd:integer" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:element name="id_utente" type="xsd:integer"/>
+  <xsd:element name="prodotti">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="prodotto" minOccurs="1" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="prodotto">
+   <xsd:complexType>
+    <xsd:sequence>
+    <xsd:element ref="id_prodotto" minOccurs="1" maxOccurs="1"/>
+    <xsd:element ref="quantita" minOccurs="1" maxOccurs="1"/>
+    <xsd:element ref="prezzo_unitario" minOccurs="1" maxOccurs="1"/>
+    <xsd:element ref="prezzo_totale" minOccurs="1" maxOccurs="1"/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+ 
+  <xsd:element name="id_prodotto" type="xsd:integer"/>
+  <xsd:element name="quantita" type="xsd:integer"/>
+  <xsd:element name="prezzo_unitario" type="xsd:float"/>
+  <xsd:element name="prezzo_totale" type="xsd:float"/>
+  <xsd:element name="prezzo_totale_carrello" type="xsd:float"/>
+
+</xsd:schema>

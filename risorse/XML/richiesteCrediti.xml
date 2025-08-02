@@ -1,0 +1,15 @@
+<richiesteCrediti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="richiesteCrediti.xsd">
+    <richiesta id="1">
+        <id_utente>1</id_utente>
+        <importo>25</importo>
+        <data>2025-06-26</data>
+        <stato>in attesa</stato>
+    </richiesta>
+    <richiesta id="2">
+        <id_utente>2</id_utente>
+        <importo>50</importo>
+        <data>2025-06-25</data>
+        <stato>approvata</stato>
+    </richiesta>
+</richiesteCrediti>

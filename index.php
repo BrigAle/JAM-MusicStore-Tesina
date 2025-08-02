@@ -6,12 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jam Music Store</title>
   <link rel="stylesheet" href="risorse/CSS/style.css" type="text/css" />
+  <link rel="icon" href="risorse/IMG/jam.ico" type="image/x-icon" />
 </head>
 
 <body>
   <div class="header">
     <div class="logo">
-      <img src="risorse/IMG/JAM_logo.png" alt="JAM Music Store" />
+      <img src="risorse/IMG/JAM_logo (2).png" alt="JAM Music Store" />
     </div>
 
     <div class="navSearch">
@@ -51,11 +52,18 @@
       <a href="#">Contatti</a>
       <a href="#">Login</a>
     </div>
+
   </div>
 
+
   <div class="content">
-    <!-- contenuto -->
+    <div class="contenuti"> 
+      <h1>Benvenuti su JAM Music Store</h1>
+      <p>Scopri la nostra vasta selezione di musica, dagli ultimi album ai classici intramontabili. Sia che tu sia un appassionato di CD o un collezionista di vinili, abbiamo qualcosa per te!</p>
+      <h2>Novità in Catalogo</h2>
+    </div>
   </div>
+
 
   <div class="pdp">
     <p>&copy; 2025 JAM Music Store</p>

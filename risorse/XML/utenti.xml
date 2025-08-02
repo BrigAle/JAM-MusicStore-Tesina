@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<utenti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="utenti.xsd">
+
+    <utente id="1">
+        <ruolo>cliente</ruolo>
+        <reputazione>4.5</reputazione>
+        <stato>1</stato>
+        <portafoglio>35.50</portafoglio>
+        <crediti>300.00</crediti>
+        <data_iscrizione>2025-06-25</data_iscrizione>
+    </utente>
+    <utente id="2">
+        <ruolo>gestore</ruolo>
+        <reputazione>0</reputazione>
+        <stato>1</stato>
+        <portafoglio>0.00</portafoglio>
+        <crediti>0.00</crediti>
+        <data_iscrizione>2025-01-01</data_iscrizione>
+    </utente>
+        
+</utenti>

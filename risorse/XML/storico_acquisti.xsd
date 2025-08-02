@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="storici">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="storico" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="storico">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="id_utente"/>
+        <xsd:element ref="data"/>
+        <xsd:element ref="prodotti"/>
+        <xsd:element ref="prezzo_totale_ordine"/>
+      </xsd:sequence>
+      <xsd:attribute name="id" type="xsd:integer" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="prodotti">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="prodotto" minOccurs="1" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="prodotto">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="id_prodotto"/>
+        <xsd:element ref="quantita"/>
+        <xsd:element ref="prezzo_unitario"/>
+        <xsd:element ref="prezzo_totale"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="id_utente" type="xsd:integer"/>
+  <xsd:element name="data" type="xsd:date"/>
+  <xsd:element name="id_prodotto" type="xsd:integer"/>
+  <xsd:element name="quantita" type="xsd:integer"/>
+  <xsd:element name="prezzo_unitario" type="xsd:float"/>
+  <xsd:element name="prezzo_totale" type="xsd:float"/>
+  <xsd:element name="prezzo_totale_ordine" type="xsd:float"/>
+</xsd:schema>

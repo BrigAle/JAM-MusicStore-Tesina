@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<risposte xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="risposte.xsd">
+ <risposta id="1">
+  <id_recensione>1</id_recensione>
+  <id_utente>2</id_utente>
+  <commento>Si confermo che e' un ottimo prodotto!</commento>
+  <data>2025-06-12</data>
+  <ora>10:25</ora>
+ </risposta>
+ <risposta id="2">
+  <id_recensione>1</id_recensione>
+  <id_utente>3</id_utente>
+  <commento>Confermo, anche il mio ordine e' 
+   arrivato in ritardo.</commento>
+  <data>2025-05-11</data>
+  <ora>11:42</ora>
+ </risposta>
+</risposte>

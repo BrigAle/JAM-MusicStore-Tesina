@@ -1,0 +1,39 @@
+<carrelli xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="carrelli.xsd">
+    <carrello id="1">
+        <id_utente>1001</id_utente>
+        <prodotti>
+            <prodotto>
+                <id_prodotto>4</id_prodotto>
+                <quantita>2</quantita>
+                <prezzo_unitario>250.00</prezzo_unitario>
+                <prezzo_totale>500.00</prezzo_totale>
+            </prodotto>
+            <prodotto>
+                <id_prodotto>6</id_prodotto>
+                <quantita>1</quantita>
+                <prezzo_unitario>150.00</prezzo_unitario>
+                <prezzo_totale>150.00</prezzo_totale>
+            </prodotto>
+        </prodotti>
+        <prezzo_totale_carrello>650.00</prezzo_totale_carrello>
+    </carrello>
+    <carrello id="2">
+        <id_utente>1002</id_utente>
+        <prodotti>
+            <prodotto>
+                <id_prodotto>1</id_prodotto>
+                <quantita>3</quantita>
+                <prezzo_unitario>100.00</prezzo_unitario>
+                <prezzo_totale>300.00</prezzo_totale>
+            </prodotto>
+            <prodotto>
+                <id_prodotto>4</id_prodotto>
+                <quantita>1</quantita>
+                <prezzo_unitario>200.00</prezzo_unitario>
+                <prezzo_totale>200.00</prezzo_totale>
+            </prodotto>
+        </prodotti>
+        <prezzo_totale_carrello>500.00</prezzo_totale_carrello>
+    </carrello>
+</carrelli>

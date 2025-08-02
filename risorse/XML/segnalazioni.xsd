@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="segnalazioni">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="segnalazione" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="segnalazione">
+   <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element ref="id_contenuto" minOccurs="1" maxOccurs="1"/>
+      <xsd:element ref="id_utente" minOccurs="1" maxOccurs="1"/>
+      <xsd:element ref="motivo" minOccurs="0" maxOccurs="1"/>
+      <xsd:element ref="data" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="id_contenuto">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:pattern value="RC-[0-9]+|RS-[0-9]+"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+  <xsd:element name="id_utente" type="xsd:integer"/>
+  <xsd:element name="motivo" type="xsd:string"/>
+  <xsd:element name="data" type="xsd:date"/>
+</xsd:schema>

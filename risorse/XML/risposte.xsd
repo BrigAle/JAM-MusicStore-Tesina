@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="risposte">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="risposta" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="risposta">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="id_recensione" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="id_utente" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="commento" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="data" minOccurs="1" maxOccurs="1"/>
+        <xsd:element ref="ora" minOccurs="1" maxOccurs="1"/>
+      </xsd:sequence>
+      <xsd:attribute name="id" type="xsd:integer" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="id_recensione" type="xsd:integer"/>
+  <xsd:element name="id_utente" type="xsd:integer"/>
+  <xsd:element name="commento" type="xsd:string"/>
+  <xsd:element name="data" type="xsd:date"/>
+
+  <xsd:element name="ora">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+        <xsd:pattern value="(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9])"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:element>
+
+</xsd:schema>

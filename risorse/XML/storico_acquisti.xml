@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<storici xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="Storico_Acquisti.xsd">
+  <storico id="1">
+    <id_utente>5</id_utente>
+    <data>2025-05-13</data>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>2</id_prodotto>
+        <quantita>2</quantita>
+        <prezzo_unitario>12.50</prezzo_unitario>
+        <prezzo_totale>25.00</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>102</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>35.00</prezzo_unitario>
+        <prezzo_totale>35.00</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_ordine>60.00</prezzo_totale_ordine>
+  </storico>
+
+  <storico id="2">
+    <id_utente>7</id_utente>
+    <data>2025-05-10</data>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>109</id_prodotto>
+        <quantita>3</quantita>
+        <prezzo_unitario>10.00</prezzo_unitario>
+        <prezzo_totale>30.00</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_ordine>30.00</prezzo_totale_ordine>
+  </storico>
+</storici>

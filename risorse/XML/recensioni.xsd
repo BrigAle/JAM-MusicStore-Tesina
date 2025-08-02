@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+ <xsd:element name="recensioni">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element ref="recensione" minOccurs="0" maxOccurs="unbounded"/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+  
+  <xsd:element name="recensione">
+   <xsd:complexType>
+    <xsd:sequence>
+     <xsd:element ref="id_prodotto" minOccurs="1" maxOccurs="1"/>
+     <xsd:element ref="id_utente" minOccurs="1" maxOccurs="1"/>
+     <xsd:element ref="commento" minOccurs="0"/>
+     <xsd:element ref="valutazione" minOccurs="1" maxOccurs="1"/>
+     <xsd:element ref="voti_utili" minOccurs="0" maxOccurs="1" />
+     <xsd:element ref="voti_inutili" minOccurs="0" maxOccurs="1" />
+     <xsd:element ref="data" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+   </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="id_prodotto" type="xsd:integer"/>
+  <xsd:element name="id_utente" type="xsd:integer"/>
+  <xsd:element name="commento" type="xsd:string"/>
+  
+  <xsd:element name="valutazione">
+    <xsd:simpleType>
+     <xsd:restriction base="xsd:integer">
+      <xsd:minInclusive value="1"/>
+      <xsd:maxInclusive value="5"/>
+     </xsd:restriction>
+   </xsd:simpleType>
+  </xsd:element>
+
+  <xsd:element name="voti_utili" type="xsd:integer" default="0"/>
+  <xsd:element name="voti_inutili" type="xsd:integer" default="0"/>
+  <xsd:element name="data" type="xsd:date"/>
+
+</xsd:schema>

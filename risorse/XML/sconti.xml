@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sconti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="sconti.xsd">
+  <sconto id="1">
+    <id_prodotto>1</id_prodotto>
+    <id_prodotto>2</id_prodotto>
+    <id_prodotto>4</id_prodotto>
+    <id_prodotto>7</id_prodotto>
+    <id_prodotto>8</id_prodotto>
+    <condizione>Black Friday</condizione>
+    <percentuale>20.0</percentuale>
+    <data_inizio>2025-11-25</data_inizio>
+    <data_fine>2025-11-30</data_fine>
+  </sconto>
+  <sconto id="2">
+    <id_prodotto>2</id_prodotto>
+    <id_prodotto>3</id_prodotto>
+    <id_prodotto>5</id_prodotto>
+    <condizione>Alta reputazione</condizione>
+    <percentuale>5.0</percentuale>
+    <data_inizio>2025-05-01</data_inizio>
+    <data_fine>2025-06-01</data_fine>
+  </sconto>
+</sconti>

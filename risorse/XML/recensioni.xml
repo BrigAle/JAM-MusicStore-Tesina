@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<recensioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="recensioni.xsd">
+  <recensione id="1">
+    <id_prodotto>1</id_prodotto>
+    <id_utente>5</id_utente>
+    <commento>Ottimo prodotto, qualita' eccellente.</commento>
+    <valutazione>5</valutazione>
+    <voti_utili>3</voti_utili>
+    <voti_inutili>0</voti_inutili>
+    <data>2025-05-10</data>
+  </recensione>
+
+  <recensione id="2">
+    <id_prodotto>2</id_prodotto>
+    <id_utente>2</id_utente>
+    <commento>Arrivato in ritardo ma funziona bene.</commento>
+    <valutazione>4</valutazione>
+    <voti_utili>2</voti_utili>
+    <voti_inutili>1</voti_inutili>
+    <data>2025-05-11</data>
+  </recensione>
+</recensioni>
