@@ -20,7 +20,7 @@
         <div class="searchContainer">
 
           <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-          <button type="submit">🔍</button>
+          <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
 
           <!-- Checkbox nascosto -->
           <input type="checkbox" id="advanced_commutator" style="display: none;" />
@@ -89,10 +89,157 @@
 
 
   <div class="content">
-    <div class="contenuti">
-      <h1>Benvenuti su JAM Music Store</h1>
-      <p>Scopri la nostra vasta selezione di musica, dagli ultimi album ai classici intramontabili. Sia che tu sia un appassionato di CD o un collezionista di vinili, abbiamo qualcosa per te!</p>
-      <h2>Novità in Catalogo</h2>
+    <div class="box_prodotto">
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/home.png" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/home.png" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
+      <div class="contenuto_prodotto">
+        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+        <p>Scopri la nostra vasta selezione di musica</p>
+      </div>
     </div>
   </div>
 
@@ -106,4 +253,5 @@
   </div>
 
 </body>
+
 </html>

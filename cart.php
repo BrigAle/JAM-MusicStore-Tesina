@@ -20,7 +20,7 @@
         <div class="searchContainer">
 
           <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-          <button type="submit">🔍</button>
+          <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
 
           <!-- Checkbox nascosto -->
           <input type="checkbox" id="advanced_commutator" style="display: none;" />

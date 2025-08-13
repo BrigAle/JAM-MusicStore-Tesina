@@ -75,10 +75,10 @@ body {
 
 /* Bottone cerca */
 .searchContainer button {
-  background-color: #E50914;
+  background-color: #2c2c2c;
   color: #F5F5F5;
   border: none;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
@@ -100,7 +100,7 @@ body {
 }
 
 .label_commutator:hover {
-  background-color: #3C3C3C;
+  background-color: #b4060e;
 }
 
 /* Checkbox nascosto */
@@ -132,20 +132,30 @@ body {
   margin-bottom: 1rem;
   font-size: 1.2rem;
 }
+
 /* Mostra se checkbox checked */
 #advanced_commutator:checked+.label_commutator+.advanced_filters {
-  display: inline-flex;      /* 1. diventa un contenitore che si ridimensiona in larghezza */
-  flex-wrap: wrap;           /* 2. se non ci stanno più colonne, vanno su una nuova riga */
-  width: auto;               /* 3. larghezza solo quanto servono i figli */
-  max-width: 100%;           /* per non uscire mai fuori dallo schermo */
+  display: inline-flex;
+  /* 1. diventa un contenitore che si ridimensiona in larghezza */
+  flex-wrap: wrap;
+  /* 2. se non ci stanno più colonne, vanno su una nuova riga */
+  width: auto;
+  /* 3. larghezza solo quanto servono i figli */
+  max-width: 100%;
+  /* per non uscire mai fuori dallo schermo */
   border: 2px solid red;
   padding: 1rem;
 }
+
 .filters_container {
-  flex: 0 0 auto;            /* non si allunga né si restringe */
-  margin-right: 2rem;        /* spazio orizzontale fra le colonne */
-  margin-bottom: 1rem;       /* spazio verticale quando wrap */
+  flex: 0 0 auto;
+  /* non si allunga né si restringe */
+  margin-right: 2rem;
+  /* spazio orizzontale fra le colonne */
+  margin-bottom: 1rem;
+  /* spazio verticale quando wrap */
 }
+
 /* Stile singoli filtri */
 .filters_container label {
   display: flex;
@@ -182,15 +192,115 @@ body {
   min-height: 100vh;
 }
 
-/* voglio inserire i contenuti in riga*/
-.contenuti {
-  margin-top: 100px;
+/* I prodotti nel catalogo sono mostrati qui in un sistema a griglia */
+.box_prodotto {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
   flex-wrap: wrap;
+  gap: 15px;
+  padding: 20px;
+  justify-content: center;
+}
+
+.contenuto_prodotto {
+  margin-bottom: 40px;
+  display: block;
+  background-color: #1F1F1F;
+  border: 2px solid #87ceeb;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Ombra leggera */
+  padding: 15px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.box_prodotto p {
+  margin: 5px 0;
+  color: #CCCCCC;
+  font-size: 0.6rem;
+}
+
+.box_prodotto .contenuto_prodotto div {
+  display: flex;
+  justify-content: center;
+}
+
+.box_prodotto .contenuto_prodotto img {
+  width: 200px;
+  height: 200px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.box_prodotto form {
+  margin-top: 10px;
+}
+
+.box_prodotto input[type="submit"] {
+  background-color: #ff4500;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.box_prodotto input[type="submit"]:hover {
+  background-color: #e03e00;
+}
+
+
+/* Form di login */
+.login_form {
+    border: 1px solid #2C2C2C;
+    background-color: #1F1F1F;
+    /* border: 2px solid #E50914; */
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 400px;
+    margin: 60px auto;
+}
+
+.login_container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.login_container form{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+.login_container h2 {
+  text-align: center;
+  color: #E50914;
+}
+.login_container label {
+  font-weight: bold;
+  color: #F5F5F5;
+}
+.login_container input[type="text"],
+.login_container input[type="password"] {
+  padding: 10px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  background-color: #2A2A2A;
+  color: #F5F5F5;
+}
+.login_container button[type="submit"] {
+  background-color: #E50914;
+  color: #F5F5F5;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login_container button[type="submit"]:hover {
+  background-color: #D40813;
 }
 
 /* Footer */

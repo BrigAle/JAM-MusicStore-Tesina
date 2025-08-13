@@ -20,7 +20,7 @@
         <div class="searchContainer">
 
           <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-          <button type="submit">🔍</button>
+          <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
 
           <!-- Checkbox nascosto -->
           <input type="checkbox" id="advanced_commutator" style="display: none;" />
@@ -89,21 +89,24 @@
 
   <!-- contenuto per login -->
   <div class="content">
-    <!-- login -->
-    <form action="login.php" method="post">
-      <div class="login_container">
-        <h2>Accedi al tuo account</h2>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-        <!-- submit button -->
-        <button type="submit">Accedi</button>
+    <div class="login_container">
+      <div class="login_form">
+        <form action="login.php" method="post">
+          <h2>Accedi al tuo account</h2>
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required />
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="password" required />
+          <button type="submit">Accedi</button>
+          <p>Non sei registrato? <a href="register.php">Registrati qui</a></p>
+        </form>
       </div>
-    </form>
-    <p>Non sei registrato? <a href="register.php">Registrati qui</a></p>
+    </div> 
   </div>
-  
+
+
+
+
   <div class="pdp">
     <div class="pdp-center">
       <p>&copy; 2025 JAM Music Store</p>
