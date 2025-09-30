@@ -12,11 +12,11 @@
 <body>
   <div class="header">
     <div class="logo">
-      <a href="index.php"><img src="risorse/IMG/JAM_logo (2).png" alt="JAM Music Store" /></a>
+      <a href="home.php"><img src="risorse/IMG/JAM_logo (2).png" alt="JAM Music Store" /></a>
     </div>
 
     <div class="navSearch">
-      <form action="index.php" method="get">
+      <form action="home.php" method="get">
         <div class="searchContainer">
 
           <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
@@ -80,7 +80,7 @@
     </div>
 
     <div class="navLink">
-      <a href="index.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
+      <a href="home.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
       <a href="login.php"><img src="risorse/IMG/login.png" alt="login" /></a>
     </div>
