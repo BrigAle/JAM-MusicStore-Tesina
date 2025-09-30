@@ -54,7 +54,7 @@ $check_brigale = "SELECT * FROM utente WHERE username = 'brigale';";
 $result_utente = mysqli_query($connessione, $check_brigale);
 if (!mysqli_num_rows($result_utente) > 0) {
     $pwd_brigale = password_hash('ale', PASSWORD_DEFAULT);
-    $sql_brigale = "INSERT INTO utente (username, nome, cognome, indirizzo, telefono, email, password) VALUES ('brigale','Alessandro','Brigale','Via Milano 2','3222222222','brigale@gmail.com','$pwd_brigale');";
+    $sql_brigale = "INSERT INTO utente (username, nome, cognome, indirizzo, telefono, email, password) VALUES ('brigale','Alessandro','Brighenti','Via Milano 2','3222222222','brigale@gmail.com','$pwd_brigale');";
     if ($connessione->query($sql_brigale) === FALSE) {
         echo "Errore nell'inserimento dell'utente brigale: " . $connessione->error;
     }
@@ -62,6 +62,6 @@ if (!mysqli_num_rows($result_utente) > 0) {
 
 // chiudo la connessione e reindirizzo alla homepage
 $connessione->close();
-header("Location: home.php");
+header("Location: homepage.php");
 exit(1);
 ?>

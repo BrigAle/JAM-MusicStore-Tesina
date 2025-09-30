@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -12,11 +16,11 @@
 <body>
   <div class="header">
     <div class="logo">
-      <a href="home.php"><img src="risorse/IMG/JAM_logo (2).png" alt="JAM Music Store" /></a>
+      <a href="homepage.php"><img src="risorse/IMG/JAM_logo (2).png" alt="JAM Music Store" /></a>
     </div>
 
     <div class="navSearch">
-      <form action="home.php" method="get">
+      <form action="homepage.php" method="get">
         <div class="searchContainer">
 
           <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
@@ -80,7 +84,7 @@
     </div>
 
     <div class="navLink">
-      <a href="home.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
+      <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
       <a href="login.php"><img src="risorse/IMG/login.png" alt="login" /></a>
     </div>
