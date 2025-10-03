@@ -282,14 +282,16 @@ body {
   color: #F5F5F5;
 }
 .login_container input[type="text"],
-.login_container input[type="password"] {
+.login_container input[type="password"],
+.login_container input[type="email"],
+.login_container input[type="tel"] {
   padding: 10px;
   border: 1px solid #CCCCCC;
   border-radius: 4px;
   background-color: #2A2A2A;
   color: #F5F5F5;
 }
-.login_container button[type="submit"] {
+.login_container input[type="submit"] {
   background-color: #E50914;
   color: #F5F5F5;
   border: none;
@@ -299,7 +301,77 @@ body {
   font-size: 16px;
 }
 
-.login_container button[type="submit"]:hover {
+.login_container input[type="submit"]:hover {
+  background-color: #D40813;
+}
+
+/* Form di registrazione */
+
+.register_form {
+    border: 1px solid #2C2C2C;
+    background-color: #1F1F1F;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 420px; /* compatto e centrato */
+    margin: 60px auto;
+}
+
+.register_container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.register_container form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+/* righe con doppio campo*/
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+.register_container h2 {
+  text-align: center;
+  color: #E50914;
+}
+
+.register_container label {
+  font-weight: bold;
+  color: #F5F5F5;
+}
+
+.register_container input[type="text"],
+.register_container input[type="password"],
+.register_container input[type="email"],
+.register_container input[type="tel"] {
+  padding: 10px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  background-color: #2A2A2A;
+  color: #F5F5F5;
+}
+
+.register_container input[type="submit"] {
+  background-color: #E50914;
+  color: #F5F5F5;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.register_container input[type="submit"]:hover {
   background-color: #D40813;
 }
 

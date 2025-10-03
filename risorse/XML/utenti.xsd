@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
- <xsd:element name="utenti">
-  <xsd:complexType>
-   <xsd:sequence>
-    <xsd:element ref="utente" minOccurs="0" maxOccurs="unbounded"/>
-   </xsd:sequence>
-  </xsd:complexType>
- </xsd:element>
- 
- <xsd:element name="utente">
-  <xsd:complexType>
-   <xsd:sequence>
-    <xsd:element ref="ruolo" minOccurs="1" maxOccurs="1"/>
-    <xsd:element ref="reputazione" minOccurs="1" maxOccurs="1"/>
-    <xsd:element ref="stato" minOccurs="1" maxOccurs="1"/>
-    <xsd:element ref="portafoglio" minOccurs="1" maxOccurs="1"/>
-    <xsd:element ref="crediti" minOccurs="1" maxOccurs="1"/>
-    <xsd:element ref="data_iscrizione" minOccurs="1" maxOccurs="1"/>
-   </xsd:sequence>
-  <xsd:attribute name="id" type="xsd:integer" use="required"/>
-  </xsd:complexType>
- </xsd:element>
- <xsd:element name="ruolo">
-  <xsd:simpleType>
-    <xsd:restriction base="xsd:string">
-     <xsd:enumeration value = "cliente"/>
-     <xsd:enumeration value = "gestore"/>
-     <xsd:enumeration value = "amministratore"/>
-    </xsd:restriction> 
-  </xsd:simpleType>
-  </xsd:element>
-  <xsd:element name="reputazione" type="xsd:float"/>
-  <xsd:element name="stato" type="xsd:boolean"/>
-  <xsd:element name="portafoglio" type="xsd:float"/>
-  <xsd:element name="crediti" type="xsd:float"/>
-  <xsd:element name="data_iscrizione" type="xsd:date"/>
- </xsd:schema>
+    <xsd:element name="utenti">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="utente" minOccurs="0" maxOccurs="unbounded" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="utente">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="nome" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="cognome" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="telefono" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="indirizzo" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="reputazione" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="stato" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="portafoglio" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="crediti" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="data_iscrizione" minOccurs="1" maxOccurs="1" />
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:integer" use="required" />
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="nome" type="xsd:string" />
+    <xsd:element name="cognome" type="xsd:string" />
+    <xsd:element name="telefono" type="xsd:string" />
+    <xsd:element name="indirizzo" type="xsd:string" />
+    <xsd:element name="reputazione" type="xsd:float" />
+    <xsd:element name="stato" type="xsd:boolean" />
+    <xsd:element name="portafoglio" type="xsd:float" />
+    <xsd:element name="crediti" type="xsd:float" />
+    <xsd:element name="data_iscrizione" type="xsd:date" />
+</xsd:schema>

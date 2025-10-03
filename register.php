@@ -91,39 +91,51 @@
   <!-- contenuto per login -->
   <div class="content">
     <!-- login -->
-    <form action="login.php" method="post">
-      <div class="login_container">
-        <h2>Accedi al tuo account</h2>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required />
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-        <label for="confirm_password">Conferma Password:</label>
-        <input type="password" id="confirm_password" name="confirm_password" required />
+    <div class="register_form">
+      <div class="register_container">
+        <h2>Registrazione</h2>
+        <form action="risorse/PHP/register.php" method="POST">
+          <div class="row">
+            <div class="col">
+              <label for="nome">Nome</label>
+              <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="col">
+              <label for="cognome">Cognome</label>
+              <input type="text" id="cognome" name="cognome" required>
+            </div>
+          </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required />
-        <label for="phone">Telefono:</label>
-        <input type="tel" id="phone" name="phone" required />
-        <label for="address">Indirizzo:</label>
-        <input type="text" id="address" name="address" required />
-        <label for="city">Città:</label>
-        <input type="text" id="city" name="city" required />
-        <label for="postal_code">Codice Postale:</label>
-        <input type="text" id="postal_code" name="postal_code" required />
-        <label for="country">Paese:</label>
-        <input type="text" id="country" name="country" required />
-        <label for="terms">
-            <input type="checkbox" id="terms" name="terms" required />
-            Accetto i termini e le condizioni
-        </label>
-        <!-- submit button -->
-        <button type="submit">Registrati</button>
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required>
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+
+          <div class="row">
+            <div class="col">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required>
+            </div>
+            <div class="col">
+              <label for="conferma_password">Conferma Password</label>
+              <input type="password" id="conferma_password" name="conferma_password" required>
+            </div>
+          </div>
+          
+          <label for="tel">Telefono</label>
+          <input type="tel" id="tel" name="telefono">
+
+          <label for="indirizzo">Indirizzo</label>
+          <input type="text" id="indirizzo" name="indirizzo" required>
+
+          <input type="submit" value="Registrati">
+        </form>
       </div>
-    </form>
-    <p>Già registrato? <a href="login.php">Accedi qui</a></p>
+    </div>
+
   </div>
-  
+
 
   <div class="pdp">
     <div class="pdp-center">

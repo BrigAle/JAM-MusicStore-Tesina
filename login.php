@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -91,17 +95,34 @@
   <div class="content">
     <div class="login_container">
       <div class="login_form">
-        <form action="login.php" method="post">
+
+        <form action="risorse/PHP/login.php" method="post">
           <h2>Accedi al tuo account</h2>
           <label for="username">Username:</label>
           <input type="text" id="username" name="username" required />
+
+          
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required />
-          <button type="submit">Accedi</button>
+          <?php 
+          if (isset($_SESSION['error_username']) && $_SESSION['error_username'] == true) {
+                         echo "<h3>Utente non registrato</h3>";
+                         unset($_SESSION['error_username']);
+                    }
+                    if (isset($_SESSION['error_password']) && $_SESSION['error_password'] == true) {
+                        echo "<h3>Password errata</h3>";
+                        unset($_SESSION['error_password']);
+                    }
+                    if (isset($_SESSION['error_users']) && $_SESSION['error_users'] == true) {
+                        echo "<h3>Errore nel recupero degli utenti</h3>";
+                        unset($_SESSION['error_users']);
+                    }    
+          ?>
+          <input type="submit" value="Accedi" />
           <p>Non sei registrato? <a href="register.php">Registrati qui</a></p>
         </form>
       </div>
-    </div> 
+    </div>
   </div>
 
 
