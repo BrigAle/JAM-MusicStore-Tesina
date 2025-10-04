@@ -9,7 +9,7 @@
     <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-03</data_iscrizione>
+    <data_iscrizione>2025-10-04</data_iscrizione>
   </utente>
   <utente id="2">
     <nome>Alessandro</nome>
@@ -20,7 +20,7 @@
     <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-03</data_iscrizione>
+    <data_iscrizione>2025-10-04</data_iscrizione>
   </utente>
   <utente id="3">
     <nome>Giovanni</nome>
@@ -31,7 +31,7 @@
     <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-03</data_iscrizione>
+    <data_iscrizione>2025-10-04</data_iscrizione>
   </utente>
   <utente id="4">
     <nome>Mattia</nome>
@@ -42,6 +42,6 @@
     <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-03</data_iscrizione>
+    <data_iscrizione>2025-10-04</data_iscrizione>
   </utente>
 </utenti>

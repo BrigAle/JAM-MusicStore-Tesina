@@ -1,26 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<prodotti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:noNamespaceSchemaLocation="prodotti.xsd">
-    
- <prodotto id="1">
-    <nome>Chitarra Elettrica Fender Stratocaster</nome>
-    <categoria>Strumenti a corda</categoria>
-    <descrizione>Chitarra elettrica a sei corde, corpo in ontano, manico in acero.</descrizione>
-    <prezzo>999.99</prezzo>
-    <bonus>100.00</bonus>
-    <data_inserimento>2025-05-05</data_inserimento>
-    <immagine>../img/fender_stratocaster.jpg</immagine>
-</prodotto>
+<prodotti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:noNamespaceSchemaLocation="prodotti.xsd">
+   <prodotto id="1">
+      <nome>Chitarra Elettrica Fender Stratocaster</nome>
+      <categoria>Strumenti a corda</categoria>
+      <descrizione>Chitarra elettrica a sei corde, corpo in ontano, manico in acero.</descrizione>
+      <prezzo>999.99</prezzo>
+      <bonus>100.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>fender_stratocaster.jpg</immagine>
 
- <prodotto id="2">
-    <nome>Album - The Dark Side of the Moon</nome>
-    <categoria>dischi</categoria>
-    <descrizione>Iconico album dei Pink Floyd, versione rimasterizzata.</descrizione>
-    <prezzo>19.99</prezzo>
-    <bonus>10.00</bonus>
-    <data_inserimento>2025-05-05</data_inserimento>
-    <immagine>../img/Dark_side_of_the_moon.jpg</immagine>
- </prodotto>
-
+   </prodotto>
+   <prodotto id="2">
+      <nome>Album - The Dark Side of the Moon</nome>
+      <categoria>dischi</categoria>
+      <descrizione>Iconico album dei Pink Floyd, versione rimasterizzata.</descrizione>
+      <prezzo>19.99</prezzo>
+      <bonus>10.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Dark_side_of_the_moon.jpg</immagine>
+   </prodotto>
+   <prodotto id="3">
+      <nome>Cuffie Audio-Technica ATH-M50x</nome>
+      <categoria>Accessori</categoria>
+      <descrizione>Cuffie professionali con isolamento acustico e driver da 45mm.</descrizione>
+      <prezzo>149.99</prezzo>
+      <bonus>20.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Audio-Technica_ATH-M50x.jpg</immagine>
+   </prodotto>
+   <prodotto id="4">
+      <nome>Pianola Yamaha P-125</nome>
+      <categoria>Strumenti a tastiera</categoria>
+      <descrizione>Pianoforte digitale con 88 tasti pesati e suoni di alta qualità.</descrizione>
+      <prezzo>649.99</prezzo>
+      <bonus>50.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Pianola.jpg</immagine>
+   </prodotto>
+   <prodotto id="5">
+      <nome>Microfono Shure SM58</nome>
+      <categoria>Accessori</categoria>
+      <descrizione>Microfono dinamico cardioide, ideale per performance live.</descrizione>
+      <prezzo>99.99</prezzo>
+      <bonus>15.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Shure_SM58.jpg</immagine>
+   </prodotto>
+   <prodotto id="6">
+      <nome>Amplificatore Marshall DSL40CR</nome>
+      <categoria>Accessori</categoria>
+      <descrizione>Amplificatore per chitarra da 40W con canali pulito e overdrive.</descrizione>
+      <prezzo>499.99</prezzo>
+      <bonus>60.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Marshall_DSL40CR.jpg</immagine>
+   </prodotto>
+   <prodotto id="7">
+      <nome>Set di Bacchette Vic Firth American Classic</nome>
+      <categoria>Accessori</categoria>
+      <descrizione>Bacchette per batteria in hickory, modello 5A.</descrizione>
+      <prezzo>12.99</prezzo>
+      <bonus>5.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Vic_Firth_American_Classic.jpg</immagine>
+   </prodotto>
+   <prodotto id="8">
+      <nome>Violino Stentor Student II</nome>
+      <categoria>Strumenti a corda</categoria>
+      <descrizione>Violino da studio in acero e abete, ideale per principianti.</descrizione>
+      <prezzo>199.99</prezzo>
+      <bonus>30.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>violino_stentor.jpg</immagine>
+   </prodotto>
+   <prodotto id="9">
+      <nome>Metronomo Meccanico Wittner</nome>
+      <categoria>Accessori</categoria>
+      <descrizione>Metronomo meccanico con regolazione della velocità da 40 a 208 BPM.</descrizione>
+      <prezzo>49.99</prezzo>
+      <bonus>10.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Wittner_metronome.jpg</immagine>
+   </prodotto>
+   <prodotto id="10">
+      <nome>Set di Corde Ernie Ball Regular Slinky</nome>
+      <categoria>Accessori</categoria>
+      <descrizione>Set di corde per chitarra elettrica, calibro .010 - .046.</descrizione>
+      <prezzo>9.99</prezzo>
+      <bonus>3.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Ernie_Ball_Regular_Slinky.jpg</immagine>
+   </prodotto>
+   <prodotto id="11">
+      <nome>Album - Abbey Road</nome>
+      <categoria>dischi</categoria>
+      <descrizione>Classico album dei Beatles, versione rimasterizzata.</descrizione>
+      <prezzo>21.99</prezzo>
+      <bonus>10.00</bonus>
+      <data_inserimento>2025-05-05</data_inserimento>
+      <immagine>Abbey_Road.jpg</immagine>
+   </prodotto>
 </prodotti>

@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -80,12 +84,24 @@
     </div>
 
     <div class="navLink">
+      <!-- admin links -->
+      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'amministratore'): ?>
+        <a href="amministrazione.php">admin</a>
+      <?php endif; ?>
+      <!-- gestore links -->
+      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
+        echo "<a href=\"gestione.php\">gestore</a>";
+      endif; ?>
+      <!-- cliente links -->
+      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
-      <a href="login.php"><img src="risorse/IMG/login.png" alt="login" /></a>
+      <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
+      <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
 
   </div>
+
 
 
   <div class="content">

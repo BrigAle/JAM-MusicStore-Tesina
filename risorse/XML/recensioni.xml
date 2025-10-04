@@ -20,4 +20,31 @@
     <voti_inutili>1</voti_inutili>
     <data>2025-05-11</data>
   </recensione>
+  <recensione id="3">
+    <id_prodotto>1</id_prodotto>
+    <id_utente>3</id_utente>
+    <commento>Non sono soddisfatto del suono.</commento>
+    <valutazione>2</valutazione>
+    <voti_utili>1</voti_utili>
+    <voti_inutili>4</voti_inutili>
+    <data>2025-05-12</data>
+  </recensione>
+  <recensione id="4">
+    <id_prodotto>3</id_prodotto>
+    <id_utente>4</id_utente>
+    <commento>Comode e con un ottimo isolamento acustico.</commento>
+    <valutazione>5</valutazione>
+    <voti_utili>5</voti_utili>
+    <voti_inutili>0</voti_inutili>
+    <data>2025-05-13</data>
+  </recensione>
+  <recensione id="5">
+    <id_prodotto>2</id_prodotto>
+    <id_utente>1</id_utente>
+    <commento>Un classico che non delude mai.</commento>
+    <valutazione>5</valutazione>
+    <voti_utili>4</voti_utili>
+    <voti_inutili>0</voti_inutili>
+    <data>2025-05-14</data>
+  </recensione>
 </recensioni>

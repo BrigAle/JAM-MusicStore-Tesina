@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sessione finale
     $_SESSION['success'] = ($successPHP && $successXML);
 
-    header('location:../../register.php');
+    header('location:../../homepage.php');
     exit();
 }
 ?>

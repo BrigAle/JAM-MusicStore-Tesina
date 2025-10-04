@@ -81,9 +81,10 @@
     </div>
 
     <div class="navLink">
+      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
-      <a href="login.php"><img src="risorse/IMG/login.png" alt="login" /></a>
+      <a href="login.php">Accedi</a>
     </div>
 
   </div>

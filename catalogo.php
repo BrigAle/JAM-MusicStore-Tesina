@@ -96,49 +96,56 @@ session_start();
       <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
-      <?php if (!isset($_SESSION['username'])) echo '<a href="register.php">Registrati</a>'; ?>
+      <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
       <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
-
   </div>
+  <!-- div presentazione sito -->
 
 
-  <!-- contenuto per login -->
   <div class="content">
-    <div class="login_container">
-      <div class="login_form">
+    <h1>Catalogo Prodotti</h1>
+    <div class="box_prodotto">
+      <?php
+      $xml = simplexml_load_file("risorse/XML/prodotti.xml");
 
-        <form action="risorse/PHP/login.php" method="post">
-          <h2>Accedi al tuo account</h2>
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required />
+      foreach ($xml->prodotto as $prodotto):
 
-          
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required />
-          <?php 
-          if (isset($_SESSION['error_username']) && $_SESSION['error_username'] == true) {
-                         echo "<h3>Utente non registrato</h3>";
-                         unset($_SESSION['error_username']);
-                    }
-                    if (isset($_SESSION['error_password']) && $_SESSION['error_password'] == true) {
-                        echo "<h3>Password errata</h3>";
-                        unset($_SESSION['error_password']);
-                    }
-                    if (isset($_SESSION['error_users']) && $_SESSION['error_users'] == true) {
-                        echo "<h3>Errore nel recupero degli utenti</h3>";
-                        unset($_SESSION['error_users']);
-                    }    
-          ?>
-          <input type="submit" value="Accedi" />
-          <p>Non sei registrato? <a href="register.php">Registrati qui</a></p>
-        </form>
-      </div>
+        $nome = $prodotto->nome;
+        $descrizione = $prodotto->descrizione;
+        $prezzo = $prodotto->prezzo;
+        $bonus = $prodotto->bonus;
+        $datainserimento = $prodotto->data_inserimento;
+        $immagine = "risorse/IMG/prodotti/" . $prodotto->immagine;
+
+      ?>
+        <div class="contenuto_prodotto">
+          <div class="immagine_box">
+            <img src="<?= $immagine ?>" alt="<?= $nome ?>" />
+          </div>
+          <div class="dettagli_box">
+            <h3><?= $nome ?></h3>
+            <p><?= $descrizione ?></p>
+            <p>Prezzo: €<?= $prezzo ?></p>
+            <?php if ($bonus > 0): ?>
+              <p>Bonus: <?= $bonus ?> punti</p>
+            <?php endif; ?>
+            <p>Data di inserimento: <?= $datainserimento ?></p>
+            <!-- form carrello -->
+            <?php
+            if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>
+              <form action="carrello.php" method="post">
+                <input type="hidden" name="id" value="<?= $id ?>" />
+                <button type="submit">Aggiungi al carrello</button>
+              </form>
+            <?php endif; ?>
+          </div>
+        </div>
+      <?php
+      endforeach; ?>
     </div>
+
   </div>
-
-
-
 
   <div class="pdp">
     <div class="pdp-center">
@@ -148,6 +155,7 @@ session_start();
       <a href="FAQs.php">FAQs</a>
     </div>
   </div>
+
 </body>
 
 </html>

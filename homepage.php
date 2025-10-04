@@ -93,168 +93,70 @@ session_start();
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
       <!-- cliente links -->
+      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
       <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
       <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
-
   </div>
+  <!-- div presentazione sito -->
 
 
   <div class="content">
-    <div class="box_prodotto">
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/home.png" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/home.png" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
-      <div class="contenuto_prodotto">
-        <div><img src="risorse/IMG/pianola.jpg" alt="Novità in Catalogo" /></div>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-        <p>Scopri la nostra vasta selezione di musica</p>
-      </div>
+    <div style="  padding: 20px; max-width: 800px; margin: auto; text-align: center;">
+      <h1>Benvenuto su JAM Music Store</h1>
+      <p>Il tuo negozio di musica online, dove puoi trovare strumenti, accessori e tanto altro!</p>
+      <p>Con JAM Music Store puoi:</p>
+      <ol>
+        <li>Consultare il catalogo prodotti</li>
+        <li>Aggiungere articoli al carrello</li>
+        <li>Accumulare punti bonus per ogni acquisto</li>
+        <li>Usare i punti per ottenere sconti speciali</li>
+      </ol>
+      <p>Registrati oggi stesso e inizia a esplorare il mondo della musica con noi!</p>
     </div>
+    <h2>Prodotti recenti</h2>
+    <div class="box_prodotto">
+      <?php
+      $xml = simplexml_load_file("risorse/XML/prodotti.xml");
+      $count = 0;
+      foreach ($xml->prodotto as $prodotto):
+        if ($count >= 4) break; // Mostra solo i primi 4 prodotti
+        $nome = $prodotto->nome;
+        $descrizione = $prodotto->descrizione;
+        $prezzo = $prodotto->prezzo;
+        $bonus = $prodotto->bonus;
+        $datainserimento = $prodotto->data_inserimento;
+        $immagine = "risorse/IMG/prodotti/" . $prodotto->immagine;
+
+      ?>
+        <div class="contenuto_prodotto">
+          <div class="immagine_box">
+            <img src="<?= $immagine ?>" alt="<?= $nome ?>" />
+          </div>
+          <div class="dettagli_box">
+            <h3><?= $nome ?></h3>
+            <p><?= $descrizione ?></p>
+            <p>Prezzo: €<?= $prezzo ?></p>
+            <?php if ($bonus > 0): ?>
+              <p>Bonus: <?= $bonus ?> punti</p>
+            <?php endif; ?>
+            <p>Data di inserimento: <?= $datainserimento ?></p>
+            <!-- form carrello -->
+            <?php
+            if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>
+              <form action="carrello.php" method="post">
+                <input type="hidden" name="id" value="<?= $id ?>" />
+                <button type="submit">Aggiungi al carrello</button>
+              </form>
+            <?php endif; ?>
+          </div>
+        </div>
+      <?php $count++;
+      endforeach; ?>
+    </div>
+    <a href="catalogo.php"><h2>Vai al catalogo completo</h2></a>
   </div>
 
   <div class="pdp">
