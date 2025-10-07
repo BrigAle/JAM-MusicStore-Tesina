@@ -81,10 +81,20 @@
     </div>
 
     <div class="navLink">
-      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
+      <!-- admin links -->
+      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'amministratore'): ?>
+        <a href="amministrazione.php">admin</a>
+      <?php endif; ?>
+      <!-- gestore links -->
+      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
+        echo "<a href=\"gestione.php\">gestore</a>";
+      endif; ?>
+      <!-- cliente links -->
+      <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
-      <a href="login.php">Accedi</a>
+      <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
+      <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
 
   </div>

@@ -93,7 +93,7 @@ session_start();
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
       <!-- cliente links -->
-      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
+      <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
       <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
@@ -108,16 +108,33 @@ session_start();
     <div class="box_prodotto">
       <?php
       $xml = simplexml_load_file("risorse/XML/prodotti.xml");
-
+      $xmlRecensioni = simplexml_load_file("risorse/XML/recensioni.xml");
+      
       foreach ($xml->prodotto as $prodotto):
-
         $nome = $prodotto->nome;
         $descrizione = $prodotto->descrizione;
         $prezzo = $prodotto->prezzo;
         $bonus = $prodotto->bonus;
         $datainserimento = $prodotto->data_inserimento;
         $immagine = "risorse/IMG/prodotti/" . $prodotto->immagine;
+        
+        $id = $prodotto['id']; // Ottieni l'ID del prodotto
+        
 
+        $valutazioneTotale = 0;
+        $countValutazioni = 0; // Per evitare divisione per zero
+
+        foreach ($xmlRecensioni->recensione as $recensione):
+          if ((string)$recensione->id_prodotto == (string)$id) {
+            $valutazioneTotale += (float)$recensione->valutazione;
+            $countValutazioni++;     
+          }
+        endforeach;
+        if ($countValutazioni > 0) {
+          $valutazioneMedia = $valutazioneTotale / $countValutazioni;
+        } else {
+          $valutazioneMedia = 0;
+        }
       ?>
         <div class="contenuto_prodotto">
           <div class="immagine_box">
@@ -131,6 +148,14 @@ session_start();
               <p>Bonus: <?= $bonus ?> punti</p>
             <?php endif; ?>
             <p>Data di inserimento: <?= $datainserimento ?></p>
+            <p class="valutazione">
+              Valutazione: <?= $valutazioneMedia ?> 
+              <img src="risorse/IMG/stella.png" alt="">
+            </p>
+            <form action="recensioni.php" method="GET">
+              <input type="hidden" name="id_prodotto" value="<?= $id ?>" />
+              <button type="submit">Leggi le recensioni</button>
+            </form>
             <!-- form carrello -->
             <?php
             if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>

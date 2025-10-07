@@ -92,8 +92,11 @@ session_start();
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
+      <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
+        <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
+      <?php endif; ?>
       <!-- cliente links -->
-      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
+      <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
       <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
@@ -102,9 +105,8 @@ session_start();
   </div>
   <!-- div presentazione sito -->
 
-
   <div class="content">
-    <div style="  padding: 20px; max-width: 800px; margin: auto; text-align: center;">
+    <div style="padding: 20px; max-width: 800px;">
       <h1>Benvenuto su JAM Music Store</h1>
       <p>Il tuo negozio di musica online, dove puoi trovare strumenti, accessori e tanto altro!</p>
       <p>Con JAM Music Store puoi:</p>
@@ -119,9 +121,10 @@ session_start();
     <h2>Prodotti recenti</h2>
     <div class="box_prodotto">
       <?php
-      $xml = simplexml_load_file("risorse/XML/prodotti.xml");
+      $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
+      $xmlRecensioni = simplexml_load_file("risorse/XML/recensioni.xml");
       $count = 0;
-      foreach ($xml->prodotto as $prodotto):
+      foreach ($xmlProdotti->prodotto as $prodotto):
         if ($count >= 4) break; // Mostra solo i primi 4 prodotti
         $nome = $prodotto->nome;
         $descrizione = $prodotto->descrizione;
@@ -129,7 +132,22 @@ session_start();
         $bonus = $prodotto->bonus;
         $datainserimento = $prodotto->data_inserimento;
         $immagine = "risorse/IMG/prodotti/" . $prodotto->immagine;
+        $id = $prodotto['id']; // Ottieni l'ID del prodotto
+        $valutazioneTotale = 0;
+        $countValutazioni = 0; // Per evitare divisione per zero
 
+        foreach ($xmlRecensioni->recensione as $recensione):
+          if ((string)$recensione->id_prodotto == (string)$id) {
+            $valutazioneTotale += (float)$recensione->valutazione;
+            $countValutazioni++;     
+          }
+        endforeach;
+
+        if ($countValutazioni > 0) {
+          $valutazioneMedia = $valutazioneTotale / $countValutazioni;
+        } else {
+          $valutazioneMedia = 0;
+        }
       ?>
         <div class="contenuto_prodotto">
           <div class="immagine_box">
@@ -143,6 +161,10 @@ session_start();
               <p>Bonus: <?= $bonus ?> punti</p>
             <?php endif; ?>
             <p>Data di inserimento: <?= $datainserimento ?></p>
+            <p class="valutazione">
+              Valutazione: <?= $valutazioneMedia ?> 
+              <img src="risorse/IMG/stella.png" alt="">
+            </p>
             <!-- form carrello -->
             <?php
             if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>
@@ -156,7 +178,9 @@ session_start();
       <?php $count++;
       endforeach; ?>
     </div>
-    <a href="catalogo.php"><h2>Vai al catalogo completo</h2></a>
+    <a href="catalogo.php">
+      <h2>Vai al catalogo completo</h2>
+    </a>
   </div>
 
   <div class="pdp">

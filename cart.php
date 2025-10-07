@@ -93,7 +93,7 @@ session_start();
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
       <!-- cliente links -->
-      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
+      <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
       <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
@@ -105,43 +105,18 @@ session_start();
 
 
   <div class="content">
+    <?php
+    if (!isset($_SESSION['username'])) {
+      echo "<h2>Devi essere loggato per visualizzare il carrello.</h2>";
+    } else {
+      echo "<h2>Carrello di " . $_SESSION['username'] . "</h2>";
+      echo "<p>Funzionalità in costruzione...</p>";
+    }
+    ?>
+  </div>
     <div class="prodotti">
-      <h2>I tuoi prodotti</h2>
-      <ul>
-        <li>Prodotto 1</li>
-        <li>Prodotto 2</li>
-        <li>Prodotto 3</li>
-      </ul>
-    </div>
-    <div class="prodotti">
-      <h2>I tuoi prodotti</h2>
-      <ul>
-        <li>Prodotto 1</li>
-        <li>Prodotto 2</li>
-        <li>Prodotto 3</li>
-      </ul>
-    </div>
-    <div class="prodotti">
-      <h2>I tuoi prodotti</h2>
-      <ul>
-        <li>Prodotto 1</li>
-        <li>Prodotto 2</li>
-        <li>Prodotto 3</li>
-      </ul>
-    </div>
-    <div class="prodotti">
-      <h2>I tuoi prodotti</h2>
-      <ul>
-        <li>Prodotto 1</li>
-        <li>Prodotto 2</li>
-        <li>Prodotto 3</li>
-      </ul>
-    </div>
-    <div class="totale">
-      <h2>Totale</h2>
-      <p>€ 0,00</p>
-      <button type="button">Procedi al checkout</button>
-    </div>
+      <!-- Qui andranno i prodotti aggiunti al carrello -->
+       
   </div>
 
 

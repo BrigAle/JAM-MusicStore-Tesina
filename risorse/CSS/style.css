@@ -110,19 +110,19 @@ body {
 
 /* Contenitore filtri avanzati (centro in riga) */
 .advanced_filters {
-    width: -webkit-fill-available;
-    display: none;
-    position: absolute;
-    left: 39%;
-    transform: translateX(-50%);
-    top: 96px;
-    background-color: #1F1F1F;
-    color: #F5F5F5;
-    padding: 2px 20px;
-    border: 2px solid #E50914;
-    border-radius: 6px;
-    white-space: nowrap;
-    z-index: 10;
+  width: -webkit-fill-available;
+  display: none;
+  position: absolute;
+  left: 39%;
+  transform: translateX(-50%);
+  top: 96px;
+  background-color: #1F1F1F;
+  color: #F5F5F5;
+  padding: 2px 20px;
+  border: 2px solid #E50914;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 10;
 }
 
 .filters_title {
@@ -209,10 +209,13 @@ body {
   padding: 15px;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
-  width: 300px;          /* larghezza fissa per uniformità */
+  width: 300px;
+  /* larghezza fissa per uniformità */
   display: flex;
-  flex-direction: column; /* impila immagine sopra e contenuto sotto */
-  align-items: center;    /* centra i blocchi */
+  flex-direction: column;
+  /* impila immagine sopra e contenuto sotto */
+  align-items: center;
+  /* centra i blocchi */
 }
 
 .immagine_box {
@@ -221,8 +224,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;        /* nasconde eventuali sbordi */
-  background-color: #111;  /* sfondo per immagini più piccole */
+  overflow: hidden;
+  /* nasconde eventuali sbordi */
+  background-color: #111;
+  /* sfondo per immagini più piccole */
   border-radius: 8px;
   margin-bottom: 10px;
 }
@@ -270,7 +275,48 @@ body {
   background-color: #e03e00;
 }
 
+.valutazione {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  color: #CCCCCC;
+}
 
+.valutazione img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+.immagine_prodotto {
+  object-fit: contain;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* voti */
+.voti button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.3s ease;
+}
+
+.voti button:hover {
+  transform: scale(1.3);
+}
+
+.voto-attivo img {
+  filter: brightness(1.3) saturate(1.5);
+}
+
+.voto-passivo img {
+  opacity: 0.5;
+}
 /* Form di login */
 .login_form {
   border: 1px solid #2C2C2C;
@@ -426,4 +472,21 @@ body {
 .pdp-center {
   text-align: center;
   flex: 1;
+}
+
+/* Recensioni */
+.recensione {
+  border: 1px solid #2C2C2C;
+  background-color: #1F1F1F;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+.risposta {
+  border: 1px solid #444;
+  background-color: #2A2A2A;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: 20px;
 }

@@ -1,19 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<risposte xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="risposte.xsd">
- <risposta id="1">
-  <id_recensione>1</id_recensione>
-  <id_utente>2</id_utente>
-  <commento>Si confermo che e' un ottimo prodotto!</commento>
-  <data>2025-06-12</data>
-  <ora>10:25</ora>
- </risposta>
- <risposta id="2">
-  <id_recensione>1</id_recensione>
-  <id_utente>3</id_utente>
-  <commento>Confermo, anche il mio ordine e' 
+<risposte xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="risposte.xsd">
+  <risposta id="1">
+    <id_recensione>1</id_recensione>
+    <id_utente>2</id_utente>
+    <commento>Si confermo che e' un ottimo prodotto!</commento>
+    <data>2025-06-12</data>
+    <ora>10:25</ora>
+  </risposta>
+  <risposta id="2">
+    <id_recensione>1</id_recensione>
+    <id_utente>3</id_utente>
+    <commento>Confermo, anche il mio ordine e' 
    arrivato in ritardo.</commento>
-  <data>2025-05-11</data>
-  <ora>11:42</ora>
- </risposta>
+    <data>2025-05-11</data>
+    <ora>11:42</ora>
+  </risposta>
+  <risposta id="3">
+    <id_recensione>1</id_recensione>
+    <id_utente>5</id_utente>
+    <commento>Consegna veloce e prodotto come da descrizione.</commento>
+    <data>2025-10-07</data>
+    <ora>18:57</ora>
+  </risposta>
+  <risposta id="4">
+    <id_recensione>1</id_recensione>
+    <id_utente>4</id_utente>
+    <commento>bibibibi</commento>
+    <data>2025-10-07</data>
+    <ora>19:30</ora>
+  </risposta>
+  <risposta id="5">
+    <id_recensione>1</id_recensione>
+    <id_utente>3</id_utente>
+    <commento>balblala</commento>
+    <data>2025-10-07</data>
+    <ora>19:33</ora>
+  </risposta>
+  <risposta id="6">
+    <id_recensione>1</id_recensione>
+    <id_utente>1</id_utente>
+    <commento>sis</commento>
+    <data>2025-10-07</data>
+    <ora>21:34</ora>
+  </risposta>
+  <risposta id="7">
+    <id_recensione>1</id_recensione>
+    <id_utente>1</id_utente>
+    <commento>b;ablbllbblaaba</commento>
+    <data>2025-10-07</data>
+    <ora>21:50</ora>
+  </risposta>
+  <risposta id="8">
+    <id_recensione>3</id_recensione>
+    <id_utente>4</id_utente>
+    <commento>susususus</commento>
+    <data>2025-10-07</data>
+    <ora>23:22</ora>
+  </risposta>
 </risposte>

@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<recensioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="recensioni.xsd">
+<recensioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="recensioni.xsd">
   <recensione id="1">
     <id_prodotto>1</id_prodotto>
     <id_utente>5</id_utente>
     <commento>Ottimo prodotto, qualita' eccellente.</commento>
     <valutazione>5</valutazione>
-    <voti_utili>3</voti_utili>
-    <voti_inutili>0</voti_inutili>
+    <voti_like>2</voti_like>
+    <voti_dislike>1</voti_dislike>
+    <voto_utenti>
+      <voto id_utente="1" tipo="like"/>
+    </voto_utenti>
     <data>2025-05-10</data>
+    <voti_utenti>
+      <voto id_utente="1" tipo="inutile"/>
+      <voto id_utente="4" tipo="like"/>
+    </voti_utenti>
   </recensione>
-
   <recensione id="2">
     <id_prodotto>2</id_prodotto>
     <id_utente>2</id_utente>
     <commento>Arrivato in ritardo ma funziona bene.</commento>
     <valutazione>4</valutazione>
-    <voti_utili>2</voti_utili>
-    <voti_inutili>1</voti_inutili>
+    <voti_like>2</voti_like>
+    <voti_dislike>1</voti_dislike>
+    <voto_utenti>
+      <voto id_utente="5" tipo="like"/>
+      <voto id_utente="9" tipo="dislike"/>
+    </voto_utenti>
     <data>2025-05-11</data>
   </recensione>
   <recensione id="3">
@@ -25,26 +34,24 @@
     <id_utente>3</id_utente>
     <commento>Non sono soddisfatto del suono.</commento>
     <valutazione>2</valutazione>
-    <voti_utili>1</voti_utili>
-    <voti_inutili>4</voti_inutili>
+    <voti_like>5</voti_like>
+    <voti_dislike>9</voti_dislike>
+    <voto_utenti>
+      <voto id_utente="2" tipo="like"/>
+      <voto id_utente="6" tipo="dislike"/>
+    </voto_utenti>
     <data>2025-05-12</data>
+    <voti_utenti>
+      <voto id_utente="4" tipo="like"/>
+    </voti_utenti>
   </recensione>
   <recensione id="4">
     <id_prodotto>3</id_prodotto>
     <id_utente>4</id_utente>
     <commento>Comode e con un ottimo isolamento acustico.</commento>
     <valutazione>5</valutazione>
-    <voti_utili>5</voti_utili>
-    <voti_inutili>0</voti_inutili>
+    <voti_like>5</voti_like>
+    <voti_dislike>0</voti_dislike>
     <data>2025-05-13</data>
-  </recensione>
-  <recensione id="5">
-    <id_prodotto>2</id_prodotto>
-    <id_utente>1</id_utente>
-    <commento>Un classico che non delude mai.</commento>
-    <valutazione>5</valutazione>
-    <voti_utili>4</voti_utili>
-    <voti_inutili>0</voti_inutili>
-    <data>2025-05-14</data>
   </recensione>
 </recensioni>

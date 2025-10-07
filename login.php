@@ -93,10 +93,10 @@ session_start();
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
       <!-- cliente links -->
-      <a href="info.php"><img src="risorse/IMG/info.png" alt="info" /></a>
+      <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
-      <?php if (!isset($_SESSION['username'])) echo '<a href="register.php">Registrati</a>'; ?>
+      <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
       <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
 
