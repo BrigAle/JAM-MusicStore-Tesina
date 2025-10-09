@@ -57,4 +57,11 @@
     <data>2025-10-07</data>
     <ora>23:22</ora>
   </risposta>
+  <risposta id="9">
+    <id_recensione>1</id_recensione>
+    <id_utente>4</id_utente>
+    <commento>belpo dai</commento>
+    <data>2025-10-08</data>
+    <ora>14:16</ora>
+  </risposta>
 </risposte>

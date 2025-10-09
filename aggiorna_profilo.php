@@ -103,18 +103,15 @@ session_start();
             <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
         </div>
     </div>
-
     <!-- div presentazione sito -->
+
     <div class="content">
-        
         <?php
-        // Controlla se l'utente è loggato
         if (!isset($_SESSION['username'])) {
             header("Location: login.php");
             exit();
         }
         ?>
-        <!-- connessione al database per recuperare i dati dell'utente -->
         <?php
         require_once 'risorse/PHP/connection.php';
         $connection = new mysqli($host, $user, $password, $db);
@@ -129,60 +126,68 @@ session_start();
             $record = $result->fetch_array(MYSQLI_ASSOC);
             $password_hash = $record['password'];
             $email = $record['email'];
-        ?>
-
-            <!-- carico il filme xml e recupero i dati con dom -->
-            <?php
+            $username = $record['username'];
+            // Carico i dati dall'XML
             $xmlFile = 'risorse/XML/utenti.xml';
             if (!file_exists($xmlFile)) {
                 die("Errore: il file XML degli utenti non esiste");
             }
-            $nome = $cognome = $telefono = $indirizzo = $reputazione = $stato = $portafoglio = $crediti = $data_iscrizione = "";
             $xml = simplexml_load_file($xmlFile);
-            
-            foreach ($xml->utente as $utente) {
-                if ((int)$utente['id'] === (int)$id_utente) {
-                    $nome = (string)$utente->nome;
-                    $cognome = (string)$utente->cognome;
-                    $telefono = (string)$utente->telefono;
-                    $indirizzo = (string)$utente->indirizzo;
-                    $reputazione = (string)$utente->reputazione;
-                    $stato = ((string)$utente->stato === '1') ? true : false;
-                    $portafoglio = (float)$utente->portafoglio;
-                    $crediti = (int)$utente->crediti;
-                    $data_iscrizione = (string)$utente->data_iscrizione;
+            foreach ($xml->utente as $user) {
+                if ((int)$user['id'] === (int)$id_utente) {
+                    $nome = (string)$user->nome;
+                    $cognome = (string)$user->cognome;
+                    $telefono = (string)$user->telefono;
+                    $indirizzo = (string)$user->indirizzo;
+                    $reputazione = (string)$user->reputazione;
+                    $stato = ((string)$user->stato === '1') ? true : false;
+                    $portafoglio = (float)$user->portafoglio;
+                    $crediti = (int)$user->crediti;
+                    $data_iscrizione = (string)$user->data_iscrizione;
                     break; // Esci dal ciclo una volta trovato l'utente
                 }
-    
             }
-            ?>
+        ?>
             <!-- visualizzo i dati dell'utente -->
             <h2>Profilo di <?php echo htmlspecialchars($record['username']); ?></h2>
             <div class="profile_info">
-                <p><strong>id: <?php echo htmlspecialchars($id_utente); ?></strong></p>
-                <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome); ?></p>
-                <p><strong>Cognome:</strong> <?php echo htmlspecialchars($cognome); ?></p>
-                <p><strong>Username:</strong> <?php echo htmlspecialchars($record['username']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-                <p><strong>Telefono:</strong> <?php echo htmlspecialchars($telefono); ?></p>
-                <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($indirizzo); ?></p>
-                <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?></p>
-                <p><strong>Stato:</strong> <?php echo $stato ? 'Attivo' : 'Disabilitato'; ?></p>
-                <p><strong>Portafoglio:</strong> €<?php echo number_format($portafoglio, 2); ?></p>
-                <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?></p>
-                <p><strong>Data di Iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
-                <p><strong>Ruolo:</strong> <?php echo htmlspecialchars($record['ruolo']); ?></p>
-                <!-- Aggiungi altre informazioni se necessario -->
-                <a href="aggiorna_profilo.php">Modifica Profilo</a>
-                <a href="cambia_password.php">Cambia Password</a>
-                
-                <?php 
-                if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])) {
-                    echo '<p class="error_message">' . htmlspecialchars($_SESSION['pwd_change_message']) . '</p>';
-                    // Pulisci il messaggio dopo averlo mostrato
-                    $_SESSION['pwd_change_message'] = "";
-                }
-                ?>
+                <form action="risorse/PHP/aggiorna_profilo.php" method="POST">
+                    <p>dati di prima:</p>
+                    <p><strong>id: <?php echo htmlspecialchars($id_utente); ?></strong></p>
+                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome); ?></p>
+                    <p><strong>Cognome:</strong> <?php echo htmlspecialchars($cognome); ?></p>
+                    <p><strong>Username:</strong> <?php echo htmlspecialchars($username); ?></p>
+                    <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
+                    <p><strong>Telefono:</strong> <?php echo htmlspecialchars($telefono); ?></p>
+                    <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($indirizzo); ?></p>
+                    <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?></p>
+                    <p><strong>Stato:</strong> <?php echo $stato ? 'Attivo' : 'Disabilitato'; ?></p>
+                    <p><strong>Portafoglio:</strong> €<?php echo number_format($portafoglio, 2); ?></p>
+                    <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?></p>
+                    <p><strong>Data di iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
+                    <br />
+                    <p>Modifica i tuoi dati (lascia vuoto per non modificare):</p>
+
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" />
+
+                    <label for="cognome">Cognome:</label>
+                    <input type="text" id="cognome" name="cognome" />
+
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" />
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" />
+
+                    <label for="telefono">Telefono:</label>
+                    <input type="text" id="telefono" name="telefono" />
+
+                    <label for="indirizzo">Indirizzo:</label>
+                    <input type="text" id="indirizzo" name="indirizzo" />
+                    
+                    <button type="submit">Aggiorna Profilo</button>
+                </form>
             </div>
         <?php
         } else {

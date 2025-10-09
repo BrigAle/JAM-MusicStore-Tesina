@@ -3,8 +3,8 @@
   <utente id="1">
     <nome>Admin</nome>
     <cognome>Admin</cognome>
-    <telefono>0000000000</telefono>
-    <indirizzo>Via Roma, 1</indirizzo>
+    <telefono>3213213211</telefono>
+    <indirizzo>Via Firenze 2</indirizzo>
     <reputazione>0</reputazione>
     <stato>1</stato>
     <portafoglio>0</portafoglio>
@@ -37,7 +37,7 @@
     <nome>Mattia</nome>
     <cognome>Aquilina</cognome>
     <telefono>1122334455</telefono>
-    <indirizzo>Via Roma, 2</indirizzo>
+    <indirizzo>Via Roma 2</indirizzo>
     <reputazione>0</reputazione>
     <stato>1</stato>
     <portafoglio>0</portafoglio>

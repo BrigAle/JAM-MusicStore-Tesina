@@ -5,7 +5,7 @@
     <id_utente>5</id_utente>
     <commento>Ottimo prodotto, qualita' eccellente.</commento>
     <valutazione>5</valutazione>
-    <voti_like>2</voti_like>
+    <voti_like>1</voti_like>
     <voti_dislike>1</voti_dislike>
     <voto_utenti>
       <voto id_utente="1" tipo="like"/>
@@ -13,7 +13,6 @@
     <data>2025-05-10</data>
     <voti_utenti>
       <voto id_utente="1" tipo="inutile"/>
-      <voto id_utente="4" tipo="like"/>
     </voti_utenti>
   </recensione>
   <recensione id="2">

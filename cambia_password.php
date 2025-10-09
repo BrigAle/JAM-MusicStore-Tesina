@@ -1,7 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
+    header("Location: login.php");
+    exit();
+}
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -103,96 +106,29 @@ session_start();
             <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
         </div>
     </div>
-
     <!-- div presentazione sito -->
-    <div class="content">
-        
-        <?php
-        // Controlla se l'utente è loggato
-        if (!isset($_SESSION['username'])) {
-            header("Location: login.php");
-            exit();
-        }
-        ?>
-        <!-- connessione al database per recuperare i dati dell'utente -->
-        <?php
-        require_once 'risorse/PHP/connection.php';
-        $connection = new mysqli($host, $user, $password, $db);
-        // Controlla la connessione
-        if ($connection->connect_error) {
-            die("Connessione fallita: " . $connection->connect_error);
-        }
-        $id_utente = $_SESSION['id'];
-        $query = "SELECT * FROM utente WHERE id='$id_utente'";
-        $result = $connection->query($query);
-        if ($result) {
-            $record = $result->fetch_array(MYSQLI_ASSOC);
-            $password_hash = $record['password'];
-            $email = $record['email'];
-        ?>
 
-            <!-- carico il filme xml e recupero i dati con dom -->
+    <div class="content">
+        <h2>Cambia Password</h2>
+        <form action="risorse/PHP/cambia_password.php" method="post">
+            <label for="current_password">Password Attuale:</label>
+            <input type="password" id="current_password" name="current_password" required />
+
+            <label for="new_password">Nuova Password:</label>
+            <input type="password" id="new_password" name="new_password" required />
+
+            <label for="confirm_password">Conferma Nuova Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required />
+
+            <button type="submit">Aggiorna Password</button>
             <?php
-            $xmlFile = 'risorse/XML/utenti.xml';
-            if (!file_exists($xmlFile)) {
-                die("Errore: il file XML degli utenti non esiste");
-            }
-            $nome = $cognome = $telefono = $indirizzo = $reputazione = $stato = $portafoglio = $crediti = $data_iscrizione = "";
-            $xml = simplexml_load_file($xmlFile);
-            
-            foreach ($xml->utente as $utente) {
-                if ((int)$utente['id'] === (int)$id_utente) {
-                    $nome = (string)$utente->nome;
-                    $cognome = (string)$utente->cognome;
-                    $telefono = (string)$utente->telefono;
-                    $indirizzo = (string)$utente->indirizzo;
-                    $reputazione = (string)$utente->reputazione;
-                    $stato = ((string)$utente->stato === '1') ? true : false;
-                    $portafoglio = (float)$utente->portafoglio;
-                    $crediti = (int)$utente->crediti;
-                    $data_iscrizione = (string)$utente->data_iscrizione;
-                    break; // Esci dal ciclo una volta trovato l'utente
-                }
-    
+            if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])) {
+                echo '<p class="error_message">' . htmlspecialchars($_SESSION['pwd_change_message']) . '</p>';
+                // Pulisci il messaggio dopo averlo mostrato
+                $_SESSION['pwd_change_message'] = "";
             }
             ?>
-            <!-- visualizzo i dati dell'utente -->
-            <h2>Profilo di <?php echo htmlspecialchars($record['username']); ?></h2>
-            <div class="profile_info">
-                <p><strong>id: <?php echo htmlspecialchars($id_utente); ?></strong></p>
-                <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome); ?></p>
-                <p><strong>Cognome:</strong> <?php echo htmlspecialchars($cognome); ?></p>
-                <p><strong>Username:</strong> <?php echo htmlspecialchars($record['username']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-                <p><strong>Telefono:</strong> <?php echo htmlspecialchars($telefono); ?></p>
-                <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($indirizzo); ?></p>
-                <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?></p>
-                <p><strong>Stato:</strong> <?php echo $stato ? 'Attivo' : 'Disabilitato'; ?></p>
-                <p><strong>Portafoglio:</strong> €<?php echo number_format($portafoglio, 2); ?></p>
-                <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?></p>
-                <p><strong>Data di Iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
-                <p><strong>Ruolo:</strong> <?php echo htmlspecialchars($record['ruolo']); ?></p>
-                <!-- Aggiungi altre informazioni se necessario -->
-                <a href="aggiorna_profilo.php">Modifica Profilo</a>
-                <a href="cambia_password.php">Cambia Password</a>
-                
-                <?php 
-                if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])) {
-                    echo '<p class="error_message">' . htmlspecialchars($_SESSION['pwd_change_message']) . '</p>';
-                    // Pulisci il messaggio dopo averlo mostrato
-                    $_SESSION['pwd_change_message'] = "";
-                }
-                ?>
-            </div>
-        <?php
-        } else {
-            echo "<p>Errore nel recupero dei dati dell'utente.</p>";
-        }
-        // Chiudi la connessione
-        $connection->close();
-        ?>
-
-
+        </form>
 
     </div>
 

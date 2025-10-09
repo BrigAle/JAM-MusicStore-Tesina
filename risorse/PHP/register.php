@@ -44,7 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $queryR = "INSERT INTO utente (username,email,password) VALUES ('$username','$email','$hashPassword')";
     $result = $connection->query($queryR);
 
-    $successPHP = $result ? true : false;
+    if(!$result) {
+        die("Errore nell'inserimento: " . $connection->error);
+    }else{
+        $successPHP = true;
+    }
 
     // --- Inserimento nel file XML ---
     $nomeVal     = $connection->real_escape_string($_POST['nome']);
