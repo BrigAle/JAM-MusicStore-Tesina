@@ -2,15 +2,15 @@
 <segnalazioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="segnalazioni.xsd">
   <segnalazione id="1">
-    <id_contenuto>RC-1</id_contenuto>
-    <id_utente>7</id_utente>
+    <id_contenuto tipo = "risposta">1</id_contenuto>
+    <id_utente>4</id_utente>
     <motivo>Contenuto offensivo</motivo>
     <data>2025-06-26</data>
   </segnalazione>
 
   <segnalazione id="2">
-    <id_contenuto>RS-1</id_contenuto>
-    <id_utente>9</id_utente>
+    <id_contenuto tipo = "recensione">1</id_contenuto>
+    <id_utente>3</id_utente>
     <motivo>Spam</motivo>
     <data>2025-06-26</data>
   </segnalazione>

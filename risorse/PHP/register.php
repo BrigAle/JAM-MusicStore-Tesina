@@ -39,14 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('location:../../register.php');
         exit();
     }
+   
 
     // Inserisco nel DB
-    $queryR = "INSERT INTO utente (username,email,password) VALUES ('$username','$email','$hashPassword')";
-    $result = $connection->query($queryR);
+    $sql = "INSERT INTO utente (username, password, email, ruolo) 
+        VALUES ('$username', '$hashPassword', '$email', 'cliente')";
+    $result = $connection->query($sql);
+    $idGenerato = $connection->insert_id;
 
-    if(!$result) {
+    if (!$result) {
         die("Errore nell'inserimento: " . $connection->error);
-    }else{
+    } else {
         $successPHP = true;
     }
 
@@ -54,8 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nomeVal     = $connection->real_escape_string($_POST['nome']);
     $cognomeVal  = $connection->real_escape_string($_POST['cognome']);
     $telefonoVal = $connection->real_escape_string($_POST['telefono']);
-    $indirizzoVal= $connection->real_escape_string($_POST['indirizzo']);
+    $indirizzoVal = $connection->real_escape_string($_POST['indirizzo']);
 
+    $connection->close();
     $xmlFile = "../XML/utenti.xml";
     if (!file_exists($xmlFile)) {
         die("Errore: Il file XML non esiste.");
@@ -68,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $utenti = $doc->documentElement; // root <utenti>
     $utente = $doc->createElement('utente');
+    $utente->setAttribute('id', $idGenerato);
 
     // Creo i nodi con i valori
     $utente->appendChild($doc->createElement('nome', $nomeVal));
@@ -79,17 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $utente->appendChild($doc->createElement('portafoglio', 0.0));
     $utente->appendChild($doc->createElement('crediti', 0.0));
     $utente->appendChild($doc->createElement('data_iscrizione', date("Y-m-d")));
-
-    // Genero nuovo id
-    $numeroUtenti = $doc->getElementsByTagName('utente');
-    $idUtente = 0;
-    if ($numeroUtenti->length > 0) {
-        $ultimoUtente = $numeroUtenti->item($numeroUtenti->length - 1);
-        if ($ultimoUtente->hasAttribute('id')) {
-            $idUtente = (int)$ultimoUtente->getAttribute('id');
-        }
-    }
-    $utente->setAttribute('id', $idUtente + 1);
 
     // Aggiungo l’utente
     $utenti->appendChild($utente);
@@ -114,4 +108,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('location:../../homepage.php');
     exit();
 }
-?>

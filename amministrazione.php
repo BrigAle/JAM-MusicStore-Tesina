@@ -92,6 +92,9 @@ session_start();
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
+      <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
+        <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
+      <?php endif; ?>
       <!-- cliente links -->
       <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
@@ -99,5 +102,33 @@ session_start();
       <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
       <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
-
   </div>
+
+  <!-- div presentazione sito -->
+  <div class="content">
+    <h1>Area di Amministrazione</h1>
+    <p>Benvenuto nell'area di amministrazione. Qui puoi gestire gli utenti, i prodotti e le statistiche del negozio.</p>
+    <!-- Aggiungi qui i link o le funzionalità specifiche per l'amministratore -->
+    <ul>
+      <!--  Visualizza e modifica i dati anagrafici, username e password degli
+              utenti.– Disattiva (ban) e riattiva gli account utente -->
+      <li><a href="gestione_utenti.php">Gestione Utenti</a></li>
+      <!--  Controlla le segnalazioni inviate dai gestori ed eventualmente pu`o
+                modificare o eliminare le recensioni.– Eleva domande nella sezione delle FAQ, traendo spunto dai commenti,
+                dalle risposte e dalle recensioni degli utenti sui prodotti. -->
+      <li><a href="gestione_contenuti.php">Gestione Contenuti</a></li>
+    </ul>
+  </div>
+
+  <div class="pdp">
+    <div class="pdp-center">
+      <p>&copy; 2025 JAM Music Store</p>
+    </div>
+    <div class="pdp-right">
+      <a href="FAQs.php">FAQs</a>
+    </div>
+  </div>
+
+</body>
+
+</html>

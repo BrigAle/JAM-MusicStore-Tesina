@@ -113,22 +113,28 @@ session_start();
           <label for="username">Username:</label>
           <input type="text" id="username" name="username" required />
 
-          
+
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required />
-          <?php 
+          <?php
           if (isset($_SESSION['error_username']) && $_SESSION['error_username'] == true) {
-                         echo "<h3>Utente non registrato</h3>";
-                         unset($_SESSION['error_username']);
-                    }
-                    if (isset($_SESSION['error_password']) && $_SESSION['error_password'] == true) {
-                        echo "<h3>Password errata</h3>";
-                        unset($_SESSION['error_password']);
-                    }
-                    if (isset($_SESSION['error_users']) && $_SESSION['error_users'] == true) {
-                        echo "<h3>Errore nel recupero degli utenti</h3>";
-                        unset($_SESSION['error_users']);
-                    }    
+            echo "<h3>Utente non registrato</h3>";
+            unset($_SESSION['error_username']);
+          }
+          if (isset($_SESSION['error_password']) && $_SESSION['error_password'] == true) {
+            echo "<h3>Password errata</h3>";
+            unset($_SESSION['error_password']);
+          }
+          if (isset($_SESSION['error_users']) && $_SESSION['error_users'] == true) {
+            echo "<h3>Errore nel recupero degli utenti</h3>";
+            unset($_SESSION['error_users']);
+          }
+          // se ho stato bannato non faccio fare il login
+          if (isset($_SESSION['error_banned']) && $_SESSION['error_banned'] == true) {
+            echo "<h3>Il tuo account è stato bloccato. Contatta l'amministratore per maggiori informazioni.</h3>";
+            unset($_SESSION['error_banned']);
+
+          }
           ?>
           <input type="submit" value="Accedi" />
           <p>Non sei registrato? <a href="register.php">Registrati qui</a></p>

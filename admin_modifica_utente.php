@@ -1,5 +1,10 @@
 <?php
 session_start();
+if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
+    header("Location: login.php");
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -107,30 +112,24 @@ session_start();
 
     <div class="content">
         <?php
-        if (!isset($_SESSION['username'])) {
-            header("Location: login.php");
-            exit();
-        }
-        ?>
-        <?php
         require_once 'risorse/PHP/connection.php';
         $connection = new mysqli($host, $user, $password, $db);
         // Controlla la connessione
         if ($connection->connect_error) {
             die("Connessione fallita: " . $connection->connect_error);
         }
-        $id_utente = $_SESSION['id'];
-        $query = "SELECT * FROM utente WHERE id='$id_utente'";
+        $id_utente = $_GET['id'];
+        $query = "SELECT * FROM utente WHERE id = $id_utente";
         $result = $connection->query($query);
         if ($result) {
             $record = $result->fetch_array(MYSQLI_ASSOC);
             $email = $record['email'];
             $username = $record['username'];
-            // Carico i dati dall'XML
+            $stato = $record['stato'];
+
             $xmlFile = 'risorse/XML/utenti.xml';
-            if (!file_exists($xmlFile)) {
-                die("Errore: il file XML degli utenti non esiste");
-            }
+
+            // Carico i dati dall'XML
             $xml = simplexml_load_file($xmlFile);
             foreach ($xml->utente as $user) {
                 if ((int)$user['id'] === (int)$id_utente) {
@@ -139,18 +138,22 @@ session_start();
                     $telefono = (string)$user->telefono;
                     $indirizzo = (string)$user->indirizzo;
                     $reputazione = (string)$user->reputazione;
-                    $stato = ((string)$user->stato === '1') ? true : false;
+                    
                     $portafoglio = (float)$user->portafoglio;
                     $crediti = (int)$user->crediti;
                     $data_iscrizione = (string)$user->data_iscrizione;
                     break; // Esci dal ciclo una volta trovato l'utente
                 }
             }
+
+
         ?>
-            <!-- visualizzo i dati dell'utente -->
+
+
+
             <h2>Profilo di <?php echo htmlspecialchars($record['username']); ?></h2>
             <div class="profile_info">
-                <form action="risorse/PHP/aggiorna_profilo.php" method="POST">
+                <form action="risorse/PHP/amministratore/aggiorna_profilo_admin.php" method="POST">
                     <p>dati di prima:</p>
                     <p><strong>id: <?php echo htmlspecialchars($id_utente); ?></strong></p>
                     <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome); ?></p>
@@ -166,6 +169,9 @@ session_start();
                     <p><strong>Data di iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
                     <br />
                     <p>Modifica i tuoi dati (lascia vuoto per non modificare):</p>
+
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($id_utente); ?>" />
+                    <input type="hidden" name="username_corrente" value="<?php echo htmlspecialchars($username); ?>" />
 
                     <label for="nome">Nome:</label>
                     <input type="text" id="nome" name="nome" />
@@ -184,7 +190,7 @@ session_start();
 
                     <label for="indirizzo">Indirizzo:</label>
                     <input type="text" id="indirizzo" name="indirizzo" />
-                    
+
                     <button type="submit">Aggiorna Profilo</button>
                 </form>
             </div>
@@ -195,9 +201,6 @@ session_start();
         // Chiudi la connessione
         $connection->close();
         ?>
-
-
-
     </div>
 
     <div class="pdp">

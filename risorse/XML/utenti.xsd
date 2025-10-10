@@ -16,7 +16,6 @@
                 <xsd:element ref="telefono" minOccurs="1" maxOccurs="1" />
                 <xsd:element ref="indirizzo" minOccurs="1" maxOccurs="1" />
                 <xsd:element ref="reputazione" minOccurs="1" maxOccurs="1" />
-                <xsd:element ref="stato" minOccurs="1" maxOccurs="1" />
                 <xsd:element ref="portafoglio" minOccurs="1" maxOccurs="1" />
                 <xsd:element ref="crediti" minOccurs="1" maxOccurs="1" />
                 <xsd:element ref="data_iscrizione" minOccurs="1" maxOccurs="1" />
@@ -29,7 +28,6 @@
     <xsd:element name="telefono" type="xsd:string" />
     <xsd:element name="indirizzo" type="xsd:string" />
     <xsd:element name="reputazione" type="xsd:float" />
-    <xsd:element name="stato" type="xsd:boolean" />
     <xsd:element name="portafoglio" type="xsd:float" />
     <xsd:element name="crediti" type="xsd:float" />
     <xsd:element name="data_iscrizione" type="xsd:date" />

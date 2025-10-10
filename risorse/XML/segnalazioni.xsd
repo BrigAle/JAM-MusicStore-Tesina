@@ -21,13 +21,24 @@
   </xsd:element>
 
   <xsd:element name="id_contenuto">
-    <xsd:simpleType>
-      <xsd:restriction base="xsd:string">
-        <xsd:pattern value="RC-[0-9]+|RS-[0-9]+"/>
-      </xsd:restriction>
-    </xsd:simpleType>
+    <xsd:complexType>
+      <xsd:simpleContent>
+        <xsd:extension base="xsd:integer">
+          <xsd:attribute name="tipo" use="required">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="risposta"/>
+                <xsd:enumeration value="recensione"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+        </xsd:extension>
+      </xsd:simpleContent>
+    </xsd:complexType>
   </xsd:element>
+
   <xsd:element name="id_utente" type="xsd:integer"/>
   <xsd:element name="motivo" type="xsd:string"/>
   <xsd:element name="data" type="xsd:date"/>
+
 </xsd:schema>

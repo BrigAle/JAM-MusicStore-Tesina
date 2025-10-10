@@ -3,13 +3,12 @@
   <utente id="1">
     <nome>Admin</nome>
     <cognome>Admin</cognome>
-    <telefono>3213213211</telefono>
-    <indirizzo>Via Firenze 2</indirizzo>
+    <telefono>0000000000</telefono>
+    <indirizzo>Via Roma, 1</indirizzo>
     <reputazione>0</reputazione>
-    <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-04</data_iscrizione>
+    <data_iscrizione>2025-10-10</data_iscrizione>
   </utente>
   <utente id="2">
     <nome>Alessandro</nome>
@@ -17,10 +16,9 @@
     <telefono>1234567890</telefono>
     <indirizzo>Via Milano, 10</indirizzo>
     <reputazione>0</reputazione>
-    <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-04</data_iscrizione>
+    <data_iscrizione>2025-10-10</data_iscrizione>
   </utente>
   <utente id="3">
     <nome>Giovanni</nome>
@@ -28,20 +26,18 @@
     <telefono>0987654321</telefono>
     <indirizzo>Via Napoli, 5</indirizzo>
     <reputazione>0</reputazione>
-    <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-04</data_iscrizione>
+    <data_iscrizione>2025-10-10</data_iscrizione>
   </utente>
   <utente id="4">
     <nome>Mattia</nome>
     <cognome>Aquilina</cognome>
     <telefono>1122334455</telefono>
-    <indirizzo>Via Roma 2</indirizzo>
+    <indirizzo>Via Roma, 2</indirizzo>
     <reputazione>0</reputazione>
-    <stato>1</stato>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-04</data_iscrizione>
+    <data_iscrizione>2025-10-10</data_iscrizione>
   </utente>
 </utenti>
