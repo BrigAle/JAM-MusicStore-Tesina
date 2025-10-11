@@ -148,16 +148,18 @@ session_start();
       <?php if (empty($recensioniProdotto)): ?>
         <p>Nessuna recensione trovata per questo prodotto.</p>
       <?php else: ?>
-        <?php 
-          $id_utente = isset($_SESSION['id']) ? $_SESSION['id'] : null; // ID utente loggato o null se non loggato
-          foreach ($recensioniProdotto as $recensione):
+        <?php
+        $id_utente = isset($_SESSION['id']) ? $_SESSION['id'] : null; // ID utente loggato o null se non loggato
+        foreach ($recensioniProdotto as $recensione):
           $id_recensione = (int)$recensione['id'];
           $votoUtente = null;
+          $id_utente_recensione = (int)$recensione->id_utente;
 
-          if (isset($recensione->voti_utenti)) {
-            foreach ($recensione->voti_utenti->voto as $v) {
+          // ✅ controlla correttamente il nodo "voto_utenti"
+          if (isset($recensione->voto_utenti)) {
+            foreach ($recensione->voto_utenti->voto as $v) {
               if ((int)$v['id_utente'] === (int)$id_utente) {
-                $votoUtente = (string)$v['tipo']; // "utile" o "inutile"
+                $votoUtente = (string)$v['tipo']; // "like" o "dislike"
                 break;
               }
             }
@@ -185,9 +187,10 @@ session_start();
 
               <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
                 <div class="voti">
-                  <!-- Bottone "Like" -->
+
+                  <!-- Pulsante Like -->
                   <form action="risorse/PHP/aggiorna_voto.php" method="GET" style="display:inline;">
-                    <input type="hidden" name="id_recensione" value="<?= $id_recensione ?>">
+                    <input type="hidden" name="id_recensione" value="<?= $id_recensione ?>"> <!-- ✅ ora funziona -->
                     <input type="hidden" name="id_prodotto" value="<?= $_GET['id_prodotto'] ?>">
                     <button type="submit" name="voto" value="like"
                       class="<?= $votoUtente === 'like' ? 'voto-attivo' : 'voto-passivo' ?>">
@@ -195,12 +198,12 @@ session_start();
                     </button>
                   </form>
 
-                  <!-- Bottone "Dislike" -->
+                  <!-- Pulsante Dislike -->
                   <form action="risorse/PHP/aggiorna_voto.php" method="GET" style="display:inline;">
                     <input type="hidden" name="id_recensione" value="<?= $id_recensione ?>">
                     <input type="hidden" name="id_prodotto" value="<?= $_GET['id_prodotto'] ?>">
-                    <button type="submit" name="voto" value="inutile"
-                      class="<?= $votoUtente === 'inutile' ? 'voto-attivo' : 'voto-passivo' ?>">
+                    <button type="submit" name="voto" value="dislike"
+                      class="<?= $votoUtente === 'dislike' ? 'voto-attivo' : 'voto-passivo' ?>">
                       <img src="risorse/IMG/thumbs_down.png" alt="Voto inutile" width="25" height="25">
                     </button>
                   </form>
@@ -215,6 +218,19 @@ session_start();
               </form>
             <?php endif; ?>
 
+            <?php
+            // se utente loggato e' un gestore, mostra pulsante segnala
+            if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] == 'gestore'):
+              echo '<form action="segnala_recensione_risposta.php" method="POST">
+                      <input type="hidden" name="id_prodotto" value="' . htmlspecialchars($_GET['id_prodotto']) . '" />
+                      <input type="hidden" name="id_utente_recensione" value="' . htmlspecialchars((int)$recensione->id_utente) . '" />
+                      <input type="hidden" name="id_recensione" value="' . htmlspecialchars((int)$recensione['id']) . '" />
+                      <button type="submit">Segnala</button>
+                    </form>';
+            endif;
+
+            ?>
+
             <!-- RISPOSTE -->
             <?php
             $risposteTrovate = false;
@@ -225,8 +241,18 @@ session_start();
                 <div class="risposta">
                   <h4>Risposta:</h4>
                   <p><?= nl2br(htmlspecialchars($risposta->commento)) ?></p>
-                  <p><strong>Data:</strong> <?= htmlspecialchars($risposta->data) ?></p>
-                  <p><strong>Ora:</strong> <?= htmlspecialchars($risposta->ora) ?></p>
+                  <p style="text-align: end;"><strong>Data:</strong> <?= htmlspecialchars($risposta->data) ?><strong> Ora:</strong> <?= htmlspecialchars($risposta->ora) ?></p>
+                  <?php
+                  // se utente loggato e' un gestore, mostra pulsante segnala
+                  if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] == 'gestore'):
+                    echo '<form action="segnala_recensione_risposta.php" method="POST">
+                            <input type="hidden" name="id_prodotto" value="' . htmlspecialchars($_GET['id_prodotto']) . '" />
+                            <input type="hidden" name="id_utente_risposta" value="' . htmlspecialchars((int)$risposta->id_utente) . '" />
+                            <input type="hidden" name="id_risposta" value="' . htmlspecialchars((int)$risposta['id']) . '" />
+                            <button type="submit">Segnala</button>
+                          </form>';
+                  endif;
+                  ?>
                 </div>
             <?php endif;
             endforeach; ?>

@@ -95,7 +95,6 @@ session_start();
       <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
         <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
       <?php endif; ?>
-      <!-- cliente links -->
       <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>

@@ -64,4 +64,11 @@
     <data>2025-10-08</data>
     <ora>14:16</ora>
   </risposta>
+  <risposta id="10">
+    <id_recensione>1</id_recensione>
+    <id_utente>4</id_utente>
+    <commento>cicicici</commento>
+    <data>2025-10-11</data>
+    <ora>16:01</ora>
+  </risposta>
 </risposte>

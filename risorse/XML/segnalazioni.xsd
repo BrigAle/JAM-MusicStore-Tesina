@@ -39,6 +39,6 @@
 
   <xsd:element name="id_utente" type="xsd:integer"/>
   <xsd:element name="motivo" type="xsd:string"/>
-  <xsd:element name="data" type="xsd:date"/>
+  <xsd:element name="data" type="xsd:dateTime"/>
 
 </xsd:schema>

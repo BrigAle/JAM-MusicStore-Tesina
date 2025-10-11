@@ -27,10 +27,10 @@ foreach ($recensioni as $recensione) {
         $votiLike = $recensione->getElementsByTagName("voti_like")->item(0);
         $votiDislike = $recensione->getElementsByTagName("voti_dislike")->item(0);
 
-        // Crea nodo voti_utenti se non esiste
-        $votiUtenti = $recensione->getElementsByTagName("voti_utenti")->item(0);
+        // Crea nodo voto_utenti se non esiste
+        $votiUtenti = $recensione->getElementsByTagName("voto_utenti")->item(0);
         if (!$votiUtenti) {
-            $votiUtenti = $doc->createElement("voti_utenti");
+            $votiUtenti = $doc->createElement("voto_utenti");
             $recensione->appendChild($votiUtenti);
         }
 

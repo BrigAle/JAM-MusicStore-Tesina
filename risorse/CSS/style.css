@@ -299,23 +299,24 @@ body {
 }
 /* voti */
 .voti button {
-  background: none;
   border: none;
+  background: none;
   cursor: pointer;
-  padding: 5px;
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.voto-attivo {
+  filter: brightness(1.2);
+  transform: scale(1.1);
+}
+
+.voto-passivo {
+  opacity: 0.6;
 }
 
 .voti button:hover {
-  transform: scale(1.3);
-}
-
-.voto-attivo img {
-  filter: brightness(1.3) saturate(1.5);
-}
-
-.voto-passivo img {
-  opacity: 0.5;
+  transform: scale(1.15);
+  opacity: 1;
 }
 /* Form di login */
 .login_form {

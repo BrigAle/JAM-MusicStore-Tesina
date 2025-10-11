@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<segnalazioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="segnalazioni.xsd">
+<segnalazioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="segnalazioni.xsd">
   <segnalazione id="1">
-    <id_contenuto tipo = "risposta">1</id_contenuto>
+    <id_contenuto tipo="risposta">1</id_contenuto>
     <id_utente>4</id_utente>
     <motivo>Contenuto offensivo</motivo>
-    <data>2025-06-26</data>
+    <data>2025-06-26T12:28:23</data>
   </segnalazione>
-
-  <segnalazione id="2">
-    <id_contenuto tipo = "recensione">1</id_contenuto>
+  <segnalazione id="3">
+    <id_contenuto tipo="risposta">2</id_contenuto>
+    <id_utente>2</id_utente>
+    <motivo>Inappropriato</motivo>
+    <data>2025-06-26T12:28:23</data>
+  </segnalazione>
+  <segnalazione id="7">
+    <id_contenuto tipo="risposta">2</id_contenuto>
     <id_utente>3</id_utente>
-    <motivo>Spam</motivo>
-    <data>2025-06-26</data>
+    <motivo>asdasdasda</motivo>
+    <data>2025-10-11T13:13:35</data>
   </segnalazione>
 </segnalazioni>
