@@ -102,5 +102,27 @@ session_start();
       <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
       <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
-
   </div>
+
+  <!-- div presentazione sito -->
+  <div class="content">
+    <h1 style="font-size: 50px; text-align: center;">Area di Gestione</h1>
+    <ul>
+      <li><a href="gestione_utenti_gestore.php"><h2>Visualizza Utenti</h2></a></li>
+      <li><a href="gestione_prodotti_gestore.php"><h2>Gestione Prodotti</h2></a></li>
+      <li><a href="gestione_contenuti_gestore.php"><h2>Gestione Contenuti</h2></a></li>
+    </ul>
+  </div>
+
+  <div class="pdp">
+    <div class="pdp-center">
+      <p>&copy; 2025 JAM Music Store</p>
+    </div>
+    <div class="pdp-right">
+      <a href="FAQs.php">FAQs</a>
+    </div>
+  </div>
+
+</body>
+
+</html>

@@ -106,17 +106,16 @@ session_start();
 
   <!-- div presentazione sito -->
   <div class="content">
-    <h1>Area di Amministrazione</h1>
-    <p>Benvenuto nell'area di amministrazione. Qui puoi gestire gli utenti, i prodotti e le statistiche del negozio.</p>
-    <!-- Aggiungi qui i link o le funzionalità specifiche per l'amministratore -->
+    <h1 style="font-size: 50px; text-align: center;">Area di Amministrazione</h1>
     <ul>
       <!--  Visualizza e modifica i dati anagrafici, username e password degli
               utenti.– Disattiva (ban) e riattiva gli account utente -->
-      <li><a href="gestione_utenti.php">Gestione Utenti</a></li>
+      <li><a href="gestione_utenti_admin.php"><h2>Gestione Utenti</h2></a></li>
       <!--  Controlla le segnalazioni inviate dai gestori ed eventualmente pu`o
                 modificare o eliminare le recensioni.– Eleva domande nella sezione delle FAQ, traendo spunto dai commenti,
                 dalle risposte e dalle recensioni degli utenti sui prodotti. -->
-      <li><a href="gestione_contenuti.php">Gestione Contenuti</a></li>
+      <li><a href="gestione_contenuti_admin.php"><h2>Gestione Contenuti</h2></a></li>
+      <li><a href="gestione_crediti_admin.php"><h2>Gestione Crediti</h2></a></li>
     </ul>
   </div>
 

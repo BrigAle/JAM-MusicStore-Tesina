@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 $sql = "UPDATE utente SET ruolo = 'cliente' WHERE id = " . $_GET['id'];
 $conn->query($sql);
 $conn->close();
-header("Location: ../../../gestione_utenti.php");
+header("Location: ../../../gestione_utenti_admin.php");
 exit();
 
 ?>

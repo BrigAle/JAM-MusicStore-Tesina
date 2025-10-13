@@ -10,7 +10,7 @@
 </head>
 
 <body>
- <div class="header">
+  <div class="header">
     <div class="logo">
       <a href="homepage.php"><img src="risorse/IMG/JAM_logo (2).png" alt="JAM Music Store" /></a>
     </div>
@@ -100,21 +100,19 @@
   </div>
 
 
-  <div class="content">
-      <ul>
-        <li><p>Domanda 1: Come posso effettuare un ordine?</p></li>
-        <li><p>Domanda 2: Quali metodi di pagamento accettate?</p></li>
-        <li><p>Domanda 3: Posso restituire un prodotto?</p></li>
-        <li><p>Domanda 4: Come posso contattare il servizio clienti?</p></li>
-        <li><p>Domanda 5: Come posso modificare i miei dati personali?</p></li>
-        <li><p>Domanda 6: Come posso cancellare il mio account?</p></li>
-        <li><p>Domanda 7: Come posso recuperare la mia password?</p></li>
-        <li><p>Domanda 8: Come posso visualizzare la mia cronologia ordini?</p></li>
-        <li><p>Domanda 9: Come posso aggiornare le mie informazioni di spedizione?</p></li>
-        <li><p>Domanda 10: Come posso segnalare un problema con un prodotto?</p></li>
-        <li><p>Domanda 11: Come posso iscrivermi alla newsletter?</p></li>
-      </ul>
-  </div>
+ <div class="content contenuto-FAQs">
+  <?php
+  $faqs = simplexml_load_file("risorse/XML/FAQs.xml") or die("Errore: impossibile caricare l'XML");
+
+  foreach ($faqs->faq as $faq): ?>
+    <div class="box-FAQs">
+      <h4 class="faq-category"><?= htmlspecialchars($faq->categoria) ?></h4>
+      <h3 class="faq-question"><?= htmlspecialchars($faq->domanda) ?></h3>
+      <div class="faq-answer"><?= nl2br(htmlspecialchars($faq->risposta)) ?></div>
+    </div>
+  <?php endforeach; ?>
+</div>
+
 
   <div class="pdp">
     <div class="pdp-center">
@@ -126,4 +124,5 @@
   </div>
 
 </body>
+
 </html>

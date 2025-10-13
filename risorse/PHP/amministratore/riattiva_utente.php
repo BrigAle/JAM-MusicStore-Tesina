@@ -14,7 +14,7 @@ $sql = "UPDATE utente SET stato = 1 WHERE id = " . $_GET['id'];
 $conn->query($sql);
 $conn->close();
 
-header("Location: ../../../gestione_utenti.php");
+header("Location: ../../../gestione_utenti_admin.php");
 exit();
 
 ?>

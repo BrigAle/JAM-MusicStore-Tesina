@@ -151,7 +151,7 @@ session_start();
               <p>Bonus: <?= $bonus ?> punti</p>
             <?php endif; ?>
             <p>Data di inserimento: <?= $datainserimento ?></p>
-            <p class="valutazione">
+            <p class="valutazione" style="text-align: center;">
               Valutazione: <?= $valutazioneMedia ?> 
               <img src="risorse/IMG/stella.png" alt="">
             </p>

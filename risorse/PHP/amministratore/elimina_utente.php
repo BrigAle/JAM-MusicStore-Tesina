@@ -50,6 +50,6 @@ foreach ($utenti as $utente) {
 $doc->save($xmlFile);
 
 // Torna alla pagina
-header("Location: ../../../gestione_utenti.php");
+header("Location: ../../../gestione_utenti_admin.php");
 exit();
 ?>

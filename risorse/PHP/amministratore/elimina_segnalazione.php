@@ -1,10 +1,13 @@
 <?php
 session_start();
+if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
+    header("Location: ../../../login.php");
+    exit();
+}
 
-// ✅ Percorso corretto del file XML
-$xmlFile = __DIR__ . '/../../XML/segnalazioni.xml';
+$xmlFile = '../../XML/segnalazioni.xml';
 
-// ✅ Controllo parametro GET
+
 $segnalazione_id = $_GET['id_segnalazione'];
 if ($segnalazione_id === null || $segnalazione_id === '') {
     $_SESSION['elimina_segnalazione_successo'] = false;
@@ -12,7 +15,7 @@ if ($segnalazione_id === null || $segnalazione_id === '') {
     exit();
 }
 
-// ✅ Carico il file XML
+
 $doc = new DOMDocument();
 $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
@@ -23,7 +26,7 @@ if (!$doc->load($xmlFile)) {
 
 $segnalazione_trovata = false;
 
-// ✅ Cerco e rimuovo la segnalazione con l'ID richiesto
+// Cerco e rimuovo la segnalazione con l'ID richiesto
 foreach ($doc->getElementsByTagName("segnalazione") as $s) {
     $id_attr = trim($s->getAttribute("id"));
     if ((int)$id_attr === (int)$segnalazione_id) {
@@ -33,7 +36,7 @@ foreach ($doc->getElementsByTagName("segnalazione") as $s) {
     }
 }
 
-// ✅ Salvo le modifiche
+
 if ($segnalazione_trovata) {
     if ($doc->save($xmlFile)) {
         $_SESSION['elimina_segnalazione_successo'] = true;
@@ -46,6 +49,6 @@ if ($segnalazione_trovata) {
 }
 
 // ✅ Redirect alla pagina di gestione
-header("Location: ../../../gestione_utenti.php");
+header("Location: ../../../gestione_contenuti_admin.php");
 exit();
 ?>

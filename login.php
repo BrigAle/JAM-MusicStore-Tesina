@@ -92,7 +92,9 @@ session_start();
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
-      <!-- cliente links -->
+       <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
+        <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
+      <?php endif; ?>
       <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
@@ -137,7 +139,7 @@ session_start();
           }
           ?>
           <input type="submit" value="Accedi" />
-          <p>Non sei registrato? <a href="register.php">Registrati qui</a></p>
+          <p>Non sei registrato? <a href="register.php" style="color: darkviolet; background-color: #1F1F1F;">Registrati qui</a></p>
         </form>
       </div>
     </div>
@@ -146,7 +148,7 @@ session_start();
 
 
 
-  <div class="pdp">
+  <div class="pdp"> 
     <div class="pdp-center">
       <p>&copy; 2025 JAM Music Store</p>
     </div>

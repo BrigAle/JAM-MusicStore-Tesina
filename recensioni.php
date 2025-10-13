@@ -92,7 +92,9 @@ session_start();
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
-      <!-- cliente links -->
+      <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
+        <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
+      <?php endif; ?>
       <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
@@ -100,7 +102,6 @@ session_start();
       <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
     </div>
   </div>
-  <!-- div presentazione sito -->
 
   <?php
 
@@ -139,7 +140,7 @@ session_start();
   ?>
 
 
-  <div class="content">
+  <div class="content" style="align-items: normal;">
     <h1>Recensioni del prodotto: <?= $nomeProdotto ?></h1>
     <div class="immagine_prodotto">
       <img src="<?= htmlspecialchars($immagineProdotto) ?>" alt="<?= htmlspecialchars($nomeProdotto) ?>" style="max-width:300px; max-height:200px;" />
@@ -155,6 +156,16 @@ session_start();
           $votoUtente = null;
           $id_utente_recensione = (int)$recensione->id_utente;
 
+          // connessione al database per ricavare l'username dell'utente che ha scritto la recensione
+          require_once 'risorse/PHP/connection.php';
+          $connection = new mysqli($host, $user, $password, $db);
+          $queryU = "SELECT username FROM utente WHERE id = $id_utente_recensione";
+          $resultU = $connection->query($queryU);
+          if ($resultU) {
+            $rowU = $resultU->fetch_assoc();
+            $username_recensione = $rowU['username'];
+          }
+
           // ✅ controlla correttamente il nodo "voto_utenti"
           if (isset($recensione->voto_utenti)) {
             foreach ($recensione->voto_utenti->voto as $v) {
@@ -166,14 +177,14 @@ session_start();
           }
         ?>
           <div class="recensione">
-            <h3><?= htmlspecialchars($recensione->titolo) ?></h3>
+            <h3>Recensione di <?= htmlspecialchars($username_recensione) ?></h3>
             <p class="valutazione">
               Valutazione: <?= $recensione->valutazione ?>
               <img src="risorse/IMG/stella.png" alt="">
             </p>
             <p><strong>Commento:</strong> <?= nl2br(htmlspecialchars($recensione->commento)) ?></p>
 
-            <p> <strong>Likes:</strong> <?= htmlspecialchars($recensione->voti_like) ?> |
+            <p><strong>Likes:</strong> <?= htmlspecialchars($recensione->voti_like) ?> |
               <strong>Dislikes:</strong> <?= htmlspecialchars($recensione->voti_dislike) ?>
             </p>
 
@@ -238,8 +249,34 @@ session_start();
               if ((int)$risposta->id_recensione == (int)$recensione['id']):
                 $risposteTrovate = true;
             ?>
+                <?php
+                // connessione al database per ricavare l'username dell'utente che ha scritto la risposta
+                $id_utente_risposta = (int)$risposta->id_utente;
+                $queryU = "SELECT username,ruolo FROM utente WHERE id = $id_utente_risposta";
+                $resultU = $connection->query($queryU);
+                if ($resultU) {
+                  $rowU = $resultU->fetch_assoc();
+                  $username_risposta = $rowU['username'];
+                  $ruolo_risposta = $rowU['ruolo'];
+                }
+                ?>
                 <div class="risposta">
-                  <h4>Risposta:</h4>
+
+                  <?php
+                  if (isset($username_risposta)) {
+                    $ruoloLower = strtolower($ruolo_risposta);
+                    $ruoloTesto = '';
+
+                    if ($ruoloLower === 'amministratore') {
+                      $ruoloTesto = ' <span style="color:red;">(Amministratore)</span>';
+                    } elseif ($ruoloLower === 'gestore') {
+                      $ruoloTesto = ' <span style="color:orange;">(Gestore)</span>';
+                    }
+
+                    echo '<h4>Risposta di ' . htmlspecialchars($username_risposta) . $ruoloTesto . ':</h4>';
+                  }
+                  ?>
+
                   <p><?= nl2br(htmlspecialchars($risposta->commento)) ?></p>
                   <p style="text-align: end;"><strong>Data:</strong> <?= htmlspecialchars($risposta->data) ?><strong> Ora:</strong> <?= htmlspecialchars($risposta->ora) ?></p>
                   <?php
@@ -264,7 +301,9 @@ session_start();
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-    <a href="catalogo.php">Torna al catalogo</a>
+    <a href="catalogo.php">
+      <h2>Torna al catalogo</h2>
+    </a>
   </div>
 
 

@@ -5,10 +5,12 @@
     <id_utente>4</id_utente>
     <commento>Ottimo prodotto, qualita' eccellente.</commento>
     <valutazione>5</valutazione>
-    <voti_like>1</voti_like>
-    <voti_dislike>1</voti_dislike>
+    <voti_like>2</voti_like>
+    <voti_dislike>2</voti_dislike>
     <voto_utenti>
       <voto id_utente="1" tipo="like"/>
+      <voto id_utente="4" tipo="like"/>
+      <voto id_utente="2" tipo="dislike"/>
     </voto_utenti>
     <data>2025-05-10</data>
   </recensione>
@@ -30,11 +32,12 @@
     <id_utente>3</id_utente>
     <commento>Non sono soddisfatto del suono.</commento>
     <valutazione>2</valutazione>
-    <voti_like>5</voti_like>
+    <voti_like>6</voti_like>
     <voti_dislike>9</voti_dislike>
     <voto_utenti>
       <voto id_utente="2" tipo="like"/>
       <voto id_utente="6" tipo="dislike"/>
+      <voto id_utente="1" tipo="like"/>
     </voto_utenti>
     <data>2025-05-12</data>
   </recensione>
@@ -57,10 +60,11 @@
     <commento>Non sono soddisfatto del suono.</commento>
     <valutazione>2</valutazione>
     <voti_like>5</voti_like>
-    <voti_dislike>9</voti_dislike>
+    <voti_dislike>10</voti_dislike>
     <voto_utenti>
       <voto id_utente="2" tipo="like"/>
       <voto id_utente="6" tipo="dislike"/>
+      <voto id_utente="1" tipo="dislike"/>
     </voto_utenti>
     <data>2025-05-12</data>
   </recensione>

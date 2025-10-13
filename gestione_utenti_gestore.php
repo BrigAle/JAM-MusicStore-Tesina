@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
-    // L'utente non è loggato o non è un admin, reindirizza alla pagina di login
+if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
+    // L'utente non è loggato o non è un gestore, reindirizza alla pagina di login
     header('Location: login.php');
     exit();
 }
@@ -90,18 +90,18 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
         </div>
 
         <div class="navLink">
-            <!-- admin links -->
+            <!-- link admin -->
             <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'amministratore'): ?>
                 <a href="amministrazione.php">admin</a>
             <?php endif; ?>
-            <!-- gestore links -->
+            <!-- link gestore -->
             <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
                 echo "<a href=\"gestione.php\">gestore</a>";
             endif; ?>
             <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
                 <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
             <?php endif; ?>
-            <!-- cliente links -->
+            <!-- link cliente -->
             <a href="catalogo.php">Catalogo</a>
             <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
             <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
@@ -110,7 +110,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
         </div>
     </div>
 
-    <!-- div presentazione sito -->
+    
     <div class="content">
         <?php
         require_once('risorse/PHP/connection.php');
@@ -119,7 +119,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
             die("Connessione fallita: " . $connection->connect_error);
         }
 
-        // --- carico anche l'XML ---
+        // ricerca in base agli id degli utenti nel database
         $xmlFile = "risorse/XML/utenti.xml";
         $xml = simplexml_load_file($xmlFile);
 
@@ -127,7 +127,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
         $result = $connection->query($sql);
 
         if ($result) {
-            echo "<h2>Gestione Utenti</h2>";
+            echo "<h2 style='text-align: left;'>Gestione Utenti</h2>";
             echo "<table border='1' cellpadding='6'>
                 <tr>
                     <th>ID</th>
@@ -137,13 +137,13 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
                     <th>Nome</th>
                     <th>Cognome</th>
                     <th>Telefono</th>
-                    <th>Indirizzo</th>
+                    <th style='padding: 0px 30px;text-align:center'>Indirizzo</th>
                     <th>Reputazione</th>
                     <th>Stato</th>
                     <th>Portafoglio</th>
                     <th>Crediti</th>
                     <th>Data Iscrizione</th>
-                    <th>Azioni</th>
+                    
                 </tr>";
 
             while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
@@ -158,7 +158,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
                     }
                 }
 
-                // Estraggo i dati dall'XML (se trovati)
+                // Estraggo i dati dall'XML
                 if ($utenteXML) {
                     $nome = (string)$utenteXML->nome;
                     $cognome = (string)$utenteXML->cognome;
@@ -172,30 +172,8 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
                     $nome = $cognome = $telefono = $indirizzo = $reputazione = $portafoglio = $crediti = $data_iscrizione = '-';
                 }
                 $stato = $row['stato'] ?? '1'; // Default a '1' se non definito
-                // Stampo i dati nella tabella
-                // Riga della tabella
-                // Costruisci le azioni in PHP, non dentro echo con tag PHP
-                $azioni = "<a href='admin_modifica_utente.php?id={$row['id']}'>Modifica</a> | ";
-
-                if (isset($row['ruolo']) && $row['ruolo'] === 'amministratore') {
-                    $azioni .= " ";
-                } else if ($stato === '1') {
-                    $azioni .= "<a href='risorse/PHP/amministratore/disattiva_utente.php?id={$row['id']}' onclick=\"return confirm('Sei sicuro di voler disattivare questo utente?');\">Disattiva</a> | ";
-                } else {
-                    $azioni .= "<a href='risorse/PHP/amministratore/riattiva_utente.php?id={$row['id']}' onclick=\"return confirm('Sei sicuro di voler riattivare questo utente?');\">Riattiva</a> | ";
-                }
-                if (isset($row['ruolo']) && $row['ruolo'] === 'amministratore') {
-                    $azioni .= " ";
-                } else {
-                    $azioni .= "<a href='risorse/PHP/amministratore/elimina_utente.php?id={$row['id']}' onclick=\"return confirm('Sei sicuro di voler eliminare questo utente?');\">Elimina</a>";
-                }
-
-                if ($row['ruolo'] === 'cliente') {
-                    $azioni .= " | <a href='risorse/PHP/amministratore/promuovi_utente.php?id={$row['id']}' onclick=\"return confirm('Sei sicuro di voler promuovere questo utente a gestore?');\">Promuovi a Gestore</a>";
-                }
-                if ($row['ruolo'] === 'gestore') {
-                    $azioni .= " | <a href='risorse/PHP/amministratore/degrada_utente.php?id={$row['id']}' onclick=\"return confirm('Sei sicuro di voler degradare questo utente a cliente?');\">Degrada a Cliente</a>";
-                }
+                
+            
 
                 echo "<tr>
                     <td>{$row['id']}</td>
@@ -210,10 +188,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
                     <td>$stato</td>
                     <td>$portafoglio</td>
                     <td>$crediti</td>
-                    <td>$data_iscrizione</td>
-                    <td>
-                        $azioni
-                    </td>
+                    <td>$data_iscrizione</td>                    
                 </tr>";
             }
             echo "</table>";
@@ -221,77 +196,6 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
             echo "Nessun utente trovato.";
         }
 
-        $connection->close();
-
-        // ora mostro le segnalazioni
-        echo "<br/><br/>";
-
-        require_once('risorse/PHP/connection.php');
-        $connection = new mysqli($host, $user, $password, $db);
-        if ($connection->connect_error) {
-            die("Connessione fallita: " . $connection->connect_error);
-        }
-        // --- carico l'XML ---
-
-        $xmlFile = "risorse/XML/segnalazioni.xml";
-        $xml = simplexml_load_file($xmlFile);
-
-        if ($xml) {
-            echo "<h2>Segnalazioni Utenti</h2>";
-            echo "<table border='1' cellpadding='6'>
-                <tr>
-                    <th>ID Segnalazione</th>
-                    <th>ID Utente</th>
-                    <th>Username</th>
-                    <th>Motivo</th>
-                    <th>Data Segnalazione</th>
-                    <th>Azioni</th>
-                </tr>";
-            foreach ($xml->segnalazione as $segnalazione) {
-                $id_segnalazione = (int)$segnalazione['id'];
-                $id_utente = (int)$segnalazione->id_utente;
-                $motivo = (string)$segnalazione->motivo;
-                $data_segnalazione = (string)$segnalazione->data;
-
-                // Ottengo lo username dall'ID utente
-                $username = '-';
-                $sql = "SELECT username FROM utente WHERE id = $id_utente";
-                $result = $connection->query($sql);
-                if ($result && $result->num_rows > 0) {
-                    $row = $result->fetch_array(MYSQLI_ASSOC);
-                    $username = $row['username'];
-                }
-
-                // ✅ Costruisci link corretto
-                $azioni = "<a href='risorse/PHP/amministratore/elimina_segnalazione.php?id_segnalazione={$id_segnalazione}' 
-                onclick=\"return confirm('Sei sicuro di voler eliminare questa segnalazione?');\">
-                Elimina
-              </a>";
-
-                echo "
-                    <tr>
-                        <td>{$id_segnalazione}</td>
-                        <td>{$id_utente}</td>
-                        <td>{$username}</td>
-                        <td>{$motivo}</td>
-                        <td>{$data_segnalazione}</td>
-                        <td>{$azioni}</td>
-                    </tr>";
-                }
-        echo "</table>";
-        } else {
-            echo "Nessuna segnalazione trovata.";
-        }
-        echo "<br/><br/>";
-        if (isset($_SESSION['elimina_segnalazione_successo'])) {
-            if ($_SESSION['elimina_segnalazione_successo']) {
-                echo "<p style='color: green;'>Segnalazione eliminata con successo.</p>";
-            } else {
-                echo "<p style='color: red;'>Errore nell'eliminazione della segnalazione.</p>";
-            }
-            unset($_SESSION['elimina_segnalazione_successo']);
-        }
-        $connection->close();
         ?>
     </div>
 

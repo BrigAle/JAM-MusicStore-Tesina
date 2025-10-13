@@ -97,6 +97,6 @@ if ($result) {
 
 mysqli_close($conn);
 // Reindirizza alla pagina del profilo
-header("Location: ../../../gestione_utenti.php");
+header("Location: ../../../gestione_utenti_admin.php");
 exit();
 ?>

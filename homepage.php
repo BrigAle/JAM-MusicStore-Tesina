@@ -104,20 +104,36 @@ session_start();
   </div>
   <!-- div presentazione sito -->
 
-  <div class="content">
-    <div style="padding: 20px; max-width: 800px;">
-      <h1>Benvenuto su JAM Music Store</h1>
-      <p>Il tuo negozio di musica online, dove puoi trovare strumenti, accessori e tanto altro!</p>
-      <p>Con JAM Music Store puoi:</p>
-      <ol>
+  <div class="content" style="text-align:center; padding:40px 20px; color:white; background-color:#111;">
+    <div style="
+      max-width:800px; 
+      margin:auto; 
+      background-color:#1b1b1b; 
+      border:1px solid #2e2e2e; 
+      border-radius:10px; 
+      padding:30px;margin-top:60px; 
+      box-shadow:0 0 15px rgba(255,255,0,0.1);
+      ">
+      <h1 style="color:#ffeb00; margin-bottom:15px;">Benvenuto su JAM Music Store</h1>
+      <p style="    font-size: 18px;
+                    line-height: 1.6;
+                    margin-bottom: 70px;">
+        Il tuo negozio di musica online, dove puoi trovare strumenti, accessori e tanto altro!
+      </p>
+
+      <p style="text-align:left; font-weight:bold; color:#ccc;">Con JAM Music Store puoi:</p>
+      <ol style="text-align: left;
+                 list-style-type: disclosure-closed;
+                 margin-left: 20px;
+                 color: #ccc;
+                 font-size: 17px;">
         <li>Consultare il catalogo prodotti</li>
         <li>Aggiungere articoli al carrello</li>
         <li>Accumulare punti bonus per ogni acquisto</li>
         <li>Usare i punti per ottenere sconti speciali</li>
       </ol>
-      <p>Registrati oggi stesso e inizia a esplorare il mondo della musica con noi!</p>
     </div>
-    <h2>Prodotti recenti</h2>
+    <h2 style="margin: 20px 0px 20px;">Prodotti recenti</h2>
     <div class="box_prodotto">
       <?php
       $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
@@ -138,7 +154,7 @@ session_start();
         foreach ($xmlRecensioni->recensione as $recensione):
           if ((string)$recensione->id_prodotto == (string)$id) {
             $valutazioneTotale += (float)$recensione->valutazione;
-            $countValutazioni++;     
+            $countValutazioni++;
           }
         endforeach;
 
@@ -161,7 +177,7 @@ session_start();
             <?php endif; ?>
             <p>Data di inserimento: <?= $datainserimento ?></p>
             <p class="valutazione">
-              Valutazione: <?= $valutazioneMedia ?> 
+              Valutazione: <?= $valutazioneMedia ?>
               <img src="risorse/IMG/stella.png" alt="">
             </p>
             <!-- form carrello -->
@@ -177,9 +193,14 @@ session_start();
       <?php $count++;
       endforeach; ?>
     </div>
-    <a href="catalogo.php">
-      <h2>Vai al catalogo completo</h2>
-    </a>
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="catalogo.php"
+        style="display:inline-block; background-color:#2c2c2c; color:#ffeb00; text-decoration:none; padding:12px 60px; border-radius:4px; transition:0.2s;"
+        onmouseover="this.style.backgroundColor='#3a3a3a'"
+        onmouseout="this.style.backgroundColor='#2c2c2c'">
+        <h2 style="margin:0; font-weight:bold;">Vai al catalogo completo</h2>
+      </a>
+    </div>
   </div>
 
   <div class="pdp">
