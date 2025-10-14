@@ -107,73 +107,89 @@ session_start();
 
 
   <div class="content">
-    <h1>Catalogo Prodotti</h1>
-    <div class="box_prodotto">
-      <?php
-      $xml = simplexml_load_file("risorse/XML/prodotti.xml");
-      $xmlRecensioni = simplexml_load_file("risorse/XML/recensioni.xml");
-      
-      foreach ($xml->prodotto as $prodotto):
-        $nome = $prodotto->nome;
-        $descrizione = $prodotto->descrizione;
-        $prezzo = $prodotto->prezzo;
-        $bonus = $prodotto->bonus;
-        $datainserimento = $prodotto->data_inserimento;
-        $immagine = "risorse/IMG/prodotti/" . $prodotto->immagine;
-        
-        $id = $prodotto['id']; // Ottieni l'ID del prodotto
-        
+  <h1>Catalogo Prodotti</h1>
+  <div class="box_prodotto">
+    <?php
+    $xml = simplexml_load_file("risorse/XML/prodotti.xml");
+    $xmlRecensioni = simplexml_load_file("risorse/XML/recensioni.xml");
 
-        $valutazioneTotale = 0;
-        $countValutazioni = 0; // Per evitare divisione per zero
+    foreach ($xml->prodotto as $prodotto):
+      $nome = (string)$prodotto->nome;
+      $descrizione = (string)$prodotto->descrizione;
+      $prezzo = (float)$prodotto->prezzo;
+      $bonus = (float)$prodotto->bonus;
+      $dataInserimento = (string)$prodotto->data_inserimento;
+      $immagine = "risorse/IMG/prodotti/" . (string)$prodotto->immagine;
+      $id = (string)$prodotto['id'];
 
-        foreach ($xmlRecensioni->recensione as $recensione):
-          if ((string)$recensione->id_prodotto == (string)$id) {
-            $valutazioneTotale += (float)$recensione->valutazione;
-            $countValutazioni++;     
-          }
-        endforeach;
-        if ($countValutazioni > 0) {
-          $valutazioneMedia = $valutazioneTotale / $countValutazioni;
-        } else {
-          $valutazioneMedia = 0;
+      // Calcolo valutazione media
+      $valutazioneTotale = 0;
+      $countValutazioni = 0;
+
+      foreach ($xmlRecensioni->recensione as $recensione) {
+        if ((string)$recensione->id_prodotto === $id) {
+          $valutazioneTotale += (float)$recensione->valutazione;
+          $countValutazioni++;
         }
-      ?>
-        <div class="contenuto_prodotto">
-          <div class="immagine_box">
-            <img src="<?= $immagine ?>" alt="<?= $nome ?>" />
-          </div>
-          <div class="dettagli_box">
-            <h3><?= $nome ?></h3>
-            <p><?= $descrizione ?></p>
-            <p>Prezzo: €<?= $prezzo ?></p>
-            <?php if ($bonus > 0): ?>
-              <p>Bonus: <?= $bonus ?> punti</p>
-            <?php endif; ?>
-            <p>Data di inserimento: <?= $datainserimento ?></p>
-            <p class="valutazione" style="text-align: center;">
-              Valutazione: <?= $valutazioneMedia ?> 
-              <img src="risorse/IMG/stella.png" alt="">
-            </p>
-            <form action="recensioni.php" method="GET">
-              <input type="hidden" name="id_prodotto" value="<?= $id ?>" />
-              <button type="submit">Leggi le recensioni</button>
-            </form>
-            <!-- form carrello -->
-            <?php
-            if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>
-              <form action="carrello.php" method="post">
-                <input type="hidden" name="id" value="<?= $id ?>" />
-                <button type="submit">Aggiungi al carrello</button>
-              </form>
-            <?php endif; ?>
-          </div>
-        </div>
-      <?php
-      endforeach; ?>
-    </div>
+      }
 
+      $valutazioneMedia = $countValutazioni > 0 ? round($valutazioneTotale / $countValutazioni, 1) : 0;
+    ?>
+      <div class="contenuto_prodotto">
+        <div class="immagine_box">
+          <img src="<?= $immagine ?>" alt="<?= htmlspecialchars($nome) ?>" />
+        </div>
+
+        <div class="dettagli_box">
+          <h3><?= htmlspecialchars($nome) ?></h3>
+          <p><?= htmlspecialchars($descrizione) ?></p>
+          <p>Prezzo: €<?= number_format($prezzo, 2, ',', '.') ?></p>
+          <?php if ($bonus > 0): ?>
+            <p>Bonus: <?= number_format($bonus, 2, ',', '.') ?> punti</p>
+          <?php endif; ?>
+          <p>Data di inserimento: <?= htmlspecialchars($dataInserimento) ?></p>
+
+          <p class="valutazione" style="text-align: center;">
+            Valutazione: <?= $valutazioneMedia ?>
+            <img src="risorse/IMG/stella.png" alt="★" style="width:22px;height:22px;vertical-align:middle;">
+          </p>
+
+          <!-- Pulsante recensioni -->
+          <form action="recensioni.php" method="GET">
+            <input type="hidden" name="id_prodotto" value="<?= $id ?>" />
+            <button type="submit">Leggi le recensioni</button>
+          </form>
+
+          <!-- Form carrello -->
+          <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>
+            <form action="risorse/PHP/aggiungi_nel_carrello.php" method="post">
+              <input type="hidden" name="id" value="<?= $id ?>" />
+              <label for="quantita_<?= $id ?>">Quantità:</label>
+              <input type="number" id="quantita_<?= $id ?>" name="quantita" min="1" value="1" step="1" required />
+              <button type="submit">Aggiungi nel carrello</button>
+            </form>
+
+            <!-- Messaggi specifici per prodotto -->
+            <?php if (isset($_SESSION['successo_id']) && $_SESSION['successo_id'] == $id): ?>
+              <p class="success_message" style="color:green;">✅ <?= $_SESSION['successo_msg'] ?></p>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['errore_id']) && $_SESSION['errore_id'] == $id): ?>
+              <p class="error_message" style="color:red;">❌ <?= $_SESSION['errore_msg'] ?></p>
+            <?php endif; ?>
+          <?php endif; ?>
+        </div>
+      </div>
+    <?php endforeach; ?>
+
+    <?php
+    // Pulisce i messaggi flash dopo il rendering
+    unset($_SESSION['flash_success_id'], $_SESSION['flash_success_msg']);
+    unset($_SESSION['flash_error_id'], $_SESSION['flash_error_msg']);
+    ?>
   </div>
+</div>
+
 
   <div class="pdp">
     <div class="pdp-center">

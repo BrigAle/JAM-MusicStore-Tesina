@@ -43,13 +43,6 @@
     <data>2025-10-07</data>
     <ora>21:34</ora>
   </risposta>
-  <risposta id="7">
-    <id_recensione>1</id_recensione>
-    <id_utente>1</id_utente>
-    <commento>b;ablbllbblaaba</commento>
-    <data>2025-10-07</data>
-    <ora>21:50</ora>
-  </risposta>
   <risposta id="8">
     <id_recensione>3</id_recensione>
     <id_utente>4</id_utente>
@@ -63,12 +56,5 @@
     <commento>belpo dai</commento>
     <data>2025-10-08</data>
     <ora>14:16</ora>
-  </risposta>
-  <risposta id="10">
-    <id_recensione>1</id_recensione>
-    <id_utente>4</id_utente>
-    <commento>cicicici</commento>
-    <data>2025-10-11</data>
-    <ora>16:01</ora>
   </risposta>
 </risposte>

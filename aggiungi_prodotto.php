@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['username']) || $_SESSION['ruolo'] != 'gestore') {
+    header("Location: homepage.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -103,121 +107,35 @@ session_start();
             <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
         </div>
     </div>
-    <!-- div presentazione sito -->
-
 
     <div class="content">
-        <h2 style="text-align: left;">Gestione Prodotti</h2>
+        <div class="form_container">
+            <h2>Aggiungi un nuovo prodotto al catalogo</h2>
+            <form action="risorse\PHP\gestore\aggiungi_prodotto.php" method="post" enctype="multipart/form-data">
 
-        <?php
-        // Carica file XML prodotti e recensioni
-        $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
-        $xmlRecensioni = simplexml_load_file("risorse/XML/recensioni.xml");
+                <label for="nome">Nome prodotto:</label>
+                <input type="text" id="nome" name="nome" required />
 
-        if ($xmlProdotti && count($xmlProdotti->prodotto) > 0) {
-            echo "
-      <table border='1' cellpadding='6'>
-        <tr>
-          <th>ID</th>
-          <th>Immagine</th>
-          <th>Nome</th>
-          <th>Categoria</th>
-          <th>Descrizione</th>
-          <th>Prezzo (€)</th>
-          <th>Bonus</th>
-          <th>Data Inserimento</th>
-          <th>Valutazione Media</th>
-          <th>Azioni</th>
-        </tr>";
+                <label for="categoria">Categoria:</label>
+                <input type="text" id="categoria" name="categoria" required />
 
-            // Cicla i prodotti
-            foreach ($xmlProdotti->prodotto as $prodotto) {
-                $id = (string)$prodotto['id'];
-                $nome = (string)$prodotto->nome;
-                $categoria = (string)$prodotto->categoria;
-                $descrizione = (string)$prodotto->descrizione;
-                $prezzo = (float)$prodotto->prezzo;
-                $bonus = (float)$prodotto->bonus;
-                $data = (string)$prodotto->data_inserimento;
-                $immagine = "risorse/IMG/prodotti/" . (string)$prodotto->immagine;
+                <label for="descrizione">Descrizione:</label>
+                <textarea id="descrizione" name="descrizione" required></textarea>
 
-                // Calcolo valutazione media
-                $valutazioneTotale = 0;
-                $countValutazioni = 0;
+                <label for="prezzo">Prezzo (€):</label>
+                <input type="number" step="1.00" id="prezzo" name="prezzo" required />
 
-                foreach ($xmlRecensioni->recensione as $recensione) {
-                    if ((string)$recensione->id_prodotto === $id) {
-                        $valutazioneTotale += (float)$recensione->valutazione;
-                        $countValutazioni++;
-                    }
-                }
-                $valutazioneMedia = $countValutazioni > 0 ? round($valutazioneTotale / $countValutazioni, 1) : 0;
+                <label for="bonus">Punti bonus:</label>
+                <input type="number" id="bonus" name="bonus" required />
 
-                // Azioni gestore
-                $azioni = "
-              <a href='recensioni.php?id_prodotto={$id}'>Recensioni</a> |
-              <a href='gestore_modifica_prodotto.php?id_prodotto={$id}'>Modifica</a> |
-              <a href='risorse/PHP/gestore/elimina_prodotto.php?id_prodotto={$id}'
-                 onclick=\"return confirm('Sei sicuro di voler eliminare il prodotto &quot;{$nome}&quot;?');\">
-                 Elimina
-              </a>
-          ";
+                <label for="immagine">Immagine del prodotto:</label>
+                <input type="file" id="immagine" name="immagine" accept="image/*" required />
 
-                echo "
-          <tr>
-            <td>{$id}</td>
-            <td style='text-align:center;'>
-              <img src='{$immagine}' alt='{$nome}' style='width:70px; height:70px; object-fit:contain; border-radius:6px; background:#111;'>
-            </td>
-            <td>{$nome}</td>
-            <td>{$categoria}</td>
-            <td style='max-width:320px; text-align:left;'>{$descrizione}</td>
-            <td>" . number_format($prezzo, 2, ',', '.') . "</td>
-            <td>" . ($bonus > 0 ? number_format($bonus, 2, ',', '.') : '-') . "</td>
-            <td>{$data}</td>
-            <td style='text-align:center;'>{$valutazioneMedia}
-              <img src='risorse/IMG/stella.png' alt='★' style='    margin-bottom: 3px;width: 25px;height: 25px; vertical-align: middle;'>
-            </td>
-            <td>{$azioni}</td>
-          </tr>";
-            }
+                <button type="submit">Aggiungi Prodotto</button>
 
-            echo "</table>";
-        } else {
-            echo "<p>Nessun prodotto trovato nel catalogo.</p>";
-        }
-        ?>
-        <a class="aggiungi-faq" href="aggiungi_prodotto.php"><h2 style="color:#1E90FF">Aggiungi Prodotti</h2></a>
-        <?php
-        if (isset($_SESSION['aggiungi_prodotto_successo'])) {
-            if ($_SESSION['aggiungi_prodotto_successo']) {
-                echo "<p style='color: green;'>✅ Prodotto aggiunto con successo!</p>";
-            } else {
-                echo "<p style='color: red;'>❌ Errore durante l'aggiunta del prodotto. Riprova.</p>";
-            }
-            unset($_SESSION['aggiungi_prodotto_successo']);
-        }
-        if (isset($_SESSION['elimina_prodotto_successo'])) {
-            if ($_SESSION['elimina_prodotto_successo']) {
-                echo "<p style='color: green;'>✅ Prodotto eliminato con successo!</p>";
-            } else {
-                echo "<p style='color: red;'>❌ Errore durante l'eliminazione del prodotto. Riprova.</p>";
-            }
-            unset($_SESSION['elimina_prodotto_successo']);
-        }
-        ?>
-    </div>
-
-
-    <div class="pdp">
-        <div class="pdp-center">
-            <p>&copy; 2025 JAM Music Store</p>
-        </div>
-        <div class="pdp-right">
-            <a href="FAQs.php">FAQs</a>
         </div>
     </div>
 
 </body>
 
-</html>
+</html> 

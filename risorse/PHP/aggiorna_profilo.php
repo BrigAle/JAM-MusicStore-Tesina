@@ -7,7 +7,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
 }
 
 // --- Variabili sessione ---
-$sessionId = $_SESSION['id'];          
+$sessionId = $_SESSION['id_utente'];          
 $username_corrente = $_SESSION['username']; 
 
 // --- Dati inviati dal form ---

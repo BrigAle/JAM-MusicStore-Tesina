@@ -5,7 +5,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
     exit();
 }
 
-$id_utente = $_SESSION['id']; // ID utente loggato
+$id_utente = $_SESSION['id_utente']; // ID utente loggato
 $id_recensione = $_GET['id_recensione'];
 $id_prodotto = $_GET['id_prodotto'];
 $voto = $_GET['voto']; // "utile" o "inutile"

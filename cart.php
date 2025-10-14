@@ -107,18 +107,118 @@ session_start();
 
 
   <div class="content">
-    <?php
-    if (!isset($_SESSION['username'])) {
-      echo "<h2>Devi essere loggato per visualizzare il carrello.</h2>";
-    } else {
-      echo "<h2>Carrello di " . $_SESSION['username'] . "</h2>";
-      echo "<p>Funzionalità in costruzione...</p>";
-    }
-    ?>
+    <div class="content">
+      <h2 style="text-align: left;">Il Mio Carrello</h2>
+
+      <?php
+      // Carica XML del carrello e prodotti
+      $xmlCarrelli = simplexml_load_file("risorse/XML/carrelli.xml");
+      $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
+
+      $idUtente = $_SESSION['id_utente'] ?? null;
+      $carrelloUtente = null;
+
+      // Trova il carrello dell'utente loggato
+      if ($xmlCarrelli && $idUtente) {
+        foreach ($xmlCarrelli->carrello as $carrello) {
+          if ((string)$carrello->id_utente === (string)$idUtente) {
+            $carrelloUtente = $carrello;
+            break;
+          }
+        }
+      }
+
+      if ($carrelloUtente && count($carrelloUtente->prodotti->prodotto) > 0) {
+        echo "
+      <table border='1' cellpadding='6'>
+        <tr>
+          <th>ID</th>
+          <th>Immagine</th>
+          <th>Nome</th>
+          <th>Quantità</th>
+          <th>Prezzo Unitario (€)</th>
+          <th>Totale (€)</th>
+          <th>Azioni</th>
+        </tr>";
+
+        // Cicla i prodotti nel carrello
+        foreach ($carrelloUtente->prodotti->prodotto as $prodottoCarrello) {
+          $idProd = (string)$prodottoCarrello->id_prodotto;
+          $quantita = (int)$prodottoCarrello->quantita;
+          $prezzoUnitario = (float)$prodottoCarrello->prezzo_unitario;
+          $prezzoTotale = (float)$prodottoCarrello->prezzo_totale;
+          // Trova il nome e l'immagine in prodotti.xml
+          $nome = "Prodotto non trovato";
+          $immagine = "risorse/IMG/prodotti/placeholder.jpg";
+
+          foreach ($xmlProdotti->prodotto as $p) {
+            if ((string)$p['id'] === $idProd) {
+              $nome = (string)$p->nome;
+              $immagine = "risorse/IMG/prodotti/" . (string)$p->immagine;
+              break;
+            }
+          }
+
+          echo "
+          <tr>
+            <td>{$idProd}</td>
+            <td style='text-align:center;'>
+              <img src='{$immagine}' alt='{$nome}' style='width:70px; height:70px; object-fit:contain; border-radius:6px; background:#111;'>
+            </td>
+            <td>{$nome}</td>
+            <td style='text-align:center;'>{$quantita}</td>
+            <td style='text-align:center;'>" . number_format($prezzoUnitario, 2, ',', '.') . "</td>
+            <td style='text-align:center; font-weight:bold;'>" . number_format($prezzoTotale, 2, ',', '.') . "</td>
+            <td style='text-align:center;'>
+              <form action='risorse/PHP/rimuovi_dal_carrello.php' method='post' onsubmit='return confirm(\"Sei sicuro di voler rimuovere questo prodotto dal carrello?\");'>
+                <input type='hidden' name='id_prodotto' value='{$idProd}'>
+                <button type='submit' style='padding:6px 12px; background-color:#FF6347; color:white; border:none; border-radius:4px; cursor:pointer;'>Rimuovi</button>
+                <input type='number' name='quantita' value='{$quantita}' min='1' style='width:60px; text-align:center;'>
+                <button type='submit' formaction='risorse/PHP/aggiorna_quantita_carrello.php' style='padding:6px 12px; background-color:#1E90FF; color:white; border:none; border-radius:4px; cursor:pointer;'>Aggiorna</button>
+              </form>
+            </td>
+          </tr>";
+        }
+
+        $totaleCarrello = (float)$carrelloUtente->prezzo_totale_carrello;
+        echo "
+        <tr style='background:#000; font-weight:bold;'>
+          <td colspan='5' style='text-align:right;'>Totale Carrello:</td>
+          <td style='text-align:center;'>" . number_format($totaleCarrello, 2, ',', '.') . " €</td>
+        </tr>
+      </table>
+      <br>
+      <form action='risorse/PHP/procedi_acquisto.php' method='post' style='text-align:center;'>
+        <input type='hidden' name='id_utente' value='{$idUtente}'>
+        <button type='submit' style='padding:10px 20px; background-color:#1E90FF; color:white; border:none; border-radius:4px; cursor:pointer; font-size:16px;'>
+          Procedi all'acquisto 🛒
+        </button>
+      </form>
+      ";
+      } else {
+        echo "<p>Il tuo carrello è vuoto.</p>";
+      }
+      ?>
+      <?php
+      // Mostra messaggi di errore o successo
+      if (isset($_SESSION['errore'])) {
+        echo "<p class='error_message' style='color:red;'>❌ " . $_SESSION['errore'] . "</p>";
+        unset($_SESSION['errore']);
+      }
+      if (isset($_SESSION['successo'])) {
+        echo "<p class='success_message' style='color:green;'>✅ " . $_SESSION['successo'] . "</p>";
+        unset($_SESSION['successo']);
+      }
+      if (isset($_SESSION['successo_rimozione'])) {
+        echo "<p class='success_message' style='color:green;'>✅ " . $_SESSION['successo_rimozione'] . "</p>";
+        unset($_SESSION['successo_rimozione']);
+      }
+      ?>
+    </div>
   </div>
-    <div class="prodotti">
-      <!-- Qui andranno i prodotti aggiunti al carrello -->
-       
+  <div class="prodotti">
+    <!-- Qui andranno i prodotti aggiunti al carrello -->
+
   </div>
 
 

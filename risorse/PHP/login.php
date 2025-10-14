@@ -15,7 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $_SESSION['username'] = $username;
                 $_SESSION['logged'] = 'true';
                 // setto la variabile di sessione id con l'id dell'utente loggato
-                $_SESSION['id'] = $record['id'];
+                $_SESSION['ruolo'] = $record['ruolo'];
+                $_SESSION['id_utente'] = $record['id'];
                 $_SESSION['stato'] = $record['stato'];
                 // se l'utente è bloccato (stato = 0) non faccio il login e mostro un messaggio di errore
                 if ($_SESSION['stato'] == 0) {
