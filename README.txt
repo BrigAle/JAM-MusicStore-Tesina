@@ -60,7 +60,7 @@ Gestore:
      -Consulta il profilo del cliente (reputazione e storico degli acquisti).
 	
      -Gestione dei prodotti:
-	-Aggiunge, elimina o modifica i prodotti presenti nel catalogo.
+	 -Aggiunge, elimina o modifica i prodotti presenti nel catalogo.
      	-Applica uno o più sconti e/o bonus a uno prodotto o piu' prodotti.
 
      -Gestione dei contenuti
@@ -69,13 +69,13 @@ Gestore:
 
 
 Amministratore:
-      -Gestione degli utenti:	
-     	-Visualizza e modifica i dati anagrafici, username e password degli utenti.
-	-Disattiva (ban) e riattiva gli account utente.
+    -Gestione degli utenti:	
+      -Visualizza e modifica i dati anagrafici, username e password degli utenti.
+	  -Disattiva (ban) e riattiva gli account utente.
 
-      -Gestione dei contenuti:
-     	-Eleva domande nella sezione delle FAQ, traendo spunto dai commenti, dalle risposte e dalle recensioni degli utenti sui prodotti.
-     	-Controlla le segnalazioni inviate dai gestori ed eventualmente può modificare o eliminare le recensioni.
+    -Gestione dei contenuti:
+      -Eleva domande nella sezione delle FAQ, traendo spunto dai commenti, dalle risposte e dalle recensioni degli utenti sui prodotti.
+      -Controlla le segnalazioni inviate dai gestori ed eventualmente può modificare o eliminare le recensioni.
 
-      -Accetta le richieste di acquisto crediti.
+    -Accetta le richieste di acquisto crediti.
      
