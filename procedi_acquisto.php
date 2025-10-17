@@ -1,12 +1,5 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
-}
-?>
-<?php
-session_start();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -48,76 +41,81 @@ session_start();
             <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
                 <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
             <?php endif; ?>
-            <!-- cliente links -->
             <a href="catalogo.php">Catalogo</a>
             <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
             <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
             <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
             <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
         </div>
+
     </div>
-    <!-- div presentazione sito -->
+
+
 
     <div class="content">
-        <!-- Mostro la recensione a cui sto rispondendo -->
-        <?php
-        if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
+        <?php  
+
+        
+        if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true' || $_SESSION['ruolo'] !== 'cliente') {
+            $_SESSION['errore'] = 'Effettua il login per procedere.';
             header("Location: login.php");
             exit();
         }
 
-        // Ricevi i dati dal form precedente
-        $id_prodotto   = $_POST['id_prodotto'];
-        $id_utente     = $_POST['id_utente'];
-        $id_recensione = $_POST['id_recensione'];
-
-        // Se manca qualcosa, errore
-        if (!$id_prodotto || !$id_utente || !$id_recensione) {
-            die("Errore: dati mancanti nella richiesta.");
+        $id_utente = $_SESSION['id_utente'] ?? '';
+        if (empty($id_utente)) {
+            $_SESSION['errore'] = 'Utente non riconosciuto.';
+            header("Location: catalogo.php");
+            exit();
         }
 
-        // Carica il file XML delle recensioni per trovare la recensione giusta
-        $xmlRecensioni = simplexml_load_file('risorse/XML/recensioni.xml');
-        $recensioneDaRispondere = null;
-        foreach ($xmlRecensioni->recensione as $recensione) {
-            if ((int)$recensione['id'] === (int)$id_recensione) {
-                $recensioneDaRispondere = $recensione;
-                break;
-            }
-        }
-        if (!$recensioneDaRispondere) {
-            die("Recensione non trovata.");
-        }
+        // Totale carrello aggiornato (viene da POST)
+        $totaleOrdine = isset($_POST['totale_carrello']) ? floatval($_POST['totale_carrello']) : 0;
 
-        // Ricava il nome utente dal database
-        require_once 'risorse/PHP/connection.php';
-        $conn = new mysqli($host, $user, $password, $db);
-        if ($conn->connect_error) {
-            die("Connessione fallita: " . $conn->connect_error);
+        if ($totaleOrdine <= 0) {
+            $_SESSION['errore'] = 'Errore: il totale carrello non è valido o mancante.';
+            header("Location: cart.php");
+            exit();
         }
-        $query = "SELECT username FROM utente WHERE id = '$id_utente'";
-        $result = $conn->query($query);
-        if ($result) {
-            $nome_utente = $result->fetch_array(MYSQLI_ASSOC)['username'];
-        }
-        $conn->close();
         ?>
 
-        <h2>Rispondi alla recensione di <?= htmlspecialchars($nome_utente) ?></h2>
-        <p>
-            <strong>Recensione:</strong> <?= htmlspecialchars($recensione->commento) ?><br />
-            <strong>Data:</strong> <?= htmlspecialchars($recensione->data) ?>
+        <h2>Procedi all'Acquisto</h2>
+        <p>Totale ordine (con eventuali sconti):
+            <strong style="color:#ffcc00;">€<?= number_format($totaleOrdine, 2, ',', '.') ?></strong>
         </p>
 
-        <form method="POST" action="risorse/PHP/inserisci_risposta.php">
-            <input type="hidden" name="id_recensione" value="<?= htmlspecialchars($id_recensione) ?>" />
-            <input type="hidden" name="id_utente" value="<?= htmlspecialchars($id_utente) ?>" />
-            <input type="hidden" name="id_prodotto" value="<?= htmlspecialchars($id_prodotto) ?>" />
-            <label for="risposta">La tua risposta:</label><br />
-            <textarea name="risposta" required></textarea><br />
-            <input type="submit" value="Invia risposta" />
+        <form action="risorse/PHP/conferma_acquisto.php" method="post">
+            <input type="hidden" name="id_utente" value="<?= htmlspecialchars($id_utente) ?>">
+            <input type="hidden" name="totale_carrello" value="<?= number_format($totaleOrdine, 2, '.', '') ?>">
+
+            <h3>Scegli il metodo di pagamento:</h3>
+
+            <label style="margin-right:15px;">
+                <input type="radio" name="metodo_pagamento" value="Portafoglio" required> Portafoglio
+            </label>
+            <label>
+                <input type="radio" name="metodo_pagamento" value="Carta di credito" required> Carta di credito
+            </label>
+
+            <br><br>
+            <button type="submit" style="
+            padding:10px 20px; 
+            background-color:#1E90FF; 
+            color:white; 
+            border:none; 
+            border-radius:4px; 
+            cursor:pointer;">
+                Conferma Acquisto
+            </button>
         </form>
+
+        <p style="margin-top:15px;">
+            <a href="cart.php" style="color:#1E90FF;">⬅ Torna al carrello</a>
+        </p>
     </div>
+
+    
+
 
     <div class="pdp">
         <div class="pdp-center">
@@ -127,7 +125,6 @@ session_start();
             <a href="FAQs.php">FAQs</a>
         </div>
     </div>
-
 </body>
 
 </html>

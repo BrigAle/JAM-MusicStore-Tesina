@@ -20,65 +20,11 @@ session_start();
         </div>
 
         <div class="navSearch">
-            <form action="homepage.php" method="get">
+            <form action="risorse/PHP/ricerca_catalogo.php" method="get">
                 <div class="searchContainer">
-
-                    <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-                    <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
-
-                    <!-- Checkbox nascosto -->
-                    <input type="checkbox" id="advanced_commutator" style="display: none;" />
-                    <label for="advanced_commutator" class="label_commutator">Ricerca avanzata</label>
-
-                    <!-- Questo deve essere subito dopo il checkbox -->
-                    <div class="advanced_filters">
-                        <div class="filters_title">
-                            <h4>Filtri avanzati</h4>
-                        </div>
-                        <div class="filters_container">
-                            <h4>tamburi</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>chitarre</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>frochoni</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                    </div>
-
+                    <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+                    <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+                    <button type="submit" name="tipo" value="categoria">Per categoria</button>
                 </div>
             </form>
         </div>
@@ -119,7 +65,7 @@ session_start();
         if ($connection->connect_error) {
             die("Connessione fallita: " . $connection->connect_error);
         }
-        $id_utente = $_SESSION['id'];
+        $id_utente = $_SESSION['id_utente'];
         $query = "SELECT * FROM utente WHERE id='$id_utente'";
         $result = $connection->query($query);
         if ($result) {
@@ -184,7 +130,7 @@ session_start();
 
                     <label for="indirizzo">Indirizzo:</label>
                     <input type="text" id="indirizzo" name="indirizzo" />
-                    
+
                     <button type="submit">Aggiorna Profilo</button>
                 </form>
             </div>

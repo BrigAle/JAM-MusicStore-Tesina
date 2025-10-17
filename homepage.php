@@ -1,9 +1,8 @@
 <?php
 session_start();
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it" lang="it">
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -16,190 +15,148 @@ session_start();
 <body>
   <div class="header">
     <div class="logo">
-      <a href="homepage.php"><img src="risorse/IMG/JAM_logo (2).png" alt="JAM Music Store" /></a>
+      <a href="homepage.php"><img src="risorse/IMG/JAM_logo%20(2).png" alt="JAM Music Store" /></a>
     </div>
 
     <div class="navSearch">
-      <form action="homepage.php" method="get">
+      <form action="risorse/PHP/ricerca_catalogo.php" method="get">
         <div class="searchContainer">
-
-          <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-          <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
-
-          <!-- Checkbox nascosto -->
-          <input type="checkbox" id="advanced_commutator" style="display: none;" />
-          <label for="advanced_commutator" class="label_commutator">Ricerca avanzata</label>
-
-          <!-- Questo deve essere subito dopo il checkbox -->
-          <div class="advanced_filters">
-            <div class="filters_title">
-              <h4>Filtri avanzati</h4>
-            </div>
-            <div class="filters_container">
-              <h4>tamburi</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>chitarre</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>frochoni</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-          </div>
-
+          <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+          <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+          <button type="submit" name="tipo" value="categoria">Per categoria</button>
         </div>
       </form>
     </div>
 
+
     <div class="navLink">
-      <!-- admin links -->
-      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'amministratore'): ?>
+      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] === 'amministratore') : ?>
         <a href="amministrazione.php">admin</a>
       <?php endif; ?>
-      <!-- gestore links -->
-      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
-        echo "<a href=\"gestione.php\">gestore</a>";
+
+      <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] === 'gestore') :
+        echo '<a href="gestione.php">gestore</a>';
       endif; ?>
-      <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
-        <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
+
+      <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true') : ?>
+        <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo" /></a>
       <?php endif; ?>
+
       <a href="catalogo.php">Catalogo</a>
-      <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
-      <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
-      <?php if (!isset($_SESSION['username'])) echo '<a href="login.php">Accedi</a>'; ?>
-      <?php if (isset($_SESSION['username'])) echo '<a href="risorse/PHP/logout.php">Esci</a>'; ?>
+      <a href="homepage.php"><img src="risorse/IMG/home.png" alt="Home" /></a>
+      <a href="cart.php"><img src="risorse/IMG/cart.png" alt="Carrello" /></a>
+
+      <?php if (!isset($_SESSION['username'])) {
+        echo '<a href="login.php">Accedi</a>';
+      } ?>
+      <?php if (isset($_SESSION['username'])) {
+        echo '<a href="risorse/PHP/logout.php">Esci</a>';
+      } ?>
     </div>
   </div>
-  <!-- div presentazione sito -->
 
   <div class="content" style="text-align:center; padding:40px 20px; color:white; background-color:#111;">
     <div style="
-      max-width:800px; 
-      margin:auto; 
-      background-color:#1b1b1b; 
-      border:1px solid #2e2e2e; 
-      border-radius:10px; 
-      padding:30px;margin-top:60px; 
-      box-shadow:0 0 15px rgba(255,255,0,0.1);
-      ">
+      max-width:800px;
+      margin:auto;
+      background-color:#1b1b1b;
+      border:1px solid #2e2e2e;
+      border-radius:10px;
+      padding:30px; margin-top:60px;
+      box-shadow:0 0 15px rgba(255,255,0,0.1);">
       <h1 style="color:#ffeb00; margin-bottom:15px;">Benvenuto su JAM Music Store</h1>
-      <p style="    font-size: 18px;
-                    line-height: 1.6;
-                    margin-bottom: 70px;">
+      <p style="font-size:18px; line-height:1.6; margin-bottom:70px;">
         Il tuo negozio di musica online, dove puoi trovare strumenti, accessori e tanto altro!
       </p>
 
       <p style="text-align:left; font-weight:bold; color:#ccc;">Con JAM Music Store puoi:</p>
-      <ol style="text-align: left;
-                 list-style-type: disclosure-closed;
-                 margin-left: 20px;
-                 color: #ccc;
-                 font-size: 17px;">
+      <ol style="text-align:left; list-style-type:disc; margin-left:20px; color:#ccc; font-size:17px;">
         <li>Consultare il catalogo prodotti</li>
         <li>Aggiungere articoli al carrello</li>
         <li>Accumulare punti bonus per ogni acquisto</li>
         <li>Usare i punti per ottenere sconti speciali</li>
       </ol>
     </div>
-    <h2 style="margin: 20px 0px 20px;">Prodotti recenti</h2>
+
+    <h2 style="margin:20px 0 20px;">Prodotti recenti</h2>
+
     <div class="box_prodotto">
       <?php
-      $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
-      $xmlRecensioni = simplexml_load_file("risorse/XML/recensioni.xml");
+      $xmlProdotti = simplexml_load_file('risorse/XML/prodotti.xml');
+      $xmlRecensioni = simplexml_load_file('risorse/XML/recensioni.xml');
       $count = 0;
-      foreach ($xmlProdotti->prodotto as $prodotto):
-        if ($count >= 4) break; // Mostra solo i primi 4 prodotti
-        $nome = $prodotto->nome;
-        $descrizione = $prodotto->descrizione;
-        $prezzo = $prodotto->prezzo;
-        $bonus = $prodotto->bonus;
-        $datainserimento = $prodotto->data_inserimento;
-        $immagine = "risorse/IMG/prodotti/" . $prodotto->immagine;
-        $id = $prodotto['id']; // Ottieni l'ID del prodotto
-        $valutazioneTotale = 0;
-        $countValutazioni = 0; // Per evitare divisione per zero
 
-        foreach ($xmlRecensioni->recensione as $recensione):
-          if ((string)$recensione->id_prodotto == (string)$id) {
+      foreach ($xmlProdotti->prodotto as $prodotto) :
+        if ($count >= 4) {
+          break;
+        }
+
+        $nome = htmlspecialchars((string)$prodotto->nome, ENT_QUOTES, 'UTF-8');
+        $descrizione = htmlspecialchars((string)$prodotto->descrizione, ENT_QUOTES, 'UTF-8');
+        $prezzo = htmlspecialchars((string)$prodotto->prezzo, ENT_QUOTES, 'UTF-8');
+        $bonus = htmlspecialchars((string)$prodotto->bonus, ENT_QUOTES, 'UTF-8');
+        $datainserimento = htmlspecialchars((string)$prodotto->data_inserimento, ENT_QUOTES, 'UTF-8');
+        $immagine = 'risorse/IMG/prodotti/' . htmlspecialchars((string)$prodotto->immagine, ENT_QUOTES, 'UTF-8');
+        $id = (string)$prodotto['id'];
+
+        // Calcolo valutazione media
+        $valutazioneTotale = 0.0;
+        $countValutazioni = 0;
+        foreach ($xmlRecensioni->recensione as $recensione) :
+          if ((string)$recensione->id_prodotto === (string)$id) {
             $valutazioneTotale += (float)$recensione->valutazione;
             $countValutazioni++;
           }
         endforeach;
+        $valutazioneMedia = ($countValutazioni > 0) ? ($valutazioneTotale / $countValutazioni) : 0.0;
 
-        if ($countValutazioni > 0) {
-          $valutazioneMedia = $valutazioneTotale / $countValutazioni;
-        } else {
-          $valutazioneMedia = 0;
+        // ID DOM locale sicuro
+        $domId = 'quantitaP' . $count;
+
+        // ID reale per il form
+        $id_value = htmlspecialchars(trim($id), ENT_QUOTES, 'UTF-8');
+
+        echo '<div class="contenuto_prodotto">';
+        echo '<div class="immagine_box">';
+        echo '<img src="' . $immagine . '" alt="' . $nome . '" />';
+        echo '</div>';
+        echo '<div class="dettagli_box">';
+        echo '<h3>' . $nome . '</h3>';
+        echo '<p>' . $descrizione . '</p>';
+        echo '<p>Prezzo: €' . $prezzo . '</p>';
+        if ((float)$bonus > 0) {
+          echo '<p>Bonus: ' . $bonus . ' punti</p>';
         }
+        echo '<p>Data di inserimento: ' . $datainserimento . '</p>';
+        echo '<p class="valutazione">Valutazione: ' . number_format((float)$valutazioneMedia, 1, ',', '') .
+          ' <img src="risorse/IMG/stella.png" alt="Stella valutazione" /></p>';
+
+        if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && isset($_SESSION['ruolo']) && $_SESSION['ruolo'] === 'cliente') {
+          $form  = '<form action="risorse/PHP/aggiungi_nel_carrello.php" method="post" ';
+          $form .= 'style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:6px;">';
+          $form .= '<div><input type="hidden" name="id" value="' . $id_value . '" /></div>';
+          $form .= '<div><label for="' . $domId . '" style="font-weight:500;">Quantità:</label>';
+          $form .= '<input type="text" id="' . $domId . '" name="quantita" value="1" size="3" maxlength="3" ';
+          $form .= 'style="width:60px; text-align:center; border-radius:4px; border:1px solid #aaa; padding:4px;" /></div>';
+          $form .= '<div><button type="submit" style="background-color:#FF8C00; color:white; border:none; ';
+          $form .= 'padding:6px 14px; border-radius:6px; cursor:pointer; font-size:14px;">Aggiungi nel carrello</button></div>';
+          $form .= '</form>';
+          echo $form;
+        }
+
+        echo '</div></div>';
+        $count++;
+      endforeach;
       ?>
-        <div class="contenuto_prodotto">
-          <div class="immagine_box">
-            <img src="<?= $immagine ?>" alt="<?= $nome ?>" />
-          </div>
-          <div class="dettagli_box">
-            <h3><?= $nome ?></h3>
-            <p><?= $descrizione ?></p>
-            <p>Prezzo: €<?= $prezzo ?></p>
-            <?php if ($bonus > 0): ?>
-              <p>Bonus: <?= $bonus ?> punti</p>
-            <?php endif; ?>
-            <p>Data di inserimento: <?= $datainserimento ?></p>
-            <p class="valutazione">
-              Valutazione: <?= $valutazioneMedia ?>
-              <img src="risorse/IMG/stella.png" alt="">
-            </p>
-            <!-- form carrello -->
-            <?php
-            if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>
-              <form action="carrello.php" method="post">
-                <input type="hidden" name="id" value="<?= $id ?>" />
-                <button type="submit">Aggiungi al carrello</button>
-              </form>
-            <?php endif; ?>
-          </div>
-        </div>
-      <?php $count++;
-      endforeach; ?>
     </div>
-    <div style="text-align: center; margin: 30px 0;">
-      <a href="catalogo.php"
-        style="display:inline-block; background-color:#2c2c2c; color:#ffeb00; text-decoration:none; padding:12px 60px; border-radius:4px; transition:0.2s;"
-        onmouseover="this.style.backgroundColor='#3a3a3a'"
-        onmouseout="this.style.backgroundColor='#2c2c2c'">
-        <h2 style="margin:0; font-weight:bold;">Vai al catalogo completo</h2>
-      </a>
+
+    <div style="text-align:center; margin:30px 0;">
+      <h2 style="margin:0; font-weight:bold;">
+        <a href="catalogo.php"
+          style="display:inline-block; background-color:#2c2c2c; color:#ffeb00; text-decoration:none; padding:12px 60px; border-radius:4px;">
+          Vai al catalogo completo
+        </a>
+      </h2>
     </div>
   </div>
 
@@ -211,7 +168,6 @@ session_start();
       <a href="FAQs.php">FAQs</a>
     </div>
   </div>
-
 </body>
 
 </html>

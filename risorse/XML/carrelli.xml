@@ -1,62 +1,8 @@
 <?xml version="1.0"?>
 <carrelli xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="carrelli.xsd">
   <carrello id="1">
-    <id_utente>1001</id_utente>
+    <id_utente>5</id_utente>
     <prodotti>
-      <prodotto>
-        <id_prodotto>4</id_prodotto>
-        <quantita>2</quantita>
-        <prezzo_unitario>250.00</prezzo_unitario>
-        <prezzo_totale>500.00</prezzo_totale>
-      </prodotto>
-      <prodotto>
-        <id_prodotto>6</id_prodotto>
-        <quantita>1</quantita>
-        <prezzo_unitario>150.00</prezzo_unitario>
-        <prezzo_totale>150.00</prezzo_totale>
-      </prodotto>
-    </prodotti>
-    <prezzo_totale_carrello>650.00</prezzo_totale_carrello>
-  </carrello>
-  <carrello id="2">
-    <id_utente>1002</id_utente>
-    <prodotti>
-      <prodotto>
-        <id_prodotto>1</id_prodotto>
-        <quantita>3</quantita>
-        <prezzo_unitario>100.00</prezzo_unitario>
-        <prezzo_totale>300.00</prezzo_totale>
-      </prodotto>
-      <prodotto>
-        <id_prodotto>4</id_prodotto>
-        <quantita>1</quantita>
-        <prezzo_unitario>200.00</prezzo_unitario>
-        <prezzo_totale>200.00</prezzo_totale>
-      </prodotto>
-    </prodotti>
-    <prezzo_totale_carrello>500.00</prezzo_totale_carrello>
-  </carrello>
-  <carrello id="3">
-    <id_utente>4</id_utente>
-    <prodotti>
-      <prodotto>
-        <id_prodotto>1</id_prodotto>
-        <quantita>10</quantita>
-        <prezzo_unitario>999.99</prezzo_unitario>
-        <prezzo_totale>9999.90</prezzo_totale>
-      </prodotto>
-      <prodotto>
-        <id_prodotto>2</id_prodotto>
-        <quantita>1</quantita>
-        <prezzo_unitario>19.99</prezzo_unitario>
-        <prezzo_totale>19.99</prezzo_totale>
-      </prodotto>
-      <prodotto>
-        <id_prodotto>3</id_prodotto>
-        <quantita>4</quantita>
-        <prezzo_unitario>149.99</prezzo_unitario>
-        <prezzo_totale>599.96</prezzo_totale>
-      </prodotto>
       <prodotto>
         <id_prodotto>4</id_prodotto>
         <quantita>1</quantita>
@@ -65,11 +11,16 @@
       </prodotto>
       <prodotto>
         <id_prodotto>9</id_prodotto>
-        <quantita>4</quantita>
+        <quantita>1</quantita>
         <prezzo_unitario>49.99</prezzo_unitario>
-        <prezzo_totale>199.96</prezzo_totale>
+        <prezzo_totale>49.99</prezzo_totale>
       </prodotto>
     </prodotti>
-    <prezzo_totale_carrello>11469.80</prezzo_totale_carrello>
+    <prezzo_totale_carrello>699.98</prezzo_totale_carrello>
+  </carrello>
+  <carrello id="2">
+    <id_utente>4</id_utente>
+    <prodotti/>
+    <prezzo_totale_carrello>0.00</prezzo_totale_carrello>
   </carrello>
 </carrelli>

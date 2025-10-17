@@ -1,14 +1,11 @@
 <?php
 session_start();
-
-// ✅ Verifica login e ruolo
 if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true' || $_SESSION['ruolo'] !== 'cliente') {
     $_SESSION['errore'] = 'Accesso negato.';
     header("Location: ../../catalogo.php");
     exit();
 }
 
-// ✅ Recupero dati POST
 $id_prodotto = $_POST['id'] ?? '';
 $quantita = $_POST['quantita'] ?? '';
 
@@ -25,13 +22,10 @@ if (empty($id_utente)) {
     exit();
 }
 
-// ✅ Percorsi file XML
 $carrelliFile = '../XML/carrelli.xml';
 $prodottiFile = '../XML/prodotti.xml';
 
-// ===========================================================
-// 1️⃣ CARICA IL FILE PRODOTTI PER PRENDERE I DATI DEL PRODOTTO
-// ===========================================================
+// carico il file dei prodotti per estrarre il prezzo unitario e l'immagine
 $prodottiDoc = new DOMDocument();
 $prodottiDoc->preserveWhiteSpace = false;
 $prodottiDoc->formatOutput = true;
@@ -59,13 +53,11 @@ if (!$prodottoTrovato) {
 
 $prezzo_unitario = (float)$prodottoTrovato->getElementsByTagName('prezzo')->item(0)->nodeValue;
 
-// ===========================================================
-// 2️⃣ CARICA O CREA IL FILE CARRELLI
-// ===========================================================
+
 $doc = new DOMDocument();
 $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
-
+// se non esiste il root lo creo
 if (!file_exists($carrelliFile)) {
     $root = $doc->createElement('carrelli');
     $doc->appendChild($root);
@@ -80,9 +72,7 @@ if (!$doc->load($carrelliFile)) {
 
 $root = $doc->documentElement;
 
-// ===========================================================
-// 3️⃣ CERCA IL CARRELLO DELL'UTENTE (O CREALO SE NON ESISTE)
-// ===========================================================
+//cerco il carrello dell'utente
 $carrelloUtente = null;
 $ultimoId = 0;
 
@@ -114,9 +104,7 @@ if (!$carrelloUtente) {
     $root->appendChild($carrelloUtente);
 }
 
-// ===========================================================
-// 4️⃣ AGGIUNGI O AGGIORNA IL PRODOTTO NEL CARRELLO
-// ===========================================================
+// Aggiungo o creo nuovo elemento prodotto nel carrello
 $prodottiNode = $carrelloUtente->getElementsByTagName('prodotti')->item(0);
 if (!$prodottiNode) {
     $prodottiNode = $doc->createElement('prodotti');
@@ -133,13 +121,13 @@ foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
 }
 
 if ($prodottoNelCarrello) {
-    // aggiorna quantità e prezzo totale
+    // se gia' si trova, aggiorna la quantita'
     $quantitaAttuale = (int)$prodottoNelCarrello->getElementsByTagName('quantita')->item(0)->nodeValue;
     $nuovaQuantita = $quantitaAttuale + $quantita;
     $prodottoNelCarrello->getElementsByTagName('quantita')->item(0)->nodeValue = $nuovaQuantita;
     $prodottoNelCarrello->getElementsByTagName('prezzo_totale')->item(0)->nodeValue = number_format($nuovaQuantita * $prezzo_unitario, 2, '.', '');
 } else {
-    // crea nuovo prodotto
+    // altrimenti creo nuovo elemento prodotto in carrelli.xml
     $nuovoProdotto = $doc->createElement('prodotto');
     $nuovoProdotto->appendChild($doc->createElement('id_prodotto', $id_prodotto));
     $nuovoProdotto->appendChild($doc->createElement('quantita', $quantita));
@@ -148,9 +136,7 @@ if ($prodottoNelCarrello) {
     $prodottiNode->appendChild($nuovoProdotto);
 }
 
-// ===========================================================
-// 5️⃣ AGGIORNA IL TOTALE DEL CARRELLO
-// ===========================================================
+// Aggiorno il prezzo totale del carrello
 $totaleCarrello = 0.0;
 foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
     $prezzoTot = (float)$p->getElementsByTagName('prezzo_totale')->item(0)->nodeValue;
@@ -158,15 +144,13 @@ foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
 }
 $carrelloUtente->getElementsByTagName('prezzo_totale_carrello')->item(0)->nodeValue = number_format($totaleCarrello, 2, '.', '');
 
-// ===========================================================
-// 6️⃣ SALVA E REINDIRIZZA
-// ===========================================================
+//Salva il file XML
 if ($doc->save($carrelliFile) === false) {
     $_SESSION['errore_id'] = $id_prodotto;
     $_SESSION['errore_msg'] = 'Errore durante il salvataggio del carrello.';
 } else {
     $_SESSION['successo_id'] = $id_prodotto;
-    $_SESSION['successo_msg'] = 'Prodotto aggiunto al carrello con successo!';
+    $_SESSION['successo_msg'] = 'Prodotto aggiunto nel carrello!';
 }
 
 header("Location: ../../catalogo.php");

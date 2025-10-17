@@ -20,41 +20,14 @@ session_start();
         </div>
 
         <div class="navSearch">
-            <form action="homepage.php" method="get">
+            <form action="risorse/PHP/ricerca_catalogo.php" method="get">
                 <div class="searchContainer">
-
-                    <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-                    <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
-
-                    <!-- Checkbox nascosto -->
-                    <input type="checkbox" id="advanced_commutator" style="display: none;" />
-                    <label for="advanced_commutator" class="label_commutator">Ricerca avanzata</label>
-
-                    <!-- Questo deve essere subito dopo il checkbox -->
-                    <div class="advanced_filters">
-                        <div class="filters_title">
-                            <h4>Filtri avanzati</h4>
-                        </div>
-
-                        <!-- Esempi di filtri (puoi rimuovere i duplicati inutili) -->
-                        <div class="filters_container">
-                            <h4>tamburi</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-
-                        <div class="filters_container">
-                            <h4>chitarre</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                    </div> <!-- fine advanced_filters -->
-
-                </div> <!-- fine searchContainer -->
+                    <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+                    <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+                    <button type="submit" name="tipo" value="categoria">Per categoria</button>
+                </div>
             </form>
-        </div> <!-- fine navSearch -->
+        </div>
 
         <div class="navLink">
             <!-- admin links -->

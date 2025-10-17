@@ -16,66 +16,11 @@
     </div>
 
     <div class="navSearch">
-      <form action="homepage.php" method="get">
+      <form action="risorse/PHP/ricerca_catalogo.php" method="get">
         <div class="searchContainer">
-
-
-          <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-          <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
-
-          <!-- Checkbox nascosto -->
-          <input type="checkbox" id="advanced_commutator" style="display: none;" />
-          <label for="advanced_commutator" class="label_commutator">Ricerca avanzata</label>
-
-          <!-- Questo deve essere subito dopo il checkbox -->
-          <div class="advanced_filters">
-            <div class="filters_title">
-              <h4>Filtri avanzati</h4>
-            </div>
-            <div class="filters_container">
-              <h4>tamburi</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>chitarre</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>frochoni</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-          </div>
-
+          <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+          <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+          <button type="submit" name="tipo" value="categoria">Per categoria</button>
         </div>
       </form>
     </div>
@@ -100,18 +45,18 @@
   </div>
 
 
- <div class="content contenuto-FAQs">
-  <?php
-  $faqs = simplexml_load_file("risorse/XML/FAQs.xml") or die("Errore: impossibile caricare l'XML");
+  <div class="content contenuto-FAQs">
+    <?php
+    $faqs = simplexml_load_file("risorse/XML/FAQs.xml") or die("Errore: impossibile caricare l'XML");
 
-  foreach ($faqs->faq as $faq): ?>
-    <div class="box-FAQs">
-      <h4 class="faq-category"><?= htmlspecialchars($faq->categoria) ?></h4>
-      <h3 class="faq-question"><?= htmlspecialchars($faq->domanda) ?></h3>
-      <div class="faq-answer"><?= nl2br(htmlspecialchars($faq->risposta)) ?></div>
-    </div>
-  <?php endforeach; ?>
-</div>
+    foreach ($faqs->faq as $faq): ?>
+      <div class="box-FAQs">
+        <h4 class="faq-category"><?= htmlspecialchars($faq->categoria) ?></h4>
+        <h3 class="faq-question"><?= htmlspecialchars($faq->domanda) ?></h3>
+        <div class="faq-answer"><?= nl2br(htmlspecialchars($faq->risposta)) ?></div>
+      </div>
+    <?php endforeach; ?>
+  </div>
 
 
   <div class="pdp">

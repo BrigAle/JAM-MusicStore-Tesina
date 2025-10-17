@@ -20,65 +20,11 @@ session_start();
     </div>
 
     <div class="navSearch">
-      <form action="homepage.php" method="get">
+      <form action="risorse/PHP/ricerca_catalogo.php" method="get">
         <div class="searchContainer">
-
-          <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-          <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
-
-          <!-- Checkbox nascosto -->
-          <input type="checkbox" id="advanced_commutator" style="display: none;" />
-          <label for="advanced_commutator" class="label_commutator">Ricerca avanzata</label>
-
-          <!-- Questo deve essere subito dopo il checkbox -->
-          <div class="advanced_filters">
-            <div class="filters_title">
-              <h4>Filtri avanzati</h4>
-            </div>
-            <div class="filters_container">
-              <h4>tamburi</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>chitarre</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>frochoni</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-          </div>
-
+          <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+          <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+          <button type="submit" name="tipo" value="categoria">Per categoria</button>
         </div>
       </form>
     </div>
@@ -92,7 +38,7 @@ session_start();
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
-       <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
+      <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
         <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
       <?php endif; ?>
       <a href="catalogo.php">Catalogo</a>
@@ -135,7 +81,6 @@ session_start();
           if (isset($_SESSION['error_banned']) && $_SESSION['error_banned'] == true) {
             echo "<h3>Il tuo account è stato bloccato. Contatta l'amministratore per maggiori informazioni.</h3>";
             unset($_SESSION['error_banned']);
-
           }
           ?>
           <input type="submit" value="Accedi" />
@@ -148,7 +93,7 @@ session_start();
 
 
 
-  <div class="pdp"> 
+  <div class="pdp">
     <div class="pdp-center">
       <p>&copy; 2025 JAM Music Store</p>
     </div>

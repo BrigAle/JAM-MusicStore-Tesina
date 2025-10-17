@@ -20,10 +20,11 @@ session_start();
         </div>
 
         <div class="navSearch">
-            <form action="homepage.php" method="get">
+            <form action="risorse/PHP/ricerca_catalogo.php" method="get">
                 <div class="searchContainer">
-                    <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-                    <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca" /></button>
+                    <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+                    <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+                    <button type="submit" name="tipo" value="categoria">Per categoria</button>
                 </div>
             </form>
         </div>

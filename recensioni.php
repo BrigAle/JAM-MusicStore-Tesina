@@ -20,68 +20,14 @@ session_start();
     </div>
 
     <div class="navSearch">
-      <form action="homepage.php" method="get">
-        <div class="searchContainer">
-
-          <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-          <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
-
-          <!-- Checkbox nascosto -->
-          <input type="checkbox" id="advanced_commutator" style="display: none;" />
-          <label for="advanced_commutator" class="label_commutator">Ricerca avanzata</label>
-
-          <!-- Questo deve essere subito dopo il checkbox -->
-          <div class="advanced_filters">
-            <div class="filters_title">
-              <h4>Filtri avanzati</h4>
-            </div>
-            <div class="filters_container">
-              <h4>tamburi</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>chitarre</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>frochoni</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-            <div class="filters_container">
-              <h4>vincenzo ferrara</h4>
-              <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-              <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-              <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-            </div>
-          </div>
-
+            <form action="risorse/PHP/ricerca_catalogo.php" method="get">
+                <div class="searchContainer">
+                    <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+                    <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+                    <button type="submit" name="tipo" value="categoria">Per categoria</button>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
 
     <div class="navLink">
       <!-- admin links -->
@@ -150,13 +96,13 @@ session_start();
         <p>Nessuna recensione trovata per questo prodotto.</p>
       <?php else: ?>
         <?php
-        $id_utente = isset($_SESSION['id']) ? $_SESSION['id'] : null; // ID utente loggato o null se non loggato
+        $id_utente = isset($_SESSION['id_utente']) ? $_SESSION['id_utente'] : null; // ID utente loggato o null se non loggato
         foreach ($recensioniProdotto as $recensione):
           $id_recensione = (int)$recensione['id'];
           $votoUtente = null;
           $id_utente_recensione = (int)$recensione->id_utente;
 
-          // connessione al database per ricavare l'username dell'utente che ha scritto la recensione
+          // Connessione al database per ricavare l'username dell'utente che ha scritto la recensione
           require_once 'risorse/PHP/connection.php';
           $connection = new mysqli($host, $user, $password, $db);
           $queryU = "SELECT username FROM utente WHERE id = $id_utente_recensione";
@@ -166,7 +112,7 @@ session_start();
             $username_recensione = $rowU['username'];
           }
 
-          // ✅ controlla correttamente il nodo "voto_utenti"
+          // Controlla se l'utente loggato ha già votato questa recensione
           if (isset($recensione->voto_utenti)) {
             foreach ($recensione->voto_utenti->voto as $v) {
               if ((int)$v['id_utente'] === (int)$id_utente) {
@@ -223,12 +169,23 @@ session_start();
               <?php endif; ?>
               <form action="risposta_recensione.php" method="POST">
                 <input type="hidden" name="id_prodotto" value="<?= $_GET['id_prodotto'] ?>" />
-                <input type="hidden" name="id_utente" value="<?= $_SESSION['id'] ?>" />
+                <input type="hidden" name="id_utente" value="<?= $_SESSION['id_utente'] ?>" />
                 <input type="hidden" name="id_recensione" value="<?= $recensione['id'] ?>" />
                 <button type="submit">Rispondi</button>
               </form>
             <?php endif; ?>
-
+            <?php 
+            // se utente ha scritto la recensione appare un messaggio di successo
+            if (isset($_SESSION['id_utente']) && $_SESSION['id_utente'] == $recensione->id_utente):
+              if (isset($_SESSION['successo_msg'])) {
+                echo '<p style="color: green;">' . htmlspecialchars($_SESSION['successo_msg']) . '</p>';
+                unset($_SESSION['successo_msg']);
+              }elseif (isset($_SESSION['errore_msg'])) {
+                echo '<p style="color: red;">' . htmlspecialchars($_SESSION['errore_msg']) . '</p>';
+                unset($_SESSION['errore_msg']);
+              }
+            endif;
+            ?>
             <?php
             // se utente loggato e' un gestore, mostra pulsante segnala
             if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] == 'gestore'):

@@ -20,65 +20,11 @@ session_start();
         </div>
 
         <div class="navSearch">
-            <form action="homepage.php" method="get">
+            <form action="risorse/PHP/ricerca_catalogo.php" method="get">
                 <div class="searchContainer">
-
-                    <input type="text" name="query" placeholder="Cerca brani, artisti, album..." />
-                    <button type="submit"><img src="risorse/IMG/search.png" alt="Cerca"></button>
-
-                    <!-- Checkbox nascosto -->
-                    <input type="checkbox" id="advanced_commutator" style="display: none;" />
-                    <label for="advanced_commutator" class="label_commutator">Ricerca avanzata</label>
-
-                    <!-- Questo deve essere subito dopo il checkbox -->
-                    <div class="advanced_filters">
-                        <div class="filters_title">
-                            <h4>Filtri avanzati</h4>
-                        </div>
-                        <div class="filters_container">
-                            <h4>tamburi</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>chitarre</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>frochoni</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                        <div class="filters_container">
-                            <h4>vincenzo ferrara</h4>
-                            <label><input type="checkbox" name="formato[]" value="CD" /> CD</label>
-                            <label><input type="checkbox" name="formato[]" value="Vinile" /> Vinile</label>
-                            <label><input type="checkbox" name="scontati" value="1" /> Solo in sconto</label>
-                        </div>
-                    </div>
-
+                    <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+                    <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+                    <button type="submit" name="tipo" value="categoria">Per categoria</button>
                 </div>
             </form>
         </div>
@@ -106,7 +52,7 @@ session_start();
 
     <!-- div presentazione sito -->
     <div class="content">
-        
+
         <?php
         // Controlla se l'utente è loggato
         if (!isset($_SESSION['username'])) {
@@ -122,13 +68,14 @@ session_start();
         if ($connection->connect_error) {
             die("Connessione fallita: " . $connection->connect_error);
         }
-        $id_utente = $_SESSION['id'];
+        $id_utente = $_SESSION['id_utente'];
         $query = "SELECT * FROM utente WHERE id='$id_utente'";
         $result = $connection->query($query);
         if ($result) {
             $record = $result->fetch_array(MYSQLI_ASSOC);
             $password_hash = $record['password'];
             $email = $record['email'];
+
         ?>
 
             <!-- carico il filme xml e recupero i dati con dom -->
@@ -139,7 +86,7 @@ session_start();
             }
             $nome = $cognome = $telefono = $indirizzo = $reputazione = $stato = $portafoglio = $crediti = $data_iscrizione = "";
             $xml = simplexml_load_file($xmlFile);
-            
+
             foreach ($xml->utente as $utente) {
                 if ((int)$utente['id'] === (int)$id_utente) {
                     $nome = (string)$utente->nome;
@@ -147,13 +94,12 @@ session_start();
                     $telefono = (string)$utente->telefono;
                     $indirizzo = (string)$utente->indirizzo;
                     $reputazione = (string)$utente->reputazione;
-                    $stato = ((string)$utente->stato === '1') ? true : false;
+
                     $portafoglio = (float)$utente->portafoglio;
                     $crediti = (int)$utente->crediti;
                     $data_iscrizione = (string)$utente->data_iscrizione;
                     break; // Esci dal ciclo una volta trovato l'utente
                 }
-    
             }
             ?>
             <!-- visualizzo i dati dell'utente -->
@@ -166,19 +112,55 @@ session_start();
                 <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
                 <p><strong>Telefono:</strong> <?php echo htmlspecialchars($telefono); ?></p>
                 <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($indirizzo); ?></p>
-                <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?></p>
-                <p><strong>Stato:</strong> <?php echo $stato ? 'Attivo' : 'Disabilitato'; ?></p>
-                <p><strong>Portafoglio:</strong> €<?php echo number_format($portafoglio, 2); ?></p>
-                <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?></p>
+                <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?> <a href="risorse/PHP/aggiorna_reputazione.php">Aggiorna reputazione</a></p>
+                <p><strong>Stato:</strong> <?= $record['stato'] ? "Attivo" : "Disabilitato" ?></p>
+                <form action="risorse/PHP/ricarica_portafoglio.php" method="post" style="display:flex; align-items:center; gap:8px;">
+                    <p style="margin:0;">
+                        <strong>Portafoglio:</strong>
+                        €<?php echo number_format($portafoglio, 2, ',', '.'); ?>
+                    </p>
+                    <input type="number" name="importo" min="1" step="0.01" placeholder="€" required
+                        style="width:80px; text-align:center; border:1px solid #aaa; border-radius:4px; padding:4px;">
+                    <button type="submit"
+                        style="background-color:#32CD32; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">
+                        Ricarica
+                    </button>
+                </form>
+
+                <?php
+                if (isset($_SESSION['successo_msg'])) {
+                    echo '<p style="color:green;">' . htmlspecialchars($_SESSION['successo_msg']) . '</p>';
+                    unset($_SESSION['successo_msg']);
+                }
+                if (isset($_SESSION['errore_msg'])) {
+                    echo '<p style="color:red;">' . htmlspecialchars($_SESSION['errore_msg']) . '</p>';
+                    unset($_SESSION['errore_msg']);
+                }
+                ?>
+                <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?><a href="richiesta_crediti.php"> Richiedi altri crediti</a></p>
                 <p><strong>Data di Iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
                 <p><strong>Ruolo:</strong> <?php echo htmlspecialchars($record['ruolo']); ?></p>
                 <!-- Aggiungi altre informazioni se necessario -->
                 <a href="aggiorna_profilo.php">Modifica Profilo</a>
                 <a href="cambia_password.php">Cambia Password</a>
-                
-                <?php 
+                <a href="storico_acquisti.php">Vai allo storico degli acquisti</a>
+                <?php if (isset($_SESSION['successo_msg']) && !empty($_SESSION['successo_msg'])): ?>
+                    <p style="color: green;"><?php
+                                                echo htmlspecialchars($_SESSION['successo_msg']);
+                                                // Pulisci il messaggio dopo averlo mostrato
+                                                $_SESSION['successo_msg'] = "";
+                                                ?></p>
+                <?php endif; ?>
+                <?php if (isset($_SESSION['errore_msg']) && !empty($_SESSION['errore_msg'])): ?>
+                    <p style="color: red;"><?php
+                                            echo htmlspecialchars($_SESSION['errore_msg']);
+                                            // Pulisci il messaggio dopo averlo mostrato
+                                            $_SESSION['errore_msg'] = "";
+                                            ?></p>
+                <?php endif; ?>
+                <?php
                 if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])) {
-                    echo '<p class="error_message">' . htmlspecialchars($_SESSION['pwd_change_message']) . '</p>';
+                    echo '<p style="color: red;">' . htmlspecialchars($_SESSION['pwd_change_message']) . '</p>';
                     // Pulisci il messaggio dopo averlo mostrato
                     $_SESSION['pwd_change_message'] = "";
                 }

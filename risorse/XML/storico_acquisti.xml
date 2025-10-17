@@ -1,37 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <storici xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:noNamespaceSchemaLocation="Storico_Acquisti.xsd">
+  xsi:noNamespaceSchemaLocation="Storico_Acquisti.xsd">
   <storico id="1">
     <id_utente>5</id_utente>
-    <data>2025-05-13</data>
+    <data>2025-10-15</data>
     <prodotti>
       <prodotto>
-        <id_prodotto>2</id_prodotto>
-        <quantita>2</quantita>
-        <prezzo_unitario>12.50</prezzo_unitario>
-        <prezzo_totale>25.00</prezzo_totale>
-      </prodotto>
-      <prodotto>
-        <id_prodotto>102</id_prodotto>
+        <id_prodotto>1</id_prodotto>
         <quantita>1</quantita>
-        <prezzo_unitario>35.00</prezzo_unitario>
-        <prezzo_totale>35.00</prezzo_totale>
+        <prezzo_unitario>999.99</prezzo_unitario>
+        <prezzo_totale>999.99</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>3</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>149.99</prezzo_unitario>
+        <prezzo_totale>149.99</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>5</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>99.99</prezzo_unitario>
+        <prezzo_totale>99.99</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>6</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>499.99</prezzo_unitario>
+        <prezzo_totale>499.99</prezzo_totale>
       </prodotto>
     </prodotti>
-    <prezzo_totale_ordine>60.00</prezzo_totale_ordine>
+    <prezzo_totale_ordine>1749.96</prezzo_totale_ordine>
   </storico>
-
   <storico id="2">
-    <id_utente>7</id_utente>
-    <data>2025-05-10</data>
+    <id_utente>4</id_utente>
+    <data>2025-10-15</data>
     <prodotti>
       <prodotto>
-        <id_prodotto>109</id_prodotto>
-        <quantita>3</quantita>
-        <prezzo_unitario>10.00</prezzo_unitario>
-        <prezzo_totale>30.00</prezzo_totale>
+        <id_prodotto>10</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>8.49</prezzo_unitario>
+        <prezzo_totale>8.49</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>9</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>42.49</prezzo_unitario>
+        <prezzo_totale>42.49</prezzo_totale>
       </prodotto>
     </prodotti>
-    <prezzo_totale_ordine>30.00</prezzo_totale_ordine>
+    <prezzo_totale_ordine>50.98</prezzo_totale_ordine>
   </storico>
 </storici>

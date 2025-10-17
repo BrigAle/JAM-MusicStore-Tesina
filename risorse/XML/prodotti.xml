@@ -38,7 +38,7 @@
   </prodotto>
   <prodotto id="5">
     <nome>Microfono Shure SM58</nome>
-    <categoria>Accessori</categoria>
+    <categoria>Accessori strumenti a voce</categoria>
     <descrizione>Microfono dinamico cardioide, ideale per performance live.</descrizione>
     <prezzo>99.99</prezzo>
     <bonus>15.00</bonus>

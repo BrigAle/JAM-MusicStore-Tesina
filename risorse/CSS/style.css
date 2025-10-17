@@ -8,9 +8,7 @@ body {
   margin: 0;
   padding: 0;
   background: #121212;
-  /* bg */
   color: #F5F5F5;
-  /* text */
   font: 16px/1.6 Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -114,104 +112,67 @@ td a:hover {
 
 .searchContainer {
   display: flex;
+  align-items: center;
   gap: 8px;
   flex-wrap: wrap;
   flex-direction: row;
+  justify-content: center;
 }
 
+/* Campo di testo */
 .searchContainer input[type="text"] {
-  max-width: 600px;
   flex: 1;
+  max-width: 500px;
   background: #2C2C2C;
   color: #F5F5F5;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
+  border: 1px solid #444;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: background 0.3s, border-color 0.3s;
 }
 
 .searchContainer input[type="text"]:focus {
   outline: none;
   background: #3C3C3C;
+  border-color: #E50914;
 }
 
+/* Pulsanti di ricerca */
 .searchContainer button {
-  background: #2C2C2C;
-  color: #F5F5F5;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.searchContainer button:hover {
-  background: #E50914;
-}
-
-/* Commutatore filtri */
-.label_commutator {
-  cursor: pointer;
-  color: #F5F5F5;
-  background: #2C2C2C;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  user-select: none;
-}
-
-.label_commutator:hover {
-  background: #E50914;
-}
-
-#advanced_commutator {
-  display: none;
-}
-
-/* Pannello filtri avanzati */
-.advanced_filters {
-  display: none;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 96px;
-  background: #1F1F1F;
-  color: #F5F5F5;
-  padding: 2px 20px;
-  border: 2px solid #E50914;
   border-radius: 6px;
-  white-space: nowrap;
-  z-index: 10;
-  max-width: 100%;
-}
-
-#advanced_commutator:checked+.label_commutator+.advanced_filters {
-  display: inline-flex;
-  flex-wrap: wrap;
-  width: auto;
-  padding: 1rem;
-}
-
-.filters_title {
-  width: 100%;
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-}
-
-.filters_container {
-  flex: 0 0 auto;
-  margin-right: 2rem;
-  margin-bottom: 1rem;
-}
-
-.filters_container label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  padding: 10px 16px;
+  cursor: pointer;
   font-size: 14px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.1s;
 }
+
+/* Pulsante: per nome prodotto */
+.searchContainer button[name="tipo"][value="nome"] {
+  background: #FF8C00;
+  color: #fff;
+}
+
+.searchContainer button[name="tipo"][value="nome"]:hover {
+  background: #ffa733;
+  transform: scale(1.03);
+}
+
+/* Pulsante: per categoria */
+.searchContainer button[name="tipo"][value="categoria"] {
+  background: #2C2C2C;
+  color: #ffeb00;
+  border: 1px solid #ffeb00;
+}
+
+.searchContainer button[name="tipo"][value="categoria"]:hover {
+  background: #3a3a3a;
+  transform: scale(1.03);
+}
+
+
 
 /* ---------- Nav link a destra ---------- */
 .navLink {
@@ -396,7 +357,7 @@ th {
   background: #222;
   color: #FFEB00;
   text-align: left;
-  padding: 10px 12px;
+  padding: 12px 14px;
   font-size: 15px;
   border-bottom: 2px solid #FFEB00;
 }
@@ -765,6 +726,113 @@ td:nth-child(10) {
 .pdp-right a:hover {
   text-decoration: underline;
 }
+/* Sconti */
+/* --- Stile dedicato esclusivamente al form sconti --- */
+/* --- Stile dedicato esclusivamente al form sconti (tema scuro JAM) --- */
+.sconto-form {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 25px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #f5f5f5;
+    box-shadow: 0 0 15px rgba(255, 200, 0, 0.1);
+}
+
+.sconto-field {
+    margin-bottom: 18px;
+}
+
+.sconto-field label {
+    font-weight: 600;
+    color: #ffd700; /* giallo oro */
+    display: block;
+    margin-bottom: 6px;
+}
+
+.sconto-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #111;
+    color: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.sconto-input:focus {
+    outline: none;
+    border-color: #ffcc00;
+    box-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
+}
+
+.sconto-date-group {
+    display: flex;
+    gap: 15px;
+}
+
+.sconto-checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+    border: 1px solid #333;
+    background: #111;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.sconto-checkbox-item {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.sconto-checkbox-item:hover {
+    color: #ffcc00;
+}
+
+.sconto-checkbox-item input[type="checkbox"] {
+    transform: scale(1.2);
+    accent-color: #ffcc00; /* Colore giallo per i checkbox */
+    cursor: pointer;
+}
+
+.sconto-btn {
+    display: inline-block;
+    background-color: #ffcc00;
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.sconto-btn:hover {
+    background-color: #ffb400;
+    transform: translateY(-1px);
+}
+
+.sconto-back {
+    display: inline-block;
+    margin-top: 20px;
+    color: #ffcc00;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.sconto-back:hover {
+    text-decoration: underline;
+}
+
 
 /* ---------- Responsive ---------- */
 @media (max-width:900px) {
@@ -861,3 +929,4 @@ td:nth-child(10) {
   text-decoration: underline;
   text-decoration-color: #FFEB00;
 }
+

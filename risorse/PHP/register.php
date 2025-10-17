@@ -80,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $utente->appendChild($doc->createElement('telefono', $telefonoVal));
     $utente->appendChild($doc->createElement('indirizzo', $indirizzoVal));
     $utente->appendChild($doc->createElement('reputazione', 0));
-    $utente->appendChild($doc->createElement('stato', 1));
     $utente->appendChild($doc->createElement('portafoglio', 0.0));
     $utente->appendChild($doc->createElement('crediti', 0.0));
     $utente->appendChild($doc->createElement('data_iscrizione', date("Y-m-d")));

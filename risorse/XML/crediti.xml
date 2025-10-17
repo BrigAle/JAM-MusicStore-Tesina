@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<richieste>
+  <richiesta id="1">
+    <id_utente>5</id_utente>
+    <importo>30.00</importo>
+    <data>2025-10-15</data>
+    <stato>in attesa</stato>
+  </richiesta>
+</richieste>

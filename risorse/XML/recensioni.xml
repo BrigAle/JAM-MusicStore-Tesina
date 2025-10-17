@@ -2,56 +2,15 @@
 <recensioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="recensioni.xsd">
   <recensione id="1">
     <id_prodotto>1</id_prodotto>
-    <id_utente>4</id_utente>
-    <commento>Ottimo prodotto, qualita' eccellente.</commento>
+    <id_utente>5</id_utente>
+    <commento>Ottima chitarra versatile</commento>
     <valutazione>5</valutazione>
     <voti_like>2</voti_like>
-    <voti_dislike>2</voti_dislike>
-    <voto_utenti>
-      <voto id_utente="1" tipo="like"/>
-      <voto id_utente="4" tipo="like"/>
-      <voto id_utente="2" tipo="dislike"/>
-    </voto_utenti>
-    <data>2025-05-10</data>
-  </recensione>
-  <recensione id="2">
-    <id_prodotto>2</id_prodotto>
-    <id_utente>2</id_utente>
-    <commento>Arrivato in ritardo ma funziona bene.</commento>
-    <valutazione>4</valutazione>
-    <voti_like>2</voti_like>
-    <voti_dislike>1</voti_dislike>
+    <voti_dislike>0</voti_dislike>
     <voto_utenti>
       <voto id_utente="5" tipo="like"/>
-      <voto id_utente="9" tipo="dislike"/>
-    </voto_utenti>
-    <data>2025-05-11</data>
-  </recensione>
-  <recensione id="3">
-    <id_prodotto>1</id_prodotto>
-    <id_utente>3</id_utente>
-    <commento>Non sono soddisfatto del suono.</commento>
-    <valutazione>2</valutazione>
-    <voti_like>6</voti_like>
-    <voti_dislike>9</voti_dislike>
-    <voto_utenti>
       <voto id_utente="2" tipo="like"/>
-      <voto id_utente="6" tipo="dislike"/>
-      <voto id_utente="1" tipo="like"/>
     </voto_utenti>
-    <data>2025-05-12</data>
-  </recensione>
-  <recensione id="4">
-    <id_prodotto>3</id_prodotto>
-    <id_utente>4</id_utente>
-    <commento>Comode e con un ottimo isolamento acustico.</commento>
-    <valutazione>5</valutazione>
-    <voti_like>5</voti_like>
-    <voti_dislike>9</voti_dislike>
-    <voto_utenti>
-      <voto id_utente="2" tipo="like"/>
-      <voto id_utente="6" tipo="dislike"/>
-    </voto_utenti>
-    <data>2025-05-12</data>
+    <data>2025-10-15</data>
   </recensione>
 </recensioni>
