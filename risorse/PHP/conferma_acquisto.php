@@ -191,7 +191,7 @@ $carrelloUtente->parentNode->removeChild($carrelloUtente);
 $docCarrelli->save($carrelliFile);
 
 // --- Messaggio finale ---
-$_SESSION['successo_msg'] = "✅ Acquisto completato con successo! Totale: €" . number_format($totaleEffettivo, 2, ',', '.') .
+$_SESSION['successo_msg'] = "Acquisto completato con successo! Totale: €" . number_format($totaleEffettivo, 2, ',', '.') .
                             ". Bonus ricevuti: +" . number_format($bonusTotale, 2) . " crediti.";
 
 header("Location: ../../cart.php");

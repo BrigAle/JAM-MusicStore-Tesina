@@ -207,7 +207,7 @@ td a:hover {
 .content a h2:hover {
   color: #FFEB00;
   text-decoration: underline;
-  
+
 }
 
 .content ul li {
@@ -318,6 +318,129 @@ td a:hover {
   justify-content: center;
   align-items: center;
 }
+
+/* ----- PROFILO UTENTE ----- */
+.user-profile {
+  color: #f5f5f5;
+  padding: 40px 20px;
+  background-color: #111;
+  min-height: 100vh;
+}
+
+.profile-card {
+  background-color: #1b1b1b;
+  border: 1px solid #2e2e2e;
+  border-radius: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px 40px;
+  box-shadow: 0 0 20px rgba(255, 255, 0, 0.1);
+}
+
+.profile-title {
+  color: #ffeb00;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-row {
+  font-size: 16px;
+  border-bottom: 1px solid #2a2a2a;
+  padding-bottom: 6px;
+}
+
+.profile-row strong {
+  color: #ffeb00;
+}
+
+.profile-link {
+  color: #32cd32;
+  text-decoration: none;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- Portafoglio ---- */
+.wallet-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.wallet-input {
+  width: 80px;
+  text-align: center;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 4px;
+  background-color: #2c2c2c;
+  color: #fff;
+}
+
+.wallet-btn {
+  background-color: #32cd32;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.wallet-btn:hover {
+  background-color: #28a428;
+}
+
+/* ---- Pulsanti azione ---- */
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.profile-btn {
+  background-color: #2c2c2c;
+  color: #ffeb00;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.profile-btn:hover {
+  background-color: #3a3a3a;
+}
+
+/* ---- Messaggi ---- */
+.msg {
+  text-align: center;
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.msg.success {
+  color: #32cd32;
+}
+
+.msg.error {
+  color: #ff4040;
+}
+
 
 /* ---------- Voti (like/dislike) ---------- */
 .voti button {
@@ -726,111 +849,114 @@ td:nth-child(10) {
 .pdp-right a:hover {
   text-decoration: underline;
 }
+
 /* Sconti */
 /* --- Stile dedicato esclusivamente al form sconti --- */
 /* --- Stile dedicato esclusivamente al form sconti (tema scuro JAM) --- */
 .sconto-form {
-    max-width: 700px;
-    margin: 30px auto;
-    padding: 25px;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #f5f5f5;
-    box-shadow: 0 0 15px rgba(255, 200, 0, 0.1);
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #f5f5f5;
+  box-shadow: 0 0 15px rgba(255, 200, 0, 0.1);
 }
 
 .sconto-field {
-    margin-bottom: 18px;
+  margin-bottom: 18px;
 }
 
 .sconto-field label {
-    font-weight: 600;
-    color: #ffd700; /* giallo oro */
-    display: block;
-    margin-bottom: 6px;
+  font-weight: 600;
+  color: #ffd700;
+  /* giallo oro */
+  display: block;
+  margin-bottom: 6px;
 }
 
 .sconto-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #444;
-    border-radius: 6px;
-    font-size: 15px;
-    background-color: #111;
-    color: #fff;
-    transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: #111;
+  color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .sconto-input:focus {
-    outline: none;
-    border-color: #ffcc00;
-    box-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
+  outline: none;
+  border-color: #ffcc00;
+  box-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
 }
 
 .sconto-date-group {
-    display: flex;
-    gap: 15px;
+  display: flex;
+  gap: 15px;
 }
 
 .sconto-checkbox-group {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 8px;
-    border: 1px solid #333;
-    background: #111;
-    padding: 10px;
-    border-radius: 6px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  border: 1px solid #333;
+  background: #111;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 .sconto-checkbox-item {
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    color: #ddd;
-    cursor: pointer;
-    transition: color 0.2s;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
 .sconto-checkbox-item:hover {
-    color: #ffcc00;
+  color: #ffcc00;
 }
 
 .sconto-checkbox-item input[type="checkbox"] {
-    transform: scale(1.2);
-    accent-color: #ffcc00; /* Colore giallo per i checkbox */
-    cursor: pointer;
+  transform: scale(1.2);
+  accent-color: #ffcc00;
+  /* Colore giallo per i checkbox */
+  cursor: pointer;
 }
 
 .sconto-btn {
-    display: inline-block;
-    background-color: #ffcc00;
-    color: #111;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 22px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
+  display: inline-block;
+  background-color: #ffcc00;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .sconto-btn:hover {
-    background-color: #ffb400;
-    transform: translateY(-1px);
+  background-color: #ffb400;
+  transform: translateY(-1px);
 }
 
 .sconto-back {
-    display: inline-block;
-    margin-top: 20px;
-    color: #ffcc00;
-    text-decoration: none;
-    font-weight: 500;
+  display: inline-block;
+  margin-top: 20px;
+  color: #ffcc00;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .sconto-back:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 
@@ -930,3 +1056,144 @@ td:nth-child(10) {
   text-decoration-color: #FFEB00;
 }
 
+/* ---------- PATCH PROFILO UTENTE: armonizzato con tema JAM ---------- */
+
+.user-profile {
+  display: block !important;
+  width: 100%;
+  background: #111;
+  color: #f5f5f5;
+  padding: 60px 20px;
+  min-height: 100vh;
+}
+
+.profile-card {
+  background: #1b1b1b;
+  border: 1px solid #2c2c2c;
+  border-radius: 10px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 30px 40px;
+  box-shadow: 0 0 20px rgba(255, 235, 0, 0.1);
+}
+
+.profile-title {
+  color: #ffeb00;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  text-shadow: 0 0 5px #E50914;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-row {
+  font-size: 15px;
+  border-bottom: 1px solid #2a2a2a;
+  padding-bottom: 6px;
+}
+
+.profile-row strong {
+  color: #ffeb00;
+}
+
+.profile-link {
+  color: #32cd32;
+  text-decoration: none;
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+.profile-link:hover {
+  text-decoration: underline;
+}
+
+/* Portafoglio */
+.wallet-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.wallet-input {
+  width: 80px;
+  text-align: center;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 4px;
+  background-color: #2c2c2c;
+  color: #fff;
+}
+
+.wallet-btn {
+  background-color: #32cd32;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.wallet-btn:hover {
+  background-color: #28a428;
+}
+
+/* Pulsanti di azione */
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.profile-btn {
+  background-color: #2c2c2c;
+  color: #ffeb00;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.profile-btn:hover {
+  background-color: #3a3a3a;
+}
+
+/* Messaggi */
+.msg {
+  text-align: center;
+  font-size: 15px;
+  margin-top: 10px;
+}
+
+.msg.success {
+  color: #32cd32;
+}
+
+.msg.error {
+  color: #ff4040;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .profile-card {
+    padding: 25px;
+  }
+
+  .profile-title {
+    font-size: 1.5rem;
+  }
+
+  .profile-row {
+    font-size: 14px;
+  }
+}

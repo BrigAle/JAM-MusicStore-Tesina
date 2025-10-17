@@ -42,13 +42,12 @@ if ($segnalazione_trovata) {
         $_SESSION['elimina_segnalazione_successo'] = true;
     } else {
         $_SESSION['elimina_segnalazione_successo'] = false;
-        die("❌ Errore nel salvataggio del file XML.");
+        die("Errore nel salvataggio del file XML.");
     }
 } else {
     $_SESSION['elimina_segnalazione_successo'] = false;
 }
 
-// ✅ Redirect alla pagina di gestione
 header("Location: ../../../gestione_contenuti_admin.php");
 exit();
 ?>

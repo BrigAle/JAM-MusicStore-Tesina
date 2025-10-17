@@ -137,17 +137,17 @@ session_start();
         <?php
         if (isset($_SESSION['aggiungi_prodotto_successo'])) {
             if ($_SESSION['aggiungi_prodotto_successo']) {
-                echo "<p style='color: green;'>✅ Prodotto aggiunto con successo!</p>";
+                echo "<p style='color: green;'> Prodotto aggiunto con successo!</p>";
             } else {
-                echo "<p style='color: red;'>❌ Errore durante l'aggiunta del prodotto. Riprova.</p>";
+                echo "<p style='color: red;'> Errore durante l'aggiunta del prodotto. Riprova.</p>";
             }
             unset($_SESSION['aggiungi_prodotto_successo']);
         }
         if (isset($_SESSION['elimina_prodotto_successo'])) {
             if ($_SESSION['elimina_prodotto_successo']) {
-                echo "<p style='color: green;'>✅ Prodotto eliminato con successo!</p>";
+                echo "<p style='color: green;'> Prodotto eliminato con successo!</p>";
             } else {
-                echo "<p style='color: red;'>❌ Errore durante l'eliminazione del prodotto. Riprova.</p>";
+                echo "<p style='color: red;'> Errore durante l'eliminazione del prodotto. Riprova.</p>";
             }
             unset($_SESSION['elimina_prodotto_successo']);
         }

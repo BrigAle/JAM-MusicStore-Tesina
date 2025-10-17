@@ -1,5 +1,22 @@
 <?php
 session_start();
+
+// ✅ Solo utenti loggati
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// ✅ Connessione DB
+require_once 'risorse/PHP/connection.php';
+$connection = new mysqli($host, $user, $password, $db);
+if ($connection->connect_error) {
+    die("Connessione fallita: " . $connection->connect_error);
+}
+
+$id_utente = $_SESSION['id_utente'];
+$query = "SELECT * FROM utente WHERE id='$id_utente'";
+$result = $connection->query($query);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -51,101 +68,94 @@ session_start();
     </div>
     <!-- div presentazione sito -->
 
-    <div class="content">
-        <?php
-        if (!isset($_SESSION['username'])) {
-            header("Location: login.php");
-            exit();
-        }
-        ?>
-        <?php
-        require_once 'risorse/PHP/connection.php';
-        $connection = new mysqli($host, $user, $password, $db);
-        // Controlla la connessione
-        if ($connection->connect_error) {
-            die("Connessione fallita: " . $connection->connect_error);
-        }
-        $id_utente = $_SESSION['id_utente'];
-        $query = "SELECT * FROM utente WHERE id='$id_utente'";
-        $result = $connection->query($query);
-        if ($result) {
-            $record = $result->fetch_array(MYSQLI_ASSOC);
-            $email = $record['email'];
-            $username = $record['username'];
-            // Carico i dati dall'XML
-            $xmlFile = 'risorse/XML/utenti.xml';
-            if (!file_exists($xmlFile)) {
-                die("Errore: il file XML degli utenti non esiste");
-            }
-            $xml = simplexml_load_file($xmlFile);
-            foreach ($xml->utente as $user) {
-                if ((int)$user['id'] === (int)$id_utente) {
-                    $nome = (string)$user->nome;
-                    $cognome = (string)$user->cognome;
-                    $telefono = (string)$user->telefono;
-                    $indirizzo = (string)$user->indirizzo;
-                    $reputazione = (string)$user->reputazione;
-                    $stato = ((string)$user->stato === '1') ? true : false;
-                    $portafoglio = (float)$user->portafoglio;
-                    $crediti = (int)$user->crediti;
-                    $data_iscrizione = (string)$user->data_iscrizione;
-                    break; // Esci dal ciclo una volta trovato l'utente
+    <div class="content user-profile">
+        <div class="profile-card">
+            <h2 class="profile-title">Aggiorna Profilo</h2>
+
+            <?php
+            if ($result) {
+                $record = $result->fetch_array(MYSQLI_ASSOC);
+                $email = $record['email'];
+                $username = $record['username'];
+
+                // Carica XML utente
+                $xmlFile = 'risorse/XML/utenti.xml';
+                if (!file_exists($xmlFile)) {
+                    die("<p class='msg error'>Errore: il file XML degli utenti non esiste.</p>");
                 }
-            }
-        ?>
-            <!-- visualizzo i dati dell'utente -->
-            <h2>Profilo di <?php echo htmlspecialchars($record['username']); ?></h2>
-            <div class="profile_info">
-                <form action="risorse/PHP/aggiorna_profilo.php" method="POST">
-                    <p>dati di prima:</p>
-                    <p><strong>id: <?php echo htmlspecialchars($id_utente); ?></strong></p>
-                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome); ?></p>
-                    <p><strong>Cognome:</strong> <?php echo htmlspecialchars($cognome); ?></p>
-                    <p><strong>Username:</strong> <?php echo htmlspecialchars($username); ?></p>
-                    <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-                    <p><strong>Telefono:</strong> <?php echo htmlspecialchars($telefono); ?></p>
-                    <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($indirizzo); ?></p>
-                    <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?></p>
-                    <p><strong>Stato:</strong> <?php echo $stato ? 'Attivo' : 'Disabilitato'; ?></p>
-                    <p><strong>Portafoglio:</strong> €<?php echo number_format($portafoglio, 2); ?></p>
-                    <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?></p>
-                    <p><strong>Data di iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
-                    <br />
-                    <p>Modifica i tuoi dati (lascia vuoto per non modificare):</p>
+                $xml = simplexml_load_file($xmlFile);
 
-                    <label for="nome">Nome:</label>
-                    <input type="text" id="nome" name="nome" />
+                foreach ($xml->utente as $user) {
+                    if ((int)$user['id'] === (int)$id_utente) {
+                        $nome = (string)$user->nome;
+                        $cognome = (string)$user->cognome;
+                        $telefono = (string)$user->telefono;
+                        $indirizzo = (string)$user->indirizzo;
+                        $reputazione = (string)$user->reputazione;
+                        $stato = ((string)$user->stato === '1') ? true : false;
+                        $portafoglio = (float)$user->portafoglio;
+                        $crediti = (int)$user->crediti;
+                        $data_iscrizione = (string)$user->data_iscrizione;
+                        break;
+                    }
+                }
+            ?>
+                <div class="profile-details">
+                    <h3 style="color:#ffeb00; margin-bottom:10px;">Dati attuali</h3>
+                    <div class="profile-row"><strong>ID:</strong> <?= htmlspecialchars($id_utente); ?></div>
+                    <div class="profile-row"><strong>Nome:</strong> <?= htmlspecialchars($nome); ?></div>
+                    <div class="profile-row"><strong>Cognome:</strong> <?= htmlspecialchars($cognome); ?></div>
+                    <div class="profile-row"><strong>Username:</strong> <?= htmlspecialchars($username); ?></div>
+                    <div class="profile-row"><strong>Email:</strong> <?= htmlspecialchars($email); ?></div>
+                    <div class="profile-row"><strong>Telefono:</strong> <?= htmlspecialchars($telefono); ?></div>
+                    <div class="profile-row"><strong>Indirizzo:</strong> <?= htmlspecialchars($indirizzo); ?></div>
+                    <div class="profile-row"><strong>Reputazione:</strong> <?= htmlspecialchars($reputazione); ?></div>
+                    <div class="profile-row"><strong>Stato:</strong> <?= $record['stato'] ? "Attivo " : "Disabilitato "; ?></div>
+                    <?php if ($_SESSION['ruolo'] !== 'amministratore' && $_SESSION['ruolo'] !== 'gestore'): ?>
+                        <div class="profile-row"><strong>Portafoglio:</strong> €<?= number_format($portafoglio, 2, ',', '.'); ?></div>
+                        <div class="profile-row"><strong>Crediti:</strong> <?= htmlspecialchars($crediti); ?></div>
+                    <?php endif; ?>
+                    <div class="profile-row"><strong>Data di iscrizione:</strong> <?= htmlspecialchars($data_iscrizione); ?></div>
+                </div>
 
-                    <label for="cognome">Cognome:</label>
-                    <input type="text" id="cognome" name="cognome" />
+                <form action="risorse/PHP/aggiorna_profilo.php" method="POST" class="profile-form" style="margin-top:30px;">
+                    <h3 style="color:#ffeb00; margin-bottom:10px;">Modifica i tuoi dati</h3>
+                    <p style="color:#aaa;">Lascia un campo vuoto per non modificare quel dato.</p>
 
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" />
+                    <div class="profile-details">
+                        <label for="nome"><strong>Nome:</strong></label>
+                        <input type="text" id="nome" name="nome" class="wallet-input" value="" />
 
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" />
+                        <label for="cognome"><strong>Cognome:</strong></label>
+                        <input type="text" id="cognome" name="cognome" class="wallet-input" value="" />
 
-                    <label for="telefono">Telefono:</label>
-                    <input type="text" id="telefono" name="telefono" />
+                        <label for="username"><strong>Username:</strong></label>
+                        <input type="text" id="username" name="username" class="wallet-input" value="" />
 
-                    <label for="indirizzo">Indirizzo:</label>
-                    <input type="text" id="indirizzo" name="indirizzo" />
+                        <label for="email"><strong>Email:</strong></label>
+                        <input type="email" id="email" name="email" class="wallet-input" value="" />
 
-                    <button type="submit">Aggiorna Profilo</button>
+                        <label for="telefono"><strong>Telefono:</strong></label>
+                        <input type="text" id="telefono" name="telefono" class="wallet-input" value="" />
+
+                        <label for="indirizzo"><strong>Indirizzo:</strong></label>
+                        <input type="text" id="indirizzo" name="indirizzo" class="wallet-input" value="" />
+
+                        <div style="text-align:center; margin-top:20px;">
+                            <button type="submit" class="wallet-btn">Aggiorna Profilo</button>
+                            <a href="profilo.php" class="profile-btn">Annulla</a>
+                        </div>
+                    </div>
                 </form>
-            </div>
-        <?php
-        } else {
-            echo "<p>Errore nel recupero dei dati dell'utente.</p>";
-        }
-        // Chiudi la connessione
-        $connection->close();
-        ?>
 
-
-
+            <?php
+            } else {
+                echo "<p class='msg error'>Errore nel recupero dei dati dell'utente.</p>";
+            }
+            $connection->close();
+            ?>
+        </div>
     </div>
-
     <div class="pdp">
         <div class="pdp-center">
             <p>&copy; 2025 JAM Music Store</p>

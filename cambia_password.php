@@ -54,28 +54,35 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
     </div>
     <!-- div presentazione sito -->
 
-    <div class="content">
-        <h2>Cambia Password</h2>
-        <form action="risorse/PHP/cambia_password.php" method="post">
-            <label for="current_password">Password Attuale:</label>
-            <input type="password" id="current_password" name="current_password" required />
+    <div class="content user-profile">
+        <div class="profile-card">
+            <h2 class="profile-title">Cambia Password</h2>
 
-            <label for="new_password">Nuova Password:</label>
-            <input type="password" id="new_password" name="new_password" required />
+            <form action="risorse/PHP/cambia_password.php" method="post" class="profile-form">
+                <div class="profile-details">
+                    <label for="current_password"><strong>Password Attuale:</strong></label>
+                    <input type="password" id="current_password" name="current_password" required class="wallet-input" />
 
-            <label for="confirm_password">Conferma Nuova Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required />
+                    <label for="new_password"><strong>Nuova Password:</strong></label>
+                    <input type="password" id="new_password" name="new_password" required class="wallet-input" />
 
-            <button type="submit">Aggiorna Password</button>
-            <?php
-            if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])) {
-                echo '<p class="error_message">' . htmlspecialchars($_SESSION['pwd_change_message']) . '</p>';
-                // Pulisci il messaggio dopo averlo mostrato
-                $_SESSION['pwd_change_message'] = "";
-            }
-            ?>
-        </form>
+                    <label for="confirm_password"><strong>Conferma Nuova Password:</strong></label>
+                    <input type="password" id="confirm_password" name="confirm_password" required class="wallet-input" />
 
+                    <div style="text-align:center; margin-top:20px;">
+                        <button type="submit" class="wallet-btn">Aggiorna Password</button>
+                        <a href="profilo.php" class="profile-btn">Annulla</a>
+                    </div>
+                </div>
+            </form>
+
+            <?php if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])): ?>
+                <p class="msg error" style="margin-top:15px;">
+                    <?= htmlspecialchars($_SESSION['pwd_change_message']); ?>
+                </p>
+                <?php $_SESSION['pwd_change_message'] = ""; ?>
+            <?php endif; ?>
+        </div>
     </div>
 
     <div class="pdp">

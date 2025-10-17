@@ -10,8 +10,16 @@ $conn = new mysqli($host, $user, $password, $db);
 if ($conn->connect_error) {
     die("Connessione fallita: " . $conn->connect_error);
 }
-$sql = "UPDATE utente SET ruolo = 'gestore' WHERE id = " . $_GET['id'];
-$conn->query($sql);
+$id = $_GET['id'];
+$sql = "UPDATE utente SET ruolo = 'gestore' WHERE id = " . $id;
+
+if ($conn->query($sql) === TRUE) {
+    echo "Ruolo utente aggiornato con successo a gestore.";
+} else {
+    echo "Errore durante l'aggiornamento del ruolo: " . $conn->error;
+}
+
+
 $conn->close();
 header("Location: ../../../gestione_utenti_admin.php");
 exit();

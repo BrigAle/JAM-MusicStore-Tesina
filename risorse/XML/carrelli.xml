@@ -18,9 +18,4 @@
     </prodotti>
     <prezzo_totale_carrello>699.98</prezzo_totale_carrello>
   </carrello>
-  <carrello id="2">
-    <id_utente>4</id_utente>
-    <prodotti/>
-    <prezzo_totale_carrello>0.00</prezzo_totale_carrello>
-  </carrello>
 </carrelli>

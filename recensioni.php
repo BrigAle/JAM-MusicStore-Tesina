@@ -20,14 +20,14 @@ session_start();
     </div>
 
     <div class="navSearch">
-            <form action="risorse/PHP/ricerca_catalogo.php" method="get">
-                <div class="searchContainer">
-                    <input type="text" name="query" placeholder="Cerca brani o categorie..." />
-                    <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
-                    <button type="submit" name="tipo" value="categoria">Per categoria</button>
-                </div>
-            </form>
+      <form action="risorse/PHP/ricerca_catalogo.php" method="get">
+        <div class="searchContainer">
+          <input type="text" name="query" placeholder="Cerca brani o categorie..." />
+          <button type="submit" name="tipo" value="nome">Per nome prodotto</button>
+          <button type="submit" name="tipo" value="categoria">Per categoria</button>
         </div>
+      </form>
+    </div>
 
     <div class="navLink">
       <!-- admin links -->
@@ -174,13 +174,13 @@ session_start();
                 <button type="submit">Rispondi</button>
               </form>
             <?php endif; ?>
-            <?php 
+            <?php
             // se utente ha scritto la recensione appare un messaggio di successo
             if (isset($_SESSION['id_utente']) && $_SESSION['id_utente'] == $recensione->id_utente):
               if (isset($_SESSION['successo_msg'])) {
                 echo '<p style="color: green;">' . htmlspecialchars($_SESSION['successo_msg']) . '</p>';
                 unset($_SESSION['successo_msg']);
-              }elseif (isset($_SESSION['errore_msg'])) {
+              } elseif (isset($_SESSION['errore_msg'])) {
                 echo '<p style="color: red;">' . htmlspecialchars($_SESSION['errore_msg']) . '</p>';
                 unset($_SESSION['errore_msg']);
               }

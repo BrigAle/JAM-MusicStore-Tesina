@@ -1,12 +1,10 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
+if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true' || $_SESSION['ruolo'] !== 'amministratore') {
     header("Location: ../../login.php");
     exit();
 }
-
-
 
 
 // --- Dati inviati dal form ---
@@ -21,9 +19,7 @@ $indirizzo = $_POST['indirizzo'] ?? '';
 $email = $_POST['email'] ?? '';
 $nuovo_username = $_POST['username'] ?? '';
 
-// ==========================
-// --- AGGIORNAMENTO XML ---
-// ==========================
+//aggiorna i campi nell'XML
 
 $xmlFile = "../../../risorse/XML/utenti.xml";
 
@@ -63,9 +59,7 @@ if ($found) {
     error_log("Utente NON trovato nell'XML. Session id: $sessionId");
 }
 
-// ==========================
-// --- AGGIORNAMENTO DATABASE ---
-// ==========================
+// aggiorno i campi nel database MySQL
 require_once('../connection.php');
 $conn = new mysqli($host, $user, $password, $db);
 if ($conn->connect_error) {
@@ -95,8 +89,9 @@ if ($result) {
     }
 }
 
+
 mysqli_close($conn);
-// Reindirizza alla pagina del profilo
+
 header("Location: ../../../gestione_utenti_admin.php");
 exit();
 ?>

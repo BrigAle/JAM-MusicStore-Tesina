@@ -6,7 +6,6 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
     exit();
 }
 
-// --- Variabili sessione ---
 $sessionId = $_SESSION['id_utente'];          
 $username_corrente = $_SESSION['username']; 
 
@@ -21,9 +20,6 @@ $indirizzo = $_POST['indirizzo'] ?? '';
 $email = $_POST['email'] ?? '';
 $nuovo_username = $_POST['username'] ?? '';
 
-// ==========================
-// --- AGGIORNAMENTO XML ---
-// ==========================
 
 $xmlFile = "../../risorse/XML/utenti.xml";
 
@@ -33,6 +29,7 @@ $doc->load($xmlFile);
 $utenti = $doc->getElementsByTagName("utente");
 $found = false;
 
+//aggiorna i campi nell'XML
 foreach ($utenti as $utente) {
     $idUtente = $utente->getAttribute('id');
     if ($idUtente === (string)$sessionId) {
@@ -63,9 +60,9 @@ if ($found) {
     error_log("Utente NON trovato nell'XML. Session id: $sessionId");
 }
 
-// ==========================
-// --- AGGIORNAMENTO DATABASE ---
-// ==========================
+
+//  aggiorna i campi nel database MySQL
+
 require_once('connection.php');
 $conn = new mysqli($host, $user, $password, $db);
 if ($conn->connect_error) {
@@ -94,9 +91,9 @@ if ($result) {
         $_SESSION['username'] = $nuovo_username;
     }
 }
+$_SESSION['successo_msg'] = "Profilo aggiornato con successo.";
 
 mysqli_close($conn);
-// Reindirizza alla pagina del profilo
 header("Location: ../../profilo.php");
 exit();
 ?>

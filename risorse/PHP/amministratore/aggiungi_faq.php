@@ -33,8 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($domanda) && !empty($rispost
     $newFaq->appendChild($elementoRisposta);
     $newFaq->appendChild($elementoCategoria);
 
-    $doc->documentElement->appendChild($newFaq);
-    $doc->save('../../XML/FAQs.xml');
+    $salvato = $doc->save('../../XML/FAQs.xml');
+
+    if ($salvato !== false) {
+        $_SESSION['successo_msg'] = "FAQ aggiunta con successo.";
+    } else {
+        $_SESSION['errore_msg'] = "Errore durante l'aggiunta della FAQ.";
+    }
+
 
     header('Location: ../../../gestione_contenuti_admin.php');
     exit();

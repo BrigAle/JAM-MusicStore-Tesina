@@ -56,7 +56,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
         </div>
     </div>
 
-    
+
     <div class="content">
         <?php
         require_once('risorse/PHP/connection.php');
@@ -118,7 +118,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
                     $nome = $cognome = $telefono = $indirizzo = $reputazione = $portafoglio = $crediti = $data_iscrizione = '-';
                 }
                 $stato = $row['stato'] ?? '1'; // Default a '1' se non definito
-                
+
                 $azioni = "<a href='admin_modifica_utente.php?id={$row['id']}'>Modifica</a> | ";
 
                 if (isset($row['ruolo']) && $row['ruolo'] === 'amministratore') {
@@ -165,6 +165,16 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
             echo "Nessun utente trovato.";
         }
 
+
+        if (isset($_SESSION['successo_msg'])) {
+            echo "<p style='color: green;'>" . $_SESSION['successo_msg'] . "</p>";
+            unset($_SESSION['successo_msg']);
+        }
+        if (isset($_SESSION['errore_msg'])) {
+            echo "<p style='color: red;'>" . $_SESSION['errore_msg'] . "</p>";
+            unset($_SESSION['errore_msg']);
+        }
+        $connection->close();
         ?>
     </div>
 

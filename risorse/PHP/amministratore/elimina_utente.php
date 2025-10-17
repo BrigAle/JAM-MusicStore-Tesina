@@ -47,8 +47,13 @@ foreach ($utenti as $utente) {
     }
 }
 
-$doc->save($xmlFile);
+$salvato = $doc->save($xmlFile);
 
+if ($salvato !== false) {
+    $_SESSION['successo_msg'] = "Utente eliminato con successo.";
+} else {
+    $_SESSION['errore_msg'] = "Errore durante l'eliminazione dell'utente.";
+}
 // Torna alla pagina
 header("Location: ../../../gestione_utenti_admin.php");
 exit();

@@ -58,63 +58,102 @@ session_start();
         if ($connection->connect_error) {
             die("Connessione fallita: " . $connection->connect_error);
         }
-        // SEGNALAZIONI
 
+        // SEGNALAZIONI
         $xmlFile = "risorse/XML/segnalazioni.xml";
         $xml = simplexml_load_file($xmlFile);
+
+        // Carico anche i contenuti segnalabili (una sola volta)
+        $xmlRecensioni = @simplexml_load_file("risorse/XML/recensioni.xml");
+        $xmlRisposte   = @simplexml_load_file("risorse/XML/risposte.xml"); // <-- assicurati che il path sia corretto
+
+        // helper: estrai in sicurezza e tronca
+        function estratto_commento($txt, $len = 120)
+        {
+            $txt = trim((string)$txt);
+            if ($txt === '') return '-';
+            if (mb_strlen($txt, 'UTF-8') > $len) {
+                return htmlspecialchars(mb_substr($txt, 0, $len, 'UTF-8') . '…', ENT_QUOTES, 'UTF-8');
+            }
+            return htmlspecialchars($txt, ENT_QUOTES, 'UTF-8');
+        }
 
         if ($xml) {
             echo "<h2 style='text-align: left;'>Segnalazioni Utenti</h2>";
             echo "<table border='1' cellpadding='6'>
-                <tr>
-                    <th>ID Segnalazione</th>
-                    <th>ID Utente</th>
-                    <th>Username</th>
-                    <th>Motivo</th>
-                    <th>Tipo</th>
-                    <th>Data Segnalazione</th>
-                    <th>Azioni</th>
-                </tr>";
+        <tr>
+            <th>ID Segnalazione</th>
+            <th>ID Utente</th>
+            <th>Username</th>
+            <th>Motivo</th>
+            <th>Tipo</th>
+            <th>ID Contenuto</th>
+            <th>Commento segnalato</th>
+            <th>Data Segnalazione</th>
+            <th>Azioni</th>
+        </tr>";
+
             foreach ($xml->segnalazione as $segnalazione) {
-                $id_segnalazione = (int)$segnalazione['id'];
-                $id_utente = (int)$segnalazione->id_utente;
-                $motivo = (string)$segnalazione->motivo;
+                $id_segnalazione  = (int)$segnalazione['id'];
+                $id_utente        = (int)$segnalazione->id_utente;
+                $motivo           = (string)$segnalazione->motivo;
                 $id_contenuto_elem = $segnalazione->id_contenuto;
-                $id_contenuto = (string)$id_contenuto_elem;
-                $tipo = (string)$id_contenuto_elem['tipo'];
+                $id_contenuto     = (string)$id_contenuto_elem;
+                $tipo             = (string)$id_contenuto_elem['tipo']; // es: 'recensione' | 'risposta'
                 $data_segnalazione = (string)$segnalazione->data;
 
-                // Ottengo lo username dall'ID utente
+                // Username da DB
                 $username = '-';
-                $sql = "SELECT username FROM utente WHERE id = $id_utente";
+                $sql = "SELECT username FROM utente WHERE id = " . (int)$id_utente;
                 $result = $connection->query($sql);
                 if ($result && $result->num_rows > 0) {
                     $row = $result->fetch_array(MYSQLI_ASSOC);
                     $username = $row['username'];
                 }
 
-               
-                $azioni = "<a href='risorse/PHP/amministratore/elimina_segnalazione.php?id_segnalazione={$id_segnalazione}' 
-                onclick=\"return confirm('Sei sicuro di voler eliminare questa segnalazione?');\">
-                Elimina
-                    </a>";
+                // Recupero commento segnalato in base al tipo
+                $commentoSegnalato = '-';
+                if ($tipo === 'recensione' && $xmlRecensioni) {
+                    // cerca <recensione id="..."><commento>...</commento>
+                    foreach ($xmlRecensioni->recensione as $rec) {
+                        if ((string)$rec['id'] === (string)$id_contenuto) {
+                            $commentoSegnalato = estratto_commento($rec->commento);
+                            break;
+                        }
+                    }
+                } elseif ($tipo === 'risposta' && $xmlRisposte) {
+                    // cerca <risposta id="..."><commento>...</commento>
+                    foreach ($xmlRisposte->risposta as $risp) {
+                        if ((string)$risp['id'] === (string)$id_contenuto) {
+                            $commentoSegnalato = estratto_commento($risp->commento);
+                            break;
+                        }
+                    }
+                }
+
+                // Azioni
+                $azioni = "<a href='risorse/PHP/amministratore/elimina_segnalazione.php?id_segnalazione={$id_segnalazione}' " .
+                    "onclick=\"return confirm('Sei sicuro di voler eliminare questa segnalazione?');\">Elimina</a>";
 
                 echo "
-                    <tr>
-                        <td>{$id_segnalazione}</td>
-                        <td>{$id_utente}</td>
-                        <td>{$username}</td>
-                        <td>{$motivo}</td>
-                        <td>{$tipo}</td>
-                        <td>{$data_segnalazione}</td>
-                        <td>{$azioni}</td>
-                    </tr>";
+            <tr>
+                <td>" . (int)$id_segnalazione . "</td>
+                <td>" . (int)$id_utente . "</td>
+                <td>" . htmlspecialchars($username, ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($motivo, ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($tipo, ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . htmlspecialchars($id_contenuto, ENT_QUOTES, 'UTF-8') . "</td>
+                <td>{$commentoSegnalato}</td>
+                <td>" . htmlspecialchars($data_segnalazione, ENT_QUOTES, 'UTF-8') . "</td>
+                <td>{$azioni}</td>
+            </tr>";
             }
             echo "</table>";
         } else {
             echo "Nessuna segnalazione trovata.";
         }
-        echo "<br/><br/>";
+
+        echo "<br /><br />";
         if (isset($_SESSION['elimina_segnalazione_successo'])) {
             if ($_SESSION['elimina_segnalazione_successo']) {
                 echo "<p style='color: green;'>Segnalazione eliminata con successo.</p>";
@@ -123,9 +162,11 @@ session_start();
             }
             unset($_SESSION['elimina_segnalazione_successo']);
         }
+
         $connection->close();
         ?>
 
+        <!-- FAQs -->
         <h2 style="text-align: left;">FAQs</h2>
         <?php
         $xml = simplexml_load_file("risorse/XML/FAQs.xml");
@@ -160,7 +201,19 @@ session_start();
             echo "Nessuna FAQ trovata.";
         }
         ?>
-    <a class="aggiungi-faq" href="aggiungi_faq.php"><h2 style="color:#1E90FF">Aggiungi FAQs</h2></a>
+        <a class="aggiungi-faq" href="aggiungi_faq.php">
+            <h2 style="color:#1E90FF">Aggiungi FAQs</h2>
+        </a>
+        <?php
+        if (isset($_SESSION['successo_msg'])) {
+            echo "<p style='color: green;'>" . $_SESSION['successo_msg'] . "</p>";
+            unset($_SESSION['successo_msg']);
+        }
+        if (isset($_SESSION['errore_msg'])) {
+            echo "<p style='color: red;'>" . $_SESSION['errore_msg'] . "</p>";
+            unset($_SESSION['errore_msg']);
+        }
+        ?>
     </div>
 
     <div class="pdp">

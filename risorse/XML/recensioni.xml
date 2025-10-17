@@ -6,11 +6,24 @@
     <commento>Ottima chitarra versatile</commento>
     <valutazione>5</valutazione>
     <voti_like>2</voti_like>
-    <voti_dislike>0</voti_dislike>
+    <voti_dislike>1</voti_dislike>
     <voto_utenti>
       <voto id_utente="5" tipo="like"/>
       <voto id_utente="2" tipo="like"/>
+      <voto id_utente="1" tipo="dislike"/>
     </voto_utenti>
     <data>2025-10-15</data>
+  </recensione>
+  <recensione id="2">
+    <id_prodotto>7</id_prodotto>
+    <id_utente>4</id_utente>
+    <commento>bacchette versatili adatte a tutto!!!!</commento>
+    <valutazione>5</valutazione>
+    <voti_like>1</voti_like>
+    <voti_dislike>0</voti_dislike>
+    <voto_utenti>
+      <voto id_utente="4" tipo="like"/>
+    </voto_utenti>
+    <data>2025-10-17</data>
   </recensione>
 </recensioni>

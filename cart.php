@@ -174,6 +174,17 @@ session_start();
       echo "<p>Il tuo carrello è vuoto. <a href='catalogo.php'>Torna al catalogo</a></p>";
     }
     ?>
+    <?php 
+    if(isset($_SESSION['successo_msg'])) {
+      echo "<p style='color:green; font-weight:bold;'>" . $_SESSION['successo_msg'] . "</p>";
+      unset($_SESSION['successo_msg']);
+    }
+    else if(isset($_SESSION['errore_msg'])) {
+      echo "<p style='color:red; font-weight:bold;'>" . $_SESSION['errore_msg'] . "</p>";
+      unset($_SESSION['errore_msg']);
+    }
+    ?>
+  
   </div>
 
 

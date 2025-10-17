@@ -17,14 +17,14 @@ if (empty($idRichiesta) || !in_array($azione, ['approvata', 'rifiutata'])) {
     exit();
 }
 
-$xmlFile = "../../../risorse/XML/richiesteCrediti.xml";
-$utentiFile = "../../../risorse/XML/utenti.xml";
+$xmlCrediti = "../../../risorse/XML/richiesteCrediti.xml";
+$xmlUtenti = "../../../risorse/XML/utenti.xml";
 
 $doc = new DOMDocument();
 $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
 
-if (!$doc->load($xmlFile)) {
+if (!$doc->load($xmlCrediti)) {
     $_SESSION['errore_msg'] = "Errore caricamento file richieste.";
     header("Location: ../../../gestione_crediti_admin.php");
     exit();
@@ -37,9 +37,13 @@ foreach ($doc->getElementsByTagName('richiesta') as $richiesta) {
         $richiestaTrovata = true;
 
         $stato = $richiesta->getElementsByTagName('stato')->item(0);
-        $stato->nodeValue = ($azione === 'approvata') ? 'approvata' : 'rifiutata';
+        if ($azione === 'approvata') {
+            $stato->nodeValue = 'approvata';
+        } else {
+            $stato->nodeValue = 'rifiutata';
+        }
 
-        // Se approvata → aggiorna crediti utente
+        // Se approvata aggiorna crediti utente
         if ($azione === 'approvata') {
             $idUtente = $richiesta->getElementsByTagName('id_utente')->item(0)->nodeValue;
             $importo = (int)$richiesta->getElementsByTagName('importo')->item(0)->nodeValue;
@@ -66,7 +70,7 @@ foreach ($doc->getElementsByTagName('richiesta') as $richiesta) {
 }
 
 if ($richiestaTrovata) {
-    $doc->save($xmlFile);
+    $doc->save($xmlCrediti);
     $_SESSION['successo_msg'] = "Richiesta aggiornata con successo.";
 } else {
     $_SESSION['errore_msg'] = "Richiesta non trovata.";

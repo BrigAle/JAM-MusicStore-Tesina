@@ -51,40 +51,29 @@ session_start();
     </div>
 
     <!-- div presentazione sito -->
-    <div class="content">
-
+    <div class="content user-profile">
         <?php
-        // Controlla se l'utente è loggato
         if (!isset($_SESSION['username'])) {
             header("Location: login.php");
             exit();
         }
-        ?>
-        <!-- connessione al database per recuperare i dati dell'utente -->
-        <?php
+
         require_once 'risorse/PHP/connection.php';
         $connection = new mysqli($host, $user, $password, $db);
-        // Controlla la connessione
         if ($connection->connect_error) {
             die("Connessione fallita: " . $connection->connect_error);
         }
+
         $id_utente = $_SESSION['id_utente'];
         $query = "SELECT * FROM utente WHERE id='$id_utente'";
         $result = $connection->query($query);
+
         if ($result) {
             $record = $result->fetch_array(MYSQLI_ASSOC);
-            $password_hash = $record['password'];
             $email = $record['email'];
 
-        ?>
-
-            <!-- carico il filme xml e recupero i dati con dom -->
-            <?php
             $xmlFile = 'risorse/XML/utenti.xml';
-            if (!file_exists($xmlFile)) {
-                die("Errore: il file XML degli utenti non esiste");
-            }
-            $nome = $cognome = $telefono = $indirizzo = $reputazione = $stato = $portafoglio = $crediti = $data_iscrizione = "";
+            if (!file_exists($xmlFile)) die("Errore: il file XML degli utenti non esiste");
             $xml = simplexml_load_file($xmlFile);
 
             foreach ($xml->utente as $utente) {
@@ -94,89 +83,70 @@ session_start();
                     $telefono = (string)$utente->telefono;
                     $indirizzo = (string)$utente->indirizzo;
                     $reputazione = (string)$utente->reputazione;
-
                     $portafoglio = (float)$utente->portafoglio;
                     $crediti = (int)$utente->crediti;
                     $data_iscrizione = (string)$utente->data_iscrizione;
-                    break; // Esci dal ciclo una volta trovato l'utente
+                    break;
                 }
             }
-            ?>
-            <!-- visualizzo i dati dell'utente -->
-            <h2>Profilo di <?php echo htmlspecialchars($record['username']); ?></h2>
-            <div class="profile_info">
-                <p><strong>id: <?php echo htmlspecialchars($id_utente); ?></strong></p>
-                <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome); ?></p>
-                <p><strong>Cognome:</strong> <?php echo htmlspecialchars($cognome); ?></p>
-                <p><strong>Username:</strong> <?php echo htmlspecialchars($record['username']); ?></p>
-                <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-                <p><strong>Telefono:</strong> <?php echo htmlspecialchars($telefono); ?></p>
-                <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($indirizzo); ?></p>
-                <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?> <a href="risorse/PHP/aggiorna_reputazione.php">Aggiorna reputazione</a></p>
-                <p><strong>Stato:</strong> <?= $record['stato'] ? "Attivo" : "Disabilitato" ?></p>
-                <form action="risorse/PHP/ricarica_portafoglio.php" method="post" style="display:flex; align-items:center; gap:8px;">
-                    <p style="margin:0;">
-                        <strong>Portafoglio:</strong>
-                        €<?php echo number_format($portafoglio, 2, ',', '.'); ?>
-                    </p>
-                    <input type="number" name="importo" min="1" step="0.01" placeholder="€" required
-                        style="width:80px; text-align:center; border:1px solid #aaa; border-radius:4px; padding:4px;">
-                    <button type="submit"
-                        style="background-color:#32CD32; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">
-                        Ricarica
-                    </button>
-                </form>
+        ?>
+            <div class="profile-card">
+                <h2 class="profile-title">Profilo di <?= htmlspecialchars($record['username']); ?></h2>
+                <div class="profile-details">
+                    <div class="profile-row"><strong>ID:</strong> <?= htmlspecialchars($id_utente); ?></div>
+                    <div class="profile-row"><strong>Nome:</strong> <?= htmlspecialchars($nome); ?></div>
+                    <div class="profile-row"><strong>Cognome:</strong> <?= htmlspecialchars($cognome); ?></div>
+                    <div class="profile-row"><strong>Email:</strong> <?= htmlspecialchars($email); ?></div>
+                    <div class="profile-row"><strong>Telefono:</strong> <?= htmlspecialchars($telefono); ?></div>
+                    <div class="profile-row"><strong>Indirizzo:</strong> <?= htmlspecialchars($indirizzo); ?></div>
+                    <div class="profile-row"><strong>Reputazione:</strong> <?= htmlspecialchars($reputazione); ?> <a href="risorse/PHP/aggiorna_reputazione.php" class="profile-link">Aggiorna</a></div>
+                    <div class="profile-row"><strong>Stato:</strong> <?= $record['stato'] ? "Attivo" : "Disabilitato"; ?></div>
 
-                <?php
-                if (isset($_SESSION['successo_msg'])) {
-                    echo '<p style="color:green;">' . htmlspecialchars($_SESSION['successo_msg']) . '</p>';
-                    unset($_SESSION['successo_msg']);
-                }
-                if (isset($_SESSION['errore_msg'])) {
-                    echo '<p style="color:red;">' . htmlspecialchars($_SESSION['errore_msg']) . '</p>';
-                    unset($_SESSION['errore_msg']);
-                }
-                ?>
-                <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?><a href="richiesta_crediti.php"> Richiedi altri crediti</a></p>
-                <p><strong>Data di Iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
-                <p><strong>Ruolo:</strong> <?php echo htmlspecialchars($record['ruolo']); ?></p>
-                <!-- Aggiungi altre informazioni se necessario -->
-                <a href="aggiorna_profilo.php">Modifica Profilo</a>
-                <a href="cambia_password.php">Cambia Password</a>
-                <a href="storico_acquisti.php">Vai allo storico degli acquisti</a>
-                <?php if (isset($_SESSION['successo_msg']) && !empty($_SESSION['successo_msg'])): ?>
-                    <p style="color: green;"><?php
-                                                echo htmlspecialchars($_SESSION['successo_msg']);
-                                                // Pulisci il messaggio dopo averlo mostrato
-                                                $_SESSION['successo_msg'] = "";
-                                                ?></p>
-                <?php endif; ?>
-                <?php if (isset($_SESSION['errore_msg']) && !empty($_SESSION['errore_msg'])): ?>
-                    <p style="color: red;"><?php
-                                            echo htmlspecialchars($_SESSION['errore_msg']);
-                                            // Pulisci il messaggio dopo averlo mostrato
-                                            $_SESSION['errore_msg'] = "";
-                                            ?></p>
-                <?php endif; ?>
-                <?php
-                if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])) {
-                    echo '<p style="color: red;">' . htmlspecialchars($_SESSION['pwd_change_message']) . '</p>';
-                    // Pulisci il messaggio dopo averlo mostrato
-                    $_SESSION['pwd_change_message'] = "";
-                }
-                ?>
+                    <?php if ($_SESSION['ruolo'] !== 'amministratore'&& $_SESSION['ruolo'] !== 'gestore'): ?>
+                        <form action="risorse/PHP/ricarica_portafoglio.php" method="post" class="wallet-form">
+                            <p class="profile-row wallet-info">
+                                <strong>Portafoglio:</strong> €<?= number_format($portafoglio, 2, ',', '.'); ?>
+                            </p>
+                            <input type="number" name="importo" min="1" step="0.01" placeholder="€" required class="wallet-input">
+                            <button type="submit" class="wallet-btn">Ricarica</button>
+                        </form>
+                    <?php endif; ?>
+
+
+                    <?php if (isset($_SESSION['successo_msg'])): ?>
+                        <p class="msg success"><?= htmlspecialchars($_SESSION['successo_msg']); ?></p>
+                        <?php unset($_SESSION['successo_msg']); ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['errore_msg'])): ?>
+                        <p class="msg error"><?= htmlspecialchars($_SESSION['errore_msg']); ?></p>
+                        <?php unset($_SESSION['errore_msg']); ?>
+                    <?php endif; ?>
+                    <?php if ($_SESSION['ruolo'] !== 'amministratore' && $_SESSION['ruolo'] !== 'gestore'): ?>
+                        <div class="profile-row">
+                            <strong>Crediti:</strong> <?= htmlspecialchars($crediti); ?>
+                            <a href="richiesta_crediti.php" class="profile-link">Richiedi altri crediti</a>
+                        </div>
+                    <?php endif; ?>
+                    <div class="profile-row"><strong>Data di Iscrizione:</strong> <?= htmlspecialchars($data_iscrizione); ?></div>
+                    <div class="profile-row"><strong>Ruolo:</strong> <?= htmlspecialchars($record['ruolo']); ?></div>
+
+                    <div class="profile-actions">
+                        <a href="aggiorna_profilo.php" class="profile-btn">Modifica Profilo</a>
+                        <a href="cambia_password.php" class="profile-btn">Cambia Password</a>
+                        <a href="storico_acquisti.php" class="profile-btn">Storico Acquisti</a>
+                    </div>
+                </div>
             </div>
         <?php
         } else {
-            echo "<p>Errore nel recupero dei dati dell'utente.</p>";
+            echo "<p class='msg error'>Errore nel recupero dei dati dell'utente.</p>";
         }
-        // Chiudi la connessione
+
         $connection->close();
         ?>
-
-
-
     </div>
+
 
     <div class="pdp">
         <div class="pdp-center">

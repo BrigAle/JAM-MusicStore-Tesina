@@ -18,4 +18,16 @@
     <data>2025-10-15</data>
     <stato>approvata</stato>
   </richiesta>
+  <richiesta id="4">
+    <id_utente>4</id_utente>
+    <importo>134</importo>
+    <data>2025-10-17</data>
+    <stato>approvata</stato>
+  </richiesta>
+  <richiesta id="5">
+    <id_utente>5</id_utente>
+    <importo>10</importo>
+    <data>2025-10-17</data>
+    <stato>rifiutata</stato>
+  </richiesta>
 </richiesteCrediti>

@@ -71,6 +71,17 @@ if (!isset($_SESSION['ruolo']) || $_SESSION['ruolo'] != 'amministratore') {
                 <input type="submit" value="Aggiungi FAQ" />
             </form>
         </div>
+        <?php
+        // Mostra messaggi di successo o errore
+        if (isset($_SESSION['successo_msg'])) {
+            echo "<div class='faq-msg faq-success'>{$_SESSION['successo_msg']}</div>";
+            unset($_SESSION['successo_msg']);
+        } elseif (isset($_SESSION['errore_msg'])) {
+            echo "<div class='faq-msg faq-error'>{$_SESSION['errore_msg']}</div>";
+            unset($_SESSION['errore_msg']);
+        }
+        ?>
+    
     </div>
 
 </body>
