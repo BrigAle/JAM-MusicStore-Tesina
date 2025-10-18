@@ -1,4 +1,4 @@
-/* ---------- Base ---------- */
+/* base */
 * {
   box-sizing: border-box
 }
@@ -14,7 +14,7 @@ body {
   flex-direction: column;
 }
 
-/* ---------- LINK ---------- */
+/* link generici */
 a {
   color: #87CEFA;
   /* link */
@@ -75,7 +75,7 @@ td a:hover {
   text-decoration: underline;
 }
 
-/* ---------- Header ---------- */
+/* Header*/
 .header {
   position: fixed;
   top: 0;
@@ -104,7 +104,7 @@ td a:hover {
   height: 100px;
 }
 
-/* ---------- Ricerca ---------- */
+/* barra di ricerca */
 .navSearch {
   flex: 1;
   margin: 0 20px;
@@ -174,13 +174,13 @@ td a:hover {
 
 
 
-/* ---------- Nav link a destra ---------- */
+/* Nav link a destra */
 .navLink {
   display: flex;
   gap: 15px;
 }
 
-/* ---------- Content wrapper ---------- */
+/* Content wrapper */
 .content {
   margin-top: 130px;
   /* spazio per header fixed */
@@ -220,7 +220,7 @@ td a:hover {
   padding: 0;
 }
 
-/* ---------- Griglia prodotti ---------- */
+/* Griglia prodotti */
 .box_prodotto {
   display: flex;
   flex-wrap: wrap;
@@ -319,7 +319,7 @@ td a:hover {
   align-items: center;
 }
 
-/* ----- PROFILO UTENTE ----- */
+/* Profilo utente */
 .user-profile {
   color: #f5f5f5;
   padding: 40px 20px;
@@ -402,7 +402,7 @@ td a:hover {
   background-color: #28a428;
 }
 
-/* ---- Pulsanti azione ---- */
+/* Azioni profilo */
 .profile-actions {
   display: flex;
   justify-content: center;
@@ -426,7 +426,7 @@ td a:hover {
   background-color: #3a3a3a;
 }
 
-/* ---- Messaggi ---- */
+/* Messaggi */
 .msg {
   text-align: center;
   font-size: 15px;
@@ -442,7 +442,7 @@ td a:hover {
 }
 
 
-/* ---------- Voti (like/dislike) ---------- */
+/* Voti (like/dislike) */
 .voti button {
   border: none;
   background: none;
@@ -464,7 +464,7 @@ td a:hover {
   opacity: 1;
 }
 
-/* ---------- Tabelle amministrazione ---------- */
+/* Tabelle amministrazione */
 table {
   border-collapse: collapse;
   width: 95%;
@@ -505,11 +505,8 @@ td:nth-child(10) {
   font-weight: bold;
 }
 
-/* colonna 'Stato' */
+  /* Form: login / registrazione */
 
-/* ---------- Form: login / registrazione ---------- */
-/* ---------- FORM LOGIN ---------- */
-/* ---------- FORM LOGIN ---------- */
 .login_form {
   border: 1px solid #2C2C2C;
   background: #1F1F1F;
@@ -606,7 +603,7 @@ td:nth-child(10) {
 }
 
 
-/* ---------- FORM REGISTRAZIONE ---------- */
+/* Form: registrazione */
 .register_form {
   border: 1px solid #2C2C2C;
   background: #1F1F1F;
@@ -726,7 +723,7 @@ td:nth-child(10) {
   }
 }
 
-/* ---------- RESPONSIVE ---------- */
+/* responsive*/
 @media (max-width: 600px) {
   .row {
     grid-template-columns: 1fr;
@@ -757,7 +754,7 @@ td:nth-child(10) {
   flex-direction: column;
 }
 
-/* ---------- Recensioni / Risposte ---------- */
+/* Recensioni / Risposte */
 .recensione {
   border: 1px solid #2C2C2C;
   background: #1F1F1F;
@@ -775,7 +772,7 @@ td:nth-child(10) {
   margin-left: 20px;
 }
 
-/* ---------- FAQ ---------- */
+/* FAQ */
 .contenuto-FAQs {
   padding: 40px 0;
   display: flex;
@@ -824,7 +821,7 @@ td:nth-child(10) {
   line-height: 1.6;
 }
 
-/* ---------- Footer ---------- */
+/* pie di pagina */
 .pdp {
   display: flex;
   justify-content: space-between;
@@ -851,8 +848,7 @@ td:nth-child(10) {
 }
 
 /* Sconti */
-/* --- Stile dedicato esclusivamente al form sconti --- */
-/* --- Stile dedicato esclusivamente al form sconti (tema scuro JAM) --- */
+
 .sconto-form {
   max-width: 700px;
   margin: 30px auto;
@@ -960,7 +956,7 @@ td:nth-child(10) {
 }
 
 
-/* ---------- Responsive ---------- */
+/* responsive */
 @media (max-width:900px) {
   .content {
     padding: 60px;
@@ -1056,7 +1052,7 @@ td:nth-child(10) {
   text-decoration-color: #FFEB00;
 }
 
-/* ---------- PATCH PROFILO UTENTE: armonizzato con tema JAM ---------- */
+/* ---------- Profilo utente ---------- */
 
 .user-profile {
   display: block !important;
@@ -1121,7 +1117,7 @@ td:nth-child(10) {
 }
 
 .wallet-input {
-  width: 80px;
+  width: 250px;
   text-align: center;
   border: 1px solid #aaa;
   border-radius: 4px;
@@ -1168,20 +1164,6 @@ td:nth-child(10) {
   background-color: #3a3a3a;
 }
 
-/* Messaggi */
-.msg {
-  text-align: center;
-  font-size: 15px;
-  margin-top: 10px;
-}
-
-.msg.success {
-  color: #32cd32;
-}
-
-.msg.error {
-  color: #ff4040;
-}
 
 /* Responsive */
 @media (max-width: 700px) {

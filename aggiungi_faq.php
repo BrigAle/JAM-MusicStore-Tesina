@@ -54,36 +54,56 @@ if (!isset($_SESSION['ruolo']) || $_SESSION['ruolo'] != 'amministratore') {
         </div>
     </div>
 
-    <div class="content">
-        <div class="faq_container">
-            <h2>Aggiungi una nuova FAQ</h2>
-            <form action="risorse\PHP\amministratore\aggiungi_faq.php" method="post">
-                <label for="domanda">Domanda:</label><br />
-                <input type="text" id="domanda" name="domanda" required /><br /><br />
-                <label for="risposta">Risposta:</label><br />
-                <textarea id="risposta" name="risposta" rows="4" cols="50" required></textarea><br /><br />
-                <label>Categoria:</label><br/>
-                <label><input type="radio" name="categoria" value="Pagamenti" required> Pagamenti</label><br />
-                <label><input type="radio" name="categoria" value="Ordini" required> Ordini</label><br />
-                <label><input type="radio" name="categoria" value="Prodotti" required> Prodotti</label><br />
-                <label><input type="radio" name="categoria" value="Bonus" required> Bonus</label><br />
-                <label><input type="radio" name="categoria" value="Registrazione" required> Registrazione</label><br />
-                <input type="submit" value="Aggiungi FAQ" />
+    <div class="content user-profile">
+        <div class="profile-card" style="max-width:700px; margin:auto; padding:40px;">
+            <h2 class="profile-title" style="text-align:center; color:#ffeb00; margin-bottom:25px;">Aggiungi una nuova FAQ</h2>
+
+            <form action="risorse/PHP/amministratore/aggiungi_faq.php" method="post" class="profile-form">
+                <div class="profile-details" style="display:flex; flex-direction:column; gap:14px;">
+
+                    <label for="domanda" style="font-weight:bold; color:#ffeb00;">Domanda:</label>
+                    <input type="text" id="domanda" name="domanda" required
+                        style="width:100%; padding:10px; border-radius:6px; border:1px solid #444; background:#2c2c2c; color:#fff; font-size:15px;" />
+
+                    <label for="risposta" style="font-weight:bold; color:#ffeb00;">Risposta:</label>
+                    <textarea id="risposta" name="risposta" rows="4" required
+                        style="width:100%; padding:10px; border-radius:6px; border:1px solid #444; background:#2c2c2c; color:#fff; font-size:15px; resize:vertical;"></textarea>
+
+                    <label style="font-weight:bold; color:#ffeb00;">Categoria:</label>
+                    <div style="display:flex; flex-direction:column; gap:6px; margin-left:10px;">
+                        <label style="color:#ddd;"><input type="radio" name="categoria" value="Pagamenti" required /> Pagamenti</label>
+                        <label style="color:#ddd;"><input type="radio" name="categoria" value="Ordini" required /> Ordini</label>
+                        <label style="color:#ddd;"><input type="radio" name="categoria" value="Prodotti" required /> Prodotti</label>
+                        <label style="color:#ddd;"><input type="radio" name="categoria" value="Bonus" required /> Bonus</label>
+                        <label style="color:#ddd;"><input type="radio" name="categoria" value="Registrazione" required /> Registrazione</label>
+                    </div>
+
+                    <div style="text-align:center; margin-top:25px;">
+                        <button type="submit"
+                            style="background-color:#32CD32; color:white; border:none; padding:10px 22px; border-radius:6px; cursor:pointer; font-size:15px; font-weight:bold; margin-right:8px;">
+                            Aggiungi FAQ
+                        </button>
+                        <a href="gestione_faq.php"
+                            style="background-color:#2c2c2c; color:#1E90FF; border:none; padding:10px 22px; border-radius:6px; font-size:15px; font-weight:bold; text-decoration:none;">
+                            Annulla
+                        </a>
+                    </div>
+                </div>
             </form>
-        </div>
-        <?php
-        // Mostra messaggi di successo o errore
-        if (isset($_SESSION['successo_msg'])) {
-            echo "<div class='faq-msg faq-success'>{$_SESSION['successo_msg']}</div>";
-            unset($_SESSION['successo_msg']);
-        } elseif (isset($_SESSION['errore_msg'])) {
-            echo "<div class='faq-msg faq-error'>{$_SESSION['errore_msg']}</div>";
-            unset($_SESSION['errore_msg']);
-        }
-        ?>
-    
-    </div>
+
+            <?php
+            // Messaggi di feedback
+            if (isset($_SESSION['successo_msg'])) {
+                echo "<p style='color:#32CD32; text-align:center; margin-top:20px; font-weight:bold;'>"
+                    . htmlspecialchars($_SESSION['successo_msg']) . "</p>";
+                unset($_SESSION['successo_msg']);
+            } elseif (isset($_SESSION['errore_msg'])) {
+                echo "<p style='color:#ff4040; text-align:center; margin-top:20px; font-weight:bold;'>"
+                    . htmlspecialchars($_SESSION['errore_msg']) . "</p>";
+                unset($_SESSION['errore_msg']);
+            }
+            ?>
 
 </body>
 
-</html> 
+</html>

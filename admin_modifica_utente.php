@@ -56,97 +56,101 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
     </div>
     <!-- div presentazione sito -->
 
-    <div class="content">
+    <div class="content user-profile">
         <?php
         require_once 'risorse/PHP/connection.php';
+
         $connection = new mysqli($host, $user, $password, $db);
-        // Controlla la connessione
         if ($connection->connect_error) {
             die("Connessione fallita: " . $connection->connect_error);
         }
+
         $id_utente = $_GET['id'];
         $query = "SELECT * FROM utente WHERE id = $id_utente";
         $result = $connection->query($query);
-        if ($result) {
-            $record = $result->fetch_array(MYSQLI_ASSOC);
-            $email = $record['email'];
-            $username = $record['username'];
-            $stato = $record['stato'];
+        ?>
+        <div class="profile-card" style="max-width:700px; margin:auto; padding:40px;">
+            <h2 class="profile-title">Gestione Profilo Utente</h2>
 
-            $xmlFile = 'risorse/XML/utenti.xml';
+            <?php
+            if ($result) {
+                $record = $result->fetch_array(MYSQLI_ASSOC);
+                $email = $record['email'];
+                $username = $record['username'];
+                $stato = $record['stato'];
 
-            // Carico i dati dall'XML
-            $xml = simplexml_load_file($xmlFile);
-            foreach ($xml->utente as $user) {
-                if ((int)$user['id'] === (int)$id_utente) {
-                    $nome = (string)$user->nome;
-                    $cognome = (string)$user->cognome;
-                    $telefono = (string)$user->telefono;
-                    $indirizzo = (string)$user->indirizzo;
-                    $reputazione = (string)$user->reputazione;
-
-                    $portafoglio = (float)$user->portafoglio;
-                    $crediti = (int)$user->crediti;
-                    $data_iscrizione = (string)$user->data_iscrizione;
-                    break; // Esci dal ciclo una volta trovato l'utente
+                $xmlFile = 'risorse/XML/utenti.xml';
+                $xml = simplexml_load_file($xmlFile);
+                foreach ($xml->utente as $user) {
+                    if ((int)$user['id'] === (int)$id_utente) {
+                        $nome = (string)$user->nome;
+                        $cognome = (string)$user->cognome;
+                        $telefono = (string)$user->telefono;
+                        $indirizzo = (string)$user->indirizzo;
+                        $reputazione = (string)$user->reputazione;
+                        $portafoglio = (float)$user->portafoglio;
+                        $crediti = (int)$user->crediti;
+                        $data_iscrizione = (string)$user->data_iscrizione;
+                        break;
+                    }
                 }
-            }
+            ?>
+                <div class="profile-details">
+                    <h3 style="color:#ffeb00; margin-bottom:10px;">Dati attuali</h3>
+                    <div class="profile-row"><strong>ID:</strong> <?= htmlspecialchars($id_utente); ?></div>
+                    <div class="profile-row"><strong>Nome:</strong> <?= htmlspecialchars($nome); ?></div>
+                    <div class="profile-row"><strong>Cognome:</strong> <?= htmlspecialchars($cognome); ?></div>
+                    <div class="profile-row"><strong>Username:</strong> <?= htmlspecialchars($username); ?></div>
+                    <div class="profile-row"><strong>Email:</strong> <?= htmlspecialchars($email); ?></div>
+                    <div class="profile-row"><strong>Telefono:</strong> <?= htmlspecialchars($telefono); ?></div>
+                    <div class="profile-row"><strong>Indirizzo:</strong> <?= htmlspecialchars($indirizzo); ?></div>
+                    <div class="profile-row"><strong>Reputazione:</strong> <?= htmlspecialchars($reputazione); ?></div>
+                    <div class="profile-row"><strong>Stato:</strong> <?= $stato ? "Attivo " : "Disabilitato "; ?></div>
+                    <div class="profile-row"><strong>Portafoglio:</strong> €<?= number_format($portafoglio, 2, ',', '.'); ?></div>
+                    <div class="profile-row"><strong>Crediti:</strong> <?= htmlspecialchars($crediti); ?></div>
+                    <div class="profile-row"><strong>Data di iscrizione:</strong> <?= htmlspecialchars($data_iscrizione); ?></div>
+                </div>
 
+                <form action="risorse/PHP/amministratore/aggiorna_profilo_admin.php" method="POST" class="profile-form" style="margin-top:30px;">
+                    <h3 style="color:#ffeb00; margin-bottom:10px;">Modifica i dati utente</h3>
+                    <p style="color:#aaa;">Lascia vuoto un campo per non modificarlo.</p>
 
-        ?>
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($id_utente); ?>" />
+                    <input type="hidden" name="username_corrente" value="<?= htmlspecialchars($username); ?>" />
 
+                    <div class="profile-details">
+                        <label for="nome"><strong>Nome:</strong></label>
+                        <input type="text" id="nome" name="nome" class="wallet-input" value="" />
 
+                        <label for="cognome"><strong>Cognome:</strong></label>
+                        <input type="text" id="cognome" name="cognome" class="wallet-input" value="" />
 
-            <h2>Profilo di <?php echo htmlspecialchars($record['username']); ?></h2>
-            <div class="profile_info">
-                <form action="risorse/PHP/amministratore/aggiorna_profilo_admin.php" method="POST">
-                    <p>dati di prima:</p>
-                    <p><strong>id: <?php echo htmlspecialchars($id_utente); ?></strong></p>
-                    <p><strong>Nome:</strong> <?php echo htmlspecialchars($nome); ?></p>
-                    <p><strong>Cognome:</strong> <?php echo htmlspecialchars($cognome); ?></p>
-                    <p><strong>Username:</strong> <?php echo htmlspecialchars($username); ?></p>
-                    <p><strong>Email:</strong> <?php echo htmlspecialchars($email); ?></p>
-                    <p><strong>Telefono:</strong> <?php echo htmlspecialchars($telefono); ?></p>
-                    <p><strong>Indirizzo:</strong> <?php echo htmlspecialchars($indirizzo); ?></p>
-                    <p><strong>Reputazione:</strong> <?php echo htmlspecialchars($reputazione); ?></p>
-                    <p><strong>Stato:</strong> <?php echo $stato ? 'Attivo' : 'Disabilitato'; ?></p>
-                    <p><strong>Portafoglio:</strong> €<?php echo number_format($portafoglio, 2); ?></p>
-                    <p><strong>Crediti:</strong> <?php echo htmlspecialchars($crediti); ?></p>
-                    <p><strong>Data di iscrizione:</strong> <?php echo htmlspecialchars($data_iscrizione); ?></p>
-                    <br />
-                    <p>Modifica i tuoi dati (lascia vuoto per non modificare):</p>
+                        <label for="username"><strong>Username:</strong></label>
+                        <input type="text" id="username" name="username" class="wallet-input" value="" />
 
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($id_utente); ?>" />
-                    <input type="hidden" name="username_corrente" value="<?php echo htmlspecialchars($username); ?>" />
+                        <label for="email"><strong>Email:</strong></label>
+                        <input type="email" id="email" name="email" class="wallet-input" value="" />
 
-                    <label for="nome">Nome:</label>
-                    <input type="text" id="nome" name="nome" />
+                        <label for="telefono"><strong>Telefono:</strong></label>
+                        <input type="text" id="telefono" name="telefono" class="wallet-input" value="" />
 
-                    <label for="cognome">Cognome:</label>
-                    <input type="text" id="cognome" name="cognome" />
+                        <label for="indirizzo"><strong>Indirizzo:</strong></label>
+                        <input type="text" id="indirizzo" name="indirizzo" class="wallet-input" value="" />
 
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" />
-
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" />
-
-                    <label for="telefono">Telefono:</label>
-                    <input type="text" id="telefono" name="telefono" />
-
-                    <label for="indirizzo">Indirizzo:</label>
-                    <input type="text" id="indirizzo" name="indirizzo" />
-
-                    <button type="submit">Aggiorna Profilo</button>
+                        <div style="text-align:center; margin-top:25px;">
+                            <button type="submit" class="wallet-btn">Aggiorna Profilo</button>
+                            <a href="gestione_utenti.php" class="profile-btn">Annulla</a>
+                        </div>
+                    </div>
                 </form>
-            </div>
-        <?php
-        } else {
-            echo "<p>Errore nel recupero dei dati dell'utente.</p>";
-        }
-        // Chiudi la connessione
-        $connection->close();
-        ?>
+
+            <?php
+            } else {
+                echo "<p class='msg error'>Errore nel recupero dei dati dell'utente.</p>";
+            }
+            $connection->close();
+            ?>
+        </div>
     </div>
 
     <div class="pdp">
