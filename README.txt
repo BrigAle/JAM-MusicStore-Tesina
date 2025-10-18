@@ -77,4 +77,5 @@ Amministratore:
       -Eleva domande nella sezione delle FAQ, traendo spunto dai commenti, dalle risposte e dalle recensioni degli utenti sui prodotti.
       -Controlla le segnalazioni inviate dai gestori ed eventualmente può modificare o eliminare le recensioni.
 
-    -Accetta le richieste di acquisto crediti.
+      -Accetta le richieste di acquisto crediti.
+     
