@@ -1,13 +1,13 @@
 <?php
 session_start();
 
-// ✅ Solo utenti loggati
+
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit();
 }
 
-// ✅ Connessione DB
+
 require_once 'risorse/PHP/connection.php';
 $connection = new mysqli($host, $user, $password, $db);
 if ($connection->connect_error) {

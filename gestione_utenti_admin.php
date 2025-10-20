@@ -141,23 +141,30 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
                     $azioni .= " | <a href='risorse/PHP/amministratore/degrada_utente.php?id={$row['id']}' onclick=\"return confirm('Sei sicuro di voler degradare questo utente a cliente?');\">Degrada a Cliente</a>";
                 }
 
-                echo "<tr>
-                    <td>{$row['id']}</td>
-                    <td>{$row['username']}</td>
-                    <td>{$row['email']}</td>
-                    <td>{$row['ruolo']}</td>
-                    <td>$nome</td>
-                    <td>$cognome</td>
-                    <td>$telefono</td>
-                    <td>$indirizzo</td>
-                    <td>$reputazione</td>
-                    <td>$stato</td>
-                    <td>$portafoglio</td>
-                    <td>$crediti</td>
-                    <td>$data_iscrizione</td>
-                    <td>
-                        $azioni
-                    </td>
+                if ($stato === '0') {
+                    $stato_text = 'Disattivato';
+                    $stato_class = 'stato-disattivato';
+                } else {
+                    $stato_text = 'Attivo';
+                    $stato_class = 'stato-attivo';
+                }
+
+                echo "
+                <tr>
+                   <td>{$row['id']}</td>
+                   <td>{$row['username']}</td>
+                   <td>{$row['email']}</td>
+                   <td>{$row['ruolo']}</td>
+                   <td>$nome</td>
+                   <td>$cognome</td>
+                   <td>$telefono</td>
+                   <td>$indirizzo</td>
+                   <td>$reputazione</td>
+                   <td><span class='$stato_class'>$stato_text</span></td>
+                   <td>$portafoglio</td>
+                   <td>$crediti</td>
+                   <td>$data_iscrizione</td>
+                   <td>$azioni</td>
                 </tr>";
             }
             echo "</table>";

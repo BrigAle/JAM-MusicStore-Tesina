@@ -1,3 +1,7 @@
+<?php 
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -44,29 +48,40 @@
 
   </div>
 
-  <!-- contenuto per login -->
+  <?php
+  $old = $_SESSION['old_data'] ?? [
+    'nome' => '',
+    'cognome' => '',
+    'username' => '',
+    'email' => '',
+    'telefono' => '',
+    'indirizzo' => ''
+  ];
+  ?>
+
   <div class="content">
-    <!-- login -->
+    <!-- registrazione -->
     <div class="register_form">
       <div class="register_container">
         <h2>Registrazione</h2>
+
         <form action="risorse/PHP/register.php" method="POST">
           <div class="row">
             <div class="col">
               <label for="nome">Nome</label>
-              <input type="text" id="nome" name="nome" required>
+              <input type="text" id="nome" name="nome" required value="<?php echo htmlspecialchars($old['nome']); ?>">
             </div>
             <div class="col">
               <label for="cognome">Cognome</label>
-              <input type="text" id="cognome" name="cognome" required>
+              <input type="text" id="cognome" name="cognome" required value="<?php echo htmlspecialchars($old['cognome']); ?>">
             </div>
           </div>
 
           <label for="username">Username</label>
-          <input type="text" id="username" name="username" required>
+          <input type="text" id="username" name="username" required value="<?php echo htmlspecialchars($old['username']); ?>">
 
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" required>
+          <input type="email" id="email" name="email" required value="<?php echo htmlspecialchars($old['email']); ?>">
 
           <div class="row">
             <div class="col">
@@ -80,17 +95,41 @@
           </div>
 
           <label for="tel">Telefono</label>
-          <input type="tel" id="tel" name="telefono">
+          <input type="tel" id="tel" name="telefono" value="<?php echo htmlspecialchars($old['telefono']); ?>">
 
           <label for="indirizzo">Indirizzo</label>
-          <input type="text" id="indirizzo" name="indirizzo" required>
+          <input type="text" id="indirizzo" name="indirizzo" required value="<?php echo htmlspecialchars($old['indirizzo']); ?>">
 
           <input type="submit" value="Registrati">
         </form>
+
+        <?php if (isset($_SESSION['error_user'])) {
+          echo '<p class="msg error">Username già esistente. Scegline un altro.</p>';
+          unset($_SESSION['error_user']);
+        } ?>
+
+        <?php if (isset($_SESSION['error_email'])) {
+          echo '<p class="msg error">Email già esistente. Scegline un\'altra.</p>';
+          unset($_SESSION['error_email']);
+        } ?>
+
+        <?php if (isset($_SESSION['error_password'])) {
+          echo '<p class="msg error">Le password non corrispondono. Riprova.</p>';
+          unset($_SESSION['error_password']);
+        } ?>
+
+        <?php if (isset($_SESSION['success'])) {
+          echo '<p class="msg success">Registrazione avvenuta con successo! Effettua il login.</p>';
+          unset($_SESSION['success']);
+        } ?>
+
       </div>
     </div>
-
   </div>
+
+  <?php
+  unset($_SESSION['old_data']);
+  ?>
 
 
   <div class="pdp">

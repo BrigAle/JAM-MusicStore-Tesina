@@ -151,6 +151,14 @@ session_start();
             }
             unset($_SESSION['elimina_prodotto_successo']);
         }
+        if (isset($_SESSION['aggiorna_prodotto_successo'])) {
+            if ($_SESSION['aggiorna_prodotto_successo']) {
+                echo "<p style='color: green;'> Prodotto aggiornato con successo!</p>";
+            } else {
+                echo "<p style='color: red;'> Errore durante l'aggiornamento del prodotto. Riprova.</p>";
+            }
+            unset($_SESSION['aggiorna_prodotto_successo']);
+        }
         ?>
     </div>
 

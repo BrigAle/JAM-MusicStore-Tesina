@@ -504,7 +504,15 @@ td:nth-child(10) {
   text-align: center;
   font-weight: bold;
 }
+.stato-attivo {
+  color: green;
+  font-weight: bold;
+}
 
+.stato-disattivato {
+  color: red;
+  font-weight: bold;
+}
   /* Form: login / registrazione */
 
 .login_form {
@@ -644,12 +652,11 @@ td:nth-child(10) {
   width: 100%;
 }
 
-/* Etichette con più aria */
+
 .register_container label {
   font-weight: bold;
   color: #F5F5F5;
   margin-bottom: 6px;
-  /* più spazio sotto l’etichetta */
   line-height: 1.3;
 }
 
@@ -660,7 +667,6 @@ td:nth-child(10) {
 .register_container input[type="tel"] {
   width: 100%;
   padding: 12px;
-  /* leggermente più alti */
   border: 1px solid #555;
   border-radius: 4px;
   background: #2A2A2A;
@@ -867,7 +873,6 @@ td:nth-child(10) {
 .sconto-field label {
   font-weight: 600;
   color: #ffd700;
-  /* giallo oro */
   display: block;
   margin-bottom: 6px;
 }
@@ -921,7 +926,6 @@ td:nth-child(10) {
 .sconto-checkbox-item input[type="checkbox"] {
   transform: scale(1.2);
   accent-color: #ffcc00;
-  /* Colore giallo per i checkbox */
   cursor: pointer;
 }
 
@@ -1052,7 +1056,7 @@ td:nth-child(10) {
   text-decoration-color: #FFEB00;
 }
 
-/* ---------- Profilo utente ---------- */
+/*  Profilo utente  */
 
 .user-profile {
   display: block !important;

@@ -8,16 +8,13 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true' || $_SESSION['
 
 // Dati inviati dal form se il campo e' vuoto o non esiste il risultato sara' una stringa vuota
 $id = $_POST['id'] ?? '';
-$nome = trim($_POST['nome'] ?? '');
-$categoria = trim($_POST['categoria'] ?? '');
-$descrizione = trim($_POST['descrizione'] ?? '');
-$prezzo = trim($_POST['prezzo'] ?? '');
-$bonus = trim($_POST['bonus'] ?? '');
+$nome = $_POST['nome'] ?? '';
+$categoria = $_POST['categoria'] ?? '';
+$descrizione = $_POST['descrizione'] ?? '';
+$prezzo = $_POST['prezzo'] ?? '';
+$bonus = $_POST['bonus'] ?? '';
 $immagine = $_FILES['immagine']['name'] ?? '';
 
-if (empty($id)) {
-    die("ID prodotto mancante.");
-}
 
 $xmlFile = "../../../risorse/XML/prodotti.xml";
 
@@ -72,6 +69,7 @@ foreach ($prodotti as $prodotto) {
 
 if ($found) {
     $doc->save($xmlFile);
+    $_SESSION['aggiorna_prodotto_successo'] = true;
 } else {
     error_log("Prodotto non trovato nell'XML. ID: $id");
 }

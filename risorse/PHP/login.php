@@ -1,61 +1,57 @@
 <?php
 session_start();
 require_once 'connection.php';
-$connection = new mysqli($host, $user, $password, $db);
 
-$username = $connection->real_escape_string($_POST['username']);
-$password = $connection->real_escape_string($_POST['password']);
+$connection = new mysqli($host, $user, $password, $db);
+if ($connection->connect_error) {
+    $_SESSION['error_connection'] = true;
+    header('Location: ../../login.php');
+    exit();
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $queryL = "SELECT * FROM utente u WHERE u.username = '$username'";
-    $result = $connection->query($queryL);
-    if ($result) {
-        if (mysqli_num_rows(($result)) == 1) {
-            $record = $result->fetch_array((MYSQLI_ASSOC));
-            if (password_verify($password, $record['password'])) {
-                $_SESSION['username'] = $username;
-                $_SESSION['logged'] = 'true';
-                // setto la variabile di sessione id con l'id dell'utente loggato
-                $_SESSION['ruolo'] = $record['ruolo'];
-                $_SESSION['id_utente'] = $record['id'];
-                $_SESSION['stato'] = $record['stato'];
-                // se l'utente è bloccato (stato = 0) non faccio il login e mostro un messaggio di errore
-                if ($_SESSION['stato'] == 0) {
-                    $_SESSION['error_banned'] = true;
-                    header('Location: ../../Login.php');
-                    exit(1);
-                }
-                // se l'utente ha ruolo 'amministratore' allora setto la variabile di sessione ruolo a 'amministratore'
-                if ($record['ruolo'] == 'amministratore') {
-                    $_SESSION['ruolo'] = 'amministratore';
-                    header('Location: ../../Homepage.php');
-                    exit(1);
-                }
-                // se l'utente ha ruolo 'gestore' allora setto la variabile di sessione ruolo a 'gestore'
-                if ($record['ruolo'] == 'gestore') {
-                    $_SESSION['ruolo'] = 'gestore';
-                    header('Location: ../../Homepage.php');
-                    exit(1);
-                }
-                // se l'utente ha ruolo 'cliente' allora setto la variabile di sessione ruolo a 'cliente'
-                if ($record['ruolo'] == 'cliente') {
-                    $_SESSION['ruolo'] = 'cliente';
-                    header('Location: ../../Homepage.php');
-                    exit(1);
-                }
-            } else {
-                $_SESSION['error_password'] = true;
-                header('Location: ../../Login.php');
-                exit(1);
+    $username = $connection->real_escape_string($_POST['username']);
+    $password = $connection->real_escape_string($_POST['password']);
+
+    // salvo l'username per reinserirlo in caso di errore
+    $_SESSION['old_data'] = ['username' => $username];
+
+    $query = "SELECT * FROM utente WHERE username = '$username'";
+    $result = $connection->query($query);
+
+    if ($result && $result->num_rows === 1) {
+        $record = $result->fetch_assoc();
+
+        if (password_verify($password, $record['password'])) {
+
+            // ✅ controllo subito se l'utente è bannato
+            if ($record['stato'] == 0) {
+                $_SESSION['error_banned'] = true;
+                header('Location: ../../login.php');
+                exit();
             }
+
+            // login consentito
+            $_SESSION['username'] = $username;
+            $_SESSION['logged'] = 'true';
+            $_SESSION['ruolo'] = $record['ruolo'];
+            $_SESSION['id_utente'] = $record['id'];
+            $_SESSION['stato'] = $record['stato'];
+
+            // redirect in base al ruolo
+            header('Location: ../../homepage.php');
+            exit();
         } else {
-            $_SESSION['error_username'] = true;
-            header('Location: ../../Login.php');
-            exit(1);
+            $_SESSION['error_password'] = true;
+            header('Location: ../../login.php');
+            exit();
         }
     } else {
-        $_SESSION['error_connection'] = true;
-        header('Location: ../../Login.php');
-        exit(1);
+        $_SESSION['error_username'] = true;
+        header('Location: ../../login.php');
+        exit();
     }
+
     $connection->close();
 }
+?>

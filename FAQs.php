@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -34,6 +38,9 @@
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
+      <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
+        <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
+      <?php endif; ?>
       <!-- cliente links -->
       <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>

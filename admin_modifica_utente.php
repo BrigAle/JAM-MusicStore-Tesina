@@ -139,7 +139,7 @@ if (!isset($_SESSION['username']) || $_SESSION['username'] !== 'admin') {
 
                         <div style="text-align:center; margin-top:25px;">
                             <button type="submit" class="wallet-btn">Aggiorna Profilo</button>
-                            <a href="gestione_utenti.php" class="profile-btn">Annulla</a>
+                            <a href="gestione_utenti_admin.php" class="profile-btn">Annulla</a>
                         </div>
                     </div>
                 </form>

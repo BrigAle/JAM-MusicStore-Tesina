@@ -1,5 +1,6 @@
 <?php
 session_start();
+$old_username = $_SESSION['old_data']['username'] ?? '';
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -30,17 +31,19 @@ session_start();
     </div>
 
     <div class="navLink">
-      <!-- admin links -->
+      <!-- admin -->
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'amministratore'): ?>
         <a href="amministrazione.php">admin</a>
       <?php endif; ?>
-      <!-- gestore links -->
+      <!-- gestore  -->
       <?php if (isset($_SESSION['ruolo']) && $_SESSION['ruolo'] == 'gestore'):
         echo "<a href=\"gestione.php\">gestore</a>";
       endif; ?>
+      <!-- cliente  -->
       <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true'): ?>
         <a href="profilo.php"><img src="risorse/IMG/user.png" alt="Profilo"></a>
       <?php endif; ?>
+      <!-- visitatore -->
       <a href="catalogo.php">Catalogo</a>
       <a href="homepage.php"><img src="risorse/IMG/home.png" alt="casetta" /></a>
       <a href="cart.php"><img src="risorse/IMG/cart.png" alt="carrello" /></a>
@@ -53,36 +56,59 @@ session_start();
 
   <!-- contenuto per login -->
   <div class="content">
+    <?php
+    // Se già loggato, reindirizza
+    if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true') {
+      header('Location: homepage.php');
+      exit();
+    }
+    ?>
+
     <div class="login_container">
       <div class="login_form">
-
         <form action="risorse/PHP/login.php" method="post">
           <h2>Accedi al tuo account</h2>
-          <label for="username">Username:</label>
-          <input type="text" id="username" name="username" required />
 
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="username" required value="<?php echo htmlspecialchars($old_username); ?>">
 
           <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required />
+          <input type="password" id="password" name="password" required>
+
           <?php
-          if (isset($_SESSION['error_username']) && $_SESSION['error_username'] == true) {
-            echo "<h3>Utente non registrato</h3>";
+          if (isset($_SESSION['error_username'])) {
+            echo "<p class='msg error'>Utente non registrato</p>";
             unset($_SESSION['error_username']);
           }
-          if (isset($_SESSION['error_password']) && $_SESSION['error_password'] == true) {
-            echo "<h3>Password errata</h3>";
+          if (isset($_SESSION['error_password'])) {
+            echo "<p class='msg error'>Password errata</p>";
             unset($_SESSION['error_password']);
           }
-          if (isset($_SESSION['error_users']) && $_SESSION['error_users'] == true) {
-            echo "<h3>Errore nel recupero degli utenti</h3>";
+          if (isset($_SESSION['error_users'])) {
+            echo "<p class='msg error'>Errore nel recupero degli utenti</p>";
             unset($_SESSION['error_users']);
           }
-          // se ho stato bannato non faccio fare il login
-          if (isset($_SESSION['error_banned']) && $_SESSION['error_banned'] == true) {
-            echo "<h3>Il tuo account è stato bloccato. Contatta l'amministratore per maggiori informazioni.</h3>";
+          if (isset($_SESSION['error_banned'])) {
+            echo "<p class='msg error'>Il tuo account è stato bloccato. Contatta l'amministratore.</p>";
             unset($_SESSION['error_banned']);
           }
+          if (isset($_SESSION['error_connection'])) {
+            echo "<p class='msg error'>Errore di connessione al database. Riprova più tardi.</p>";
+            unset($_SESSION['error_connection']);
+          }
+          if (isset($_SESSION['success_registrazione'])) {
+            if ($_SESSION['success_registrazione']) {
+              echo "<p class='msg success'>Registrazione avvenuta con successo! Effettua il login.</p>";
+            } else {
+              echo "<p class='msg error'>Errore durante la registrazione. Riprova.</p>";
+            }
+            unset($_SESSION['success_registrazione']);
+          }
+
+        
+          unset($_SESSION['old_data']);
           ?>
+
           <input type="submit" value="Accedi" />
           <p>Non sei registrato? <a href="register.php" style="color: darkviolet; background-color: #1F1F1F;">Registrati qui</a></p>
         </form>

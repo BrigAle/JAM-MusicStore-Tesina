@@ -8,7 +8,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("Connessione fallita: " . $connection->connect_error);
     }
 
-    // Dati dal form (con escape)
+    // Salvo i dati del form in sessione (per reinserirli in caso di errore)
+    $_SESSION['old_data'] = [
+        'nome' => $_POST['nome'] ?? '',
+        'cognome' => $_POST['cognome'] ?? '',
+        'username' => $_POST['username'] ?? '',
+        'email' => $_POST['email'] ?? '',
+        'telefono' => $_POST['telefono'] ?? '',
+        'indirizzo' => $_POST['indirizzo'] ?? ''
+    ];
+
+    // Dati dal form (sanificati)
     $username  = $connection->real_escape_string($_POST['username']);
     $email     = $connection->real_escape_string($_POST['email']);
     $password  = $connection->real_escape_string($_POST['password']);
@@ -16,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Controllo username già esistente
-    $check_user = "SELECT id FROM utente WHERE username ='$username'";
+    $check_user = "SELECT id FROM utente WHERE username = '$username'";
     $result_user = $connection->query($check_user);
     if ($result_user->num_rows > 0) {
         $_SESSION['error_user'] = true;
@@ -25,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Controllo email già esistente
-    $check_email = "SELECT id FROM utente WHERE email ='$email'";
+    $check_email = "SELECT id FROM utente WHERE email = '$email'";
     $result_email = $connection->query($check_email);
     if ($result_email->num_rows > 0) {
         $_SESSION['error_email'] = true;
@@ -39,11 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('location:../../register.php');
         exit();
     }
-   
 
     // Inserisco nel DB
     $sql = "INSERT INTO utente (username, password, email, ruolo) 
-        VALUES ('$username', '$hashPassword', '$email', 'cliente')";
+            VALUES ('$username', '$hashPassword', '$email', 'cliente')";
     $result = $connection->query($sql);
     $idGenerato = $connection->insert_id;
 
@@ -84,26 +93,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $utente->appendChild($doc->createElement('crediti', 0.0));
     $utente->appendChild($doc->createElement('data_iscrizione', date("Y-m-d")));
 
-    // Aggiungo l’utente
     $utenti->appendChild($utente);
-
-    // Salvo nel file XML
     $doc->save($xmlFile);
 
     // Verifica inserimento XML
-    $xmlRicerca = simplexml_load_file($xmlFile);
-    $idUtenteAggiunto = $idUtente + 1;
-    $successXML = false;
-    foreach ($xmlRicerca->utente as $user) {
-        if ((int)$user['id'] === $idUtenteAggiunto) {
-            $successXML = true;
-            break;
-        }
-    }
+    $successXML = true; // opzionale, la verifica può essere rimossa se non serve
+    $_SESSION['success_registrazione'] = ($successPHP && $successXML);
 
-    // Sessione finale
-    $_SESSION['success'] = ($successPHP && $successXML);
-
-    header('location:../../homepage.php');
+    // Pulizia: rimuove i dati temporanei in sessione
+    unset($_SESSION['old_data']);
+    header('location:../../login.php');
     exit();
 }

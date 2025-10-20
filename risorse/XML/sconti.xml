@@ -1,22 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sconti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="sconti.xsd">
-  <sconto id="1">
-    <id_prodotto>1</id_prodotto>
-    <id_prodotto>2</id_prodotto>
-    <id_prodotto>3</id_prodotto>
-    <id_prodotto>4</id_prodotto>
-    <id_prodotto>5</id_prodotto>
-    <id_prodotto>6</id_prodotto>
-    <id_prodotto>7</id_prodotto>
-    <id_prodotto>8</id_prodotto>
-    <id_prodotto>9</id_prodotto>
-    <id_prodotto>10</id_prodotto>
-    <id_prodotto>11</id_prodotto>
-    <condizione>black friday</condizione>
-    <percentuale>15.0</percentuale>
-    <data_inizio>2025-10-13</data_inizio>
-    <data_fine>2025-10-19</data_fine>
-  </sconto>
   <sconto id="2">
     <id_prodotto>1</id_prodotto>
     <condizione>promo chitarre</condizione>
@@ -30,5 +13,13 @@
     <percentuale>30.0</percentuale>
     <data_inizio>2025-10-13</data_inizio>
     <data_fine>2025-10-19</data_fine>
+  </sconto>
+  <sconto id="4">
+    <id_prodotto>8</id_prodotto>
+    <id_prodotto>9</id_prodotto>
+    <condizione>Sconto per nuovi studenti</condizione>
+    <percentuale>20.0</percentuale>
+    <data_inizio>2025-10-16</data_inizio>
+    <data_fine>2025-10-20</data_fine>
   </sconto>
 </sconti>

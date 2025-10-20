@@ -5,12 +5,13 @@
     <id_utente>5</id_utente>
     <commento>Ottima chitarra versatile</commento>
     <valutazione>5</valutazione>
-    <voti_like>2</voti_like>
+    <voti_like>3</voti_like>
     <voti_dislike>1</voti_dislike>
     <voto_utenti>
       <voto id_utente="5" tipo="like"/>
       <voto id_utente="2" tipo="like"/>
       <voto id_utente="1" tipo="dislike"/>
+      <voto id_utente="4" tipo="like"/>
     </voto_utenti>
     <data>2025-10-15</data>
   </recensione>
@@ -19,11 +20,9 @@
     <id_utente>4</id_utente>
     <commento>bacchette versatili adatte a tutto!!!!</commento>
     <valutazione>5</valutazione>
-    <voti_like>1</voti_like>
+    <voti_like>0</voti_like>
     <voti_dislike>0</voti_dislike>
-    <voto_utenti>
-      <voto id_utente="4" tipo="like"/>
-    </voto_utenti>
+    <voto_utenti/>
     <data>2025-10-17</data>
   </recensione>
 </recensioni>

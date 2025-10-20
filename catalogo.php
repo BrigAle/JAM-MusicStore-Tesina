@@ -133,6 +133,7 @@ session_start();
 
           $percentualeScontoPromo = 0;
           $condizioneScontoPromo = '';
+          $condizioneScontoCrediti = '';
           // --- Calcolo sconto promozionale
           if ($xmlSconti && count($xmlSconti->sconto) > 0) {
             foreach ($xmlSconti->sconto as $sconto) {
@@ -241,7 +242,9 @@ session_start();
                     Prezzo scontato: €<?= number_format($prezzoFinale, 2, ',', '.') ?>
                   </span>
                   <small style="color:#aaa;">(<?= number_format($percentualeScontoPromo, 1, ',', '.') ?>% <?= htmlspecialchars($condizioneScontoPromo) ?>)</small>
+                  <?php if ($percentualeScontoCrediti > 0): ?>
                   <small style="color:#aaa;">(<?= number_format($percentualeScontoCrediti, 1, ',', '.') ?>% <?= htmlspecialchars($condizioneScontoCrediti) ?>)</small>
+                  <?php endif; ?>
                 </p>
               <?php else: ?>
                 <p>Prezzo: €<?= number_format($prezzo, 2, ',', '.') ?></p>

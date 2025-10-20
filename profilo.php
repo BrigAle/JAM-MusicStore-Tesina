@@ -130,11 +130,12 @@ session_start();
                     <?php endif; ?>
                     <div class="profile-row"><strong>Data di Iscrizione:</strong> <?= htmlspecialchars($data_iscrizione); ?></div>
                     <div class="profile-row"><strong>Ruolo:</strong> <?= htmlspecialchars($record['ruolo']); ?></div>
-
                     <div class="profile-actions">
                         <a href="aggiorna_profilo.php" class="profile-btn">Modifica Profilo</a>
                         <a href="cambia_password.php" class="profile-btn">Cambia Password</a>
-                        <a href="storico_acquisti.php" class="profile-btn">Storico Acquisti</a>
+                        <?php if ($_SESSION['ruolo'] === 'cliente'): ?>
+                            <a href="storico_ordini.php" class="profile-btn">Storico Ordini</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -142,7 +143,6 @@ session_start();
         } else {
             echo "<p class='msg error'>Errore nel recupero dei dati dell'utente.</p>";
         }
-
         $connection->close();
         ?>
     </div>
