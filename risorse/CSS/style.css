@@ -777,6 +777,57 @@ td:nth-child(10) {
   margin-top: 10px;
   margin-left: 20px;
 }
+.review-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.review-date {
+  margin: 0;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.review-date strong {
+  color: #ffeb00;
+}
+
+.review-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-button {
+  border: none;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.review-button.reply {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.review-button.reply:hover {
+  background-color: #0b5ed7;
+}
+
+.review-button.report {
+  background-color: #ff9800;
+  color: white;
+}
+
+.review-button.report:hover {
+  background-color: #e68a00;
+}
+
 
 /* FAQ */
 .contenuto-FAQs {

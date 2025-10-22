@@ -7,9 +7,9 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true' || $_SESSION['
 }
 
 $id_prodotto = $_POST['id'] ?? '';
-$quantita = $_POST['quantita'] ?? '';
+$quantita = $_POST['quantita'] ?? 1;
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($id_prodotto) || empty($quantita) || $quantita < 1) {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($id_prodotto) || $quantita < 1) {
     $_SESSION['errore'] = 'Dati non validi.';
     header("Location: ../../catalogo.php");
     exit();
@@ -22,10 +22,11 @@ if (empty($id_utente)) {
     exit();
 }
 
+// Percorsi file
 $carrelliFile = '../XML/carrelli.xml';
 $prodottiFile = '../XML/prodotti.xml';
 
-// carico il file dei prodotti per estrarre il prezzo unitario e l'immagine
+// Carico il file prodotti per eventuale verifica
 $prodottiDoc = new DOMDocument();
 $prodottiDoc->preserveWhiteSpace = false;
 $prodottiDoc->formatOutput = true;
@@ -36,10 +37,10 @@ if (!$prodottiDoc->load($prodottiFile)) {
     exit();
 }
 
+// Trova il prodotto nel file prodotti
 $prodottoTrovato = null;
 foreach ($prodottiDoc->getElementsByTagName('prodotto') as $p) {
-    $idAttr = $p->getAttribute('id');
-    if ($idAttr == $id_prodotto) {
+    if ($p->getAttribute('id') == $id_prodotto) {
         $prodottoTrovato = $p;
         break;
     }
@@ -51,13 +52,23 @@ if (!$prodottoTrovato) {
     exit();
 }
 
-$prezzo_unitario = (float)$prodottoTrovato->getElementsByTagName('prezzo')->item(0)->nodeValue;
+// Usa il prezzo scontato passato dal catalogo (prezzo per singola unità)
+if (isset($_POST['prezzo_finale']) && is_numeric($_POST['prezzo_finale'])) {
+    $prezzo_unitario = (float)$_POST['prezzo_finale'];
+} else {
+    // fallback: prezzo base dal file prodotti
+    $prezzo_unitario = (float)$prodottoTrovato->getElementsByTagName('prezzo')->item(0)->nodeValue;
+}
 
+// Calcolo prezzo totale in base alla quantità
+$prezzo_totale = $prezzo_unitario * (int)$quantita;
 
+// Carrello XML
 $doc = new DOMDocument();
 $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
-// se non esiste il root lo creo
+
+// Crea root se mancante
 if (!file_exists($carrelliFile)) {
     $root = $doc->createElement('carrelli');
     $doc->appendChild($root);
@@ -72,7 +83,7 @@ if (!$doc->load($carrelliFile)) {
 
 $root = $doc->documentElement;
 
-//cerco il carrello dell'utente
+// Cerca o crea il carrello utente
 $carrelloUtente = null;
 $ultimoId = 0;
 
@@ -87,7 +98,6 @@ foreach ($doc->getElementsByTagName('carrello') as $c) {
     }
 }
 
-// Se non esiste, crealo
 if (!$carrelloUtente) {
     $carrelloUtente = $doc->createElement('carrello');
     $carrelloUtente->setAttribute('id', $ultimoId + 1);
@@ -104,7 +114,7 @@ if (!$carrelloUtente) {
     $root->appendChild($carrelloUtente);
 }
 
-// Aggiungo o creo nuovo elemento prodotto nel carrello
+// Aggiungi o aggiorna il prodotto nel carrello
 $prodottiNode = $carrelloUtente->getElementsByTagName('prodotti')->item(0);
 if (!$prodottiNode) {
     $prodottiNode = $doc->createElement('prodotti');
@@ -121,22 +131,24 @@ foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
 }
 
 if ($prodottoNelCarrello) {
-    // se gia' si trova, aggiorna la quantita'
+    // Aggiorna quantità e totale
     $quantitaAttuale = (int)$prodottoNelCarrello->getElementsByTagName('quantita')->item(0)->nodeValue;
-    $nuovaQuantita = $quantitaAttuale + $quantita;
+    $nuovaQuantita = $quantitaAttuale + (int)$quantita;
+
     $prodottoNelCarrello->getElementsByTagName('quantita')->item(0)->nodeValue = $nuovaQuantita;
-    $prodottoNelCarrello->getElementsByTagName('prezzo_totale')->item(0)->nodeValue = number_format($nuovaQuantita * $prezzo_unitario, 2, '.', '');
+    $prodottoNelCarrello->getElementsByTagName('prezzo_unitario')->item(0)->nodeValue = number_format($prezzo_unitario, 2, '.', '');
+    $prodottoNelCarrello->getElementsByTagName('prezzo_totale')->item(0)->nodeValue = number_format($prezzo_unitario * $nuovaQuantita, 2, '.', '');
 } else {
-    // altrimenti creo nuovo elemento prodotto in carrelli.xml
+    // Crea nuovo elemento prodotto nel carrello
     $nuovoProdotto = $doc->createElement('prodotto');
     $nuovoProdotto->appendChild($doc->createElement('id_prodotto', $id_prodotto));
     $nuovoProdotto->appendChild($doc->createElement('quantita', $quantita));
     $nuovoProdotto->appendChild($doc->createElement('prezzo_unitario', number_format($prezzo_unitario, 2, '.', '')));
-    $nuovoProdotto->appendChild($doc->createElement('prezzo_totale', number_format($prezzo_unitario * $quantita, 2, '.', '')));
+    $nuovoProdotto->appendChild($doc->createElement('prezzo_totale', number_format($prezzo_totale, 2, '.', '')));
     $prodottiNode->appendChild($nuovoProdotto);
 }
 
-// Aggiorno il prezzo totale del carrello
+// Aggiorna il totale carrello
 $totaleCarrello = 0.0;
 foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
     $prezzoTot = (float)$p->getElementsByTagName('prezzo_totale')->item(0)->nodeValue;
@@ -144,12 +156,10 @@ foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
 }
 $carrelloUtente->getElementsByTagName('prezzo_totale_carrello')->item(0)->nodeValue = number_format($totaleCarrello, 2, '.', '');
 
-//Salva il file XML
+// Salva XML
 if ($doc->save($carrelliFile) === false) {
-    $_SESSION['errore_id'] = $id_prodotto;
     $_SESSION['errore_msg'] = 'Errore durante il salvataggio del carrello.';
 } else {
-    $_SESSION['successo_id'] = $id_prodotto;
     $_SESSION['successo_msg'] = 'Prodotto aggiunto nel carrello!';
 }
 

@@ -37,15 +37,15 @@
     <indirizzo>Via Roma, 2</indirizzo>
     <reputazione>10</reputazione>
     <portafoglio>0</portafoglio>
-    <crediti>235</crediti>
-    <data_iscrizione>2025-10-14</data_iscrizione>
+    <crediti>458</crediti>
+    <data_iscrizione>2025-09-14</data_iscrizione>
   </utente>
   <utente id="5">
     <nome>Franco</nome>
     <cognome>Pontarollo</cognome>
     <telefono>1234321</telefono>
     <indirizzo>Via Molise 2</indirizzo>
-    <reputazione>11.2</reputazione>
+    <reputazione>10</reputazione>
     <portafoglio>250.04</portafoglio>
     <crediti>250</crediti>
     <data_iscrizione>2025-10-15</data_iscrizione>

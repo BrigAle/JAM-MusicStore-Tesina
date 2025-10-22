@@ -6,12 +6,13 @@
     <commento>Ottima chitarra versatile</commento>
     <valutazione>5</valutazione>
     <voti_like>3</voti_like>
-    <voti_dislike>1</voti_dislike>
+    <voti_dislike>2</voti_dislike>
     <voto_utenti>
       <voto id_utente="5" tipo="like"/>
       <voto id_utente="2" tipo="like"/>
       <voto id_utente="1" tipo="dislike"/>
       <voto id_utente="4" tipo="like"/>
+      <voto id_utente="3" tipo="dislike"/>
     </voto_utenti>
     <data>2025-10-15</data>
   </recensione>

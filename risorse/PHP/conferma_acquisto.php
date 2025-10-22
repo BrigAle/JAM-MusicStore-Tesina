@@ -139,44 +139,26 @@ $newStorico->appendChild($docStorico->createElement('data', $oggi));
 $prodottiNode = $docStorico->createElement('prodotti');
 $totaleEffettivo = 0.00;
 
-// --- Copia prodotti acquistati con prezzo scontato ---
+
 foreach ($carrelloUtente->getElementsByTagName('prodotto') as $p) {
-    $idProd = (string)$p->getElementsByTagName('id_prodotto')->item(0)->nodeValue;
-    $quantita = (int)$p->getElementsByTagName('quantita')->item(0)->nodeValue;
-    $prezzoUnitario = (float)$p->getElementsByTagName('prezzo_unitario')->item(0)->nodeValue;
+    $idProd    = (string)$p->getElementsByTagName('id_prodotto')->item(0)->nodeValue;
+    $quantita  = (int)$p->getElementsByTagName('quantita')->item(0)->nodeValue;
 
-    // 🔹 Trova lo sconto più alto attivo
-    $percentualeScontoMax = 0;
-    if ($xmlSconti && count($xmlSconti->sconto) > 0) {
-        foreach ($xmlSconti->sconto as $sconto) {
-            foreach ($sconto->id_prodotto as $idScontato) {
-                if ((string)$idScontato === $idProd) {
-                    $dataInizio = (string)$sconto->data_inizio;
-                    $dataFine = (string)$sconto->data_fine;
-                    if ($oggi >= $dataInizio && $oggi <= $dataFine) {
-                        $perc = (float)$sconto->percentuale;
-                        if ($perc > $percentualeScontoMax) $percentualeScontoMax = $perc;
-                    }
-                }
-            }
-        }
-    }
+    // Normalizza separatore decimale (es. "19,95" -> "19.95")
+    $rawUnit   = (string)$p->getElementsByTagName('prezzo_unitario')->item(0)->nodeValue;
+    $rawTot    = (string)$p->getElementsByTagName('prezzo_totale')->item(0)->nodeValue;
 
-    // 🔹 Calcolo prezzo scontato
-    $prezzoScontato = $prezzoUnitario;
-    if ($percentualeScontoMax > 0) {
-        $prezzoScontato = round($prezzoUnitario - ($prezzoUnitario * $percentualeScontoMax / 100), 2);
-    }
+    $prezzoUnitario = (float) str_replace(',', '.', $rawUnit);
+    $prezzoTotale   = (float) str_replace(',', '.', $rawTot);
 
-    $totaleProdotto = $prezzoScontato * $quantita;
-    $totaleEffettivo += $totaleProdotto;
+    $totaleEffettivo += $prezzoTotale;
 
-    // 🔹 Crea nodo prodotto
+    // Scrivi nello storico con punto come separatore (valore "pulito")
     $newProd = $docStorico->createElement('prodotto');
     $newProd->appendChild($docStorico->createElement('id_prodotto', $idProd));
     $newProd->appendChild($docStorico->createElement('quantita', $quantita));
-    $newProd->appendChild($docStorico->createElement('prezzo_unitario', number_format($prezzoScontato, 2, '.', '')));
-    $newProd->appendChild($docStorico->createElement('prezzo_totale', number_format($totaleProdotto, 2, '.', '')));
+    $newProd->appendChild($docStorico->createElement('prezzo_unitario', number_format($prezzoUnitario, 2, '.', '')));
+    $newProd->appendChild($docStorico->createElement('prezzo_totale',   number_format($prezzoTotale,   2, '.', '')));
     $prodottiNode->appendChild($newProd);
 }
 

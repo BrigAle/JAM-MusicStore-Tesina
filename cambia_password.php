@@ -80,7 +80,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
                 <p class="msg error" style="margin-top:15px;">
                     <?= htmlspecialchars($_SESSION['pwd_change_message']); ?>
                 </p>
-                <?php $_SESSION['pwd_change_message'] = ""; ?>
+                <?php unset($_SESSION['pwd_change_message']); ?>
             <?php endif; ?>
         </div>
     </div>

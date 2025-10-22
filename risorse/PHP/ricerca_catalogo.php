@@ -8,7 +8,11 @@ if (isset($_GET['query'], $_GET['tipo'])) {
 
     // Sanificazione
     $query = htmlspecialchars($query, ENT_QUOTES, 'UTF-8');
-    $tipo = ($tipo === 'categoria') ? 'categoria' : 'nome';
+    if ($tipo === 'categoria') {
+        $tipo = 'categoria';
+    } else {
+        $tipo = 'nome';
+    }
 
     // Salva in sessione per il catalogo
     $_SESSION['search_query'] = $query;
@@ -21,4 +25,3 @@ if (isset($_GET['query'], $_GET['tipo'])) {
     header("Location: ../../homepage.php");
     exit;
 }
-?>

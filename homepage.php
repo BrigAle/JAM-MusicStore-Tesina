@@ -123,7 +123,7 @@ session_start();
         echo '<div class="dettagli_box">';
         echo '<h3>' . $nome . '</h3>';
         echo '<p>' . $descrizione . '</p>';
-        echo '<p>Prezzo: €' . $prezzo . '</p>';
+        echo '<p>Prezzo non scontato: €' . $prezzo . '</p>';
         if ((float)$bonus > 0) {
           echo '<p>Bonus: ' . $bonus . ' punti</p>';
         }

@@ -69,4 +69,61 @@
     </prodotti>
     <prezzo_totale_ordine>151.03</prezzo_totale_ordine>
   </storico>
+  <storico id="4">
+    <id_utente>4</id_utente>
+    <data>2025-10-21</data>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>1</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>899.99</prezzo_unitario>
+        <prezzo_totale>899.99</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>2</id_prodotto>
+        <quantita>2</quantita>
+        <prezzo_unitario>18.39</prezzo_unitario>
+        <prezzo_totale>36.78</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_ordine>936.77</prezzo_totale_ordine>
+  </storico>
+  <storico id="5">
+    <id_utente>4</id_utente>
+    <data>2025-10-21</data>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>8</id_prodotto>
+        <quantita>2</quantita>
+        <prezzo_unitario>178.59</prezzo_unitario>
+        <prezzo_totale>357.18</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>7</id_prodotto>
+        <quantita>2</quantita>
+        <prezzo_unitario>11.60</prezzo_unitario>
+        <prezzo_totale>23.20</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_ordine>380.38</prezzo_totale_ordine>
+  </storico>
+  <storico id="6">
+    <id_utente>4</id_utente>
+    <data>2025-10-21</data>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>9</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>44.64</prezzo_unitario>
+        <prezzo_totale>44.64</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>10</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>8.92</prezzo_unitario>
+        <prezzo_totale>8.92</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_ordine>53.56</prezzo_totale_ordine>
+  </storico>
 </storici>

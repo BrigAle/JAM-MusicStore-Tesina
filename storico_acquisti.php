@@ -75,7 +75,6 @@ session_start();
             <tr>
               <th>ID Ordine</th>
               <th>Data</th>
-              <th>Metodo di Pagamento</th>
               <th>Prodotti</th>
               <th>Totale (€)</th>
             </tr>";
@@ -83,7 +82,6 @@ session_start();
                 foreach ($ordiniUtente as $ordine) {
                     $idOrdine = (string)$ordine['id'];
                     $data = (string)$ordine->data;
-                    $metodo = isset($ordine->metodo_pagamento) ? (string)$ordine->metodo_pagamento : '-';
                     $totale = (float)$ordine->prezzo_totale_ordine;
 
                     // Sezione prodotti
@@ -120,8 +118,7 @@ session_start();
                     echo "
               <tr>
                 <td style='text-align:center;'>{$idOrdine}</td>
-                <td style='text-align:center;'>{$data}</td>
-                <td style='text-align:center;'>{$metodo}</td>
+                <td style='text-align:center;'>{$data}</td>                
                 <td>{$listaProdotti}</td>
                 <td style='text-align:center; font-weight:bold; color:#ffcc00;'>
                   €" . number_format($totale, 2, ',', '.') . "
@@ -137,6 +134,9 @@ session_start();
             echo "<p>Errore nel caricamento dello storico acquisti.</p>";
         }
         ?>
+        <div style="text-align:center; margin-top:20px;">
+            <a href="profilo.php" class="profile-btn">Torna indietro</a>
+        </div>
     </div>
 
 

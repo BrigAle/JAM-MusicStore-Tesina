@@ -21,7 +21,7 @@ if (empty($id_utente) || empty($id_prodotto) || empty($valutazione) || empty($co
 }
 
 $recensioniFile = '../XML/recensioni.xml';
-$prodottiFile   = '../XML/prodotti.xml';
+$utentiFile     = '../XML/utenti.xml';
 
 // === CARICAMENTO RECENSIONI ===
 $doc = new DOMDocument();
@@ -44,7 +44,7 @@ foreach ($doc->getElementsByTagName('recensione') as $rec) {
     (string)$rec->getElementsByTagName('id_prodotto')[0]->nodeValue === $id_prodotto
   ) {
     $_SESSION['errore_msg'] = "Hai già recensito questo prodotto.";
-    header("Location: ../../recensioni.php?id_prodotto={$id_prodotto}");
+    header("Location: ../../recensione.php?id_prodotto={$id_prodotto}");
     exit();
   }
 }
@@ -62,7 +62,7 @@ $newRec->setAttribute('id', $ultimoId + 1);
 $newRec->appendChild($doc->createElement('id_prodotto', $id_prodotto));
 $newRec->appendChild($doc->createElement('id_utente', $id_utente));
 $newRec->appendChild($doc->createElement('commento', htmlspecialchars($commento)));
-$newRec->appendChild($doc->createElement('valutazione', $valutazione));
+$newRec->appendChild($doc->createElement('valutazione', $valutazione)); // voto dell'utente
 $newRec->appendChild($doc->createElement('voti_like', 0));
 $newRec->appendChild($doc->createElement('voti_dislike', 0));
 $newRec->appendChild($doc->createElement('voto_utenti'));
@@ -71,31 +71,18 @@ $newRec->appendChild($doc->createElement('data', date('Y-m-d')));
 $root->appendChild($newRec);
 $doc->save($recensioniFile);
 
-// === RICALCOLA MEDIA VALUTAZIONI ===
-$xmlRecensioni = simplexml_load_file($recensioniFile);
-$totale = 0;
-$conteggio = 0;
-
-foreach ($xmlRecensioni->recensione as $rec) {
-  if ((string)$rec->id_prodotto === (string)$id_prodotto) {
-    $totale += (float)$rec->valutazione;
-    $conteggio++;
-  }
-}
-
-$media = $conteggio > 0 ? round($totale / $conteggio, 1) : 0;
-
-// === AGGIORNA MEDIA NELL'XML DELLE recensioni ===
-foreach ($xmlRecensioni->recensione as $rec) {
-  if ((string)$rec->id_prodotto === (string)$id_prodotto) {
-    $rec->valutazione = $media;
+// === AGGIORNA LA REPUTAZIONE DELL’UTENTE (+10) ===
+$xmlUtenti = simplexml_load_file($utentiFile);
+foreach ($xmlUtenti->utente as $u) {
+  if ((int)$u['id'] === (int)$id_utente) {
+    $u->reputazione = (float)$u->reputazione + 10;
     break;
   }
 }
-$xmlRecensioni->asXML($recensioniFile);
+$xmlUtenti->asXML($utentiFile);
 
 // === REDIRECT CON MESSAGGIO DI SUCCESSO ===
-$_SESSION['successo_msg'] = "Recensione inviata con successo! Valutazione media aggiornata ✅";
-header("Location: ../../recensioni.php?id_prodotto={$id_prodotto}");
+$_SESSION['successo_msg'] = "Recensione inviata con successo! (+10 reputazione) ✅";
+header("Location: ../../recensione.php?id_prodotto={$id_prodotto}");
 exit();
 ?>

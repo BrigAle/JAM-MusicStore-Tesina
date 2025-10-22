@@ -134,7 +134,7 @@ session_start();
                         <a href="aggiorna_profilo.php" class="profile-btn">Modifica Profilo</a>
                         <a href="cambia_password.php" class="profile-btn">Cambia Password</a>
                         <?php if ($_SESSION['ruolo'] === 'cliente'): ?>
-                            <a href="storico_ordini.php" class="profile-btn">Storico Ordini</a>
+                            <a href="storico_acquisti.php" class="profile-btn">Storico Acquisti</a>
                         <?php endif; ?>
                     </div>
                 </div>

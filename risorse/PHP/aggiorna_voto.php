@@ -1,86 +1,110 @@
 <?php
 session_start();
-if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
-    header("Location: ../../login.php");
-    exit();
+
+if (!isset($_SESSION['id_utente'])) {
+    $_SESSION['errore_voto'] = "Devi essere loggato per votare.";
+    header("Location: ../../recensioni.php?id_prodotto=" . $_POST['id_prodotto']);
+    exit;
 }
 
-$id_utente = $_SESSION['id_utente']; // ID utente loggato
-$id_recensione = $_GET['id_recensione'];
-$id_prodotto = $_GET['id_prodotto'];
-$voto = $_GET['voto']; // "utile" o "inutile"
+$idUtente   = (int)$_SESSION['id_utente'];
+$idRecensione = (int)$_POST['id_recensione'];
+$idProdotto = (int)$_POST['id_prodotto'];
+$azione      = $_POST['azione']; // "like" o "dislike"
 
-// Carica XML recensioni
-$xmlPath = "../XML/recensioni.xml";
-$doc = new DOMDocument();
-$doc->preserveWhiteSpace = false;
-$doc->formatOutput = true;
+$recensioniFile = '../XML/recensioni.xml';
+$utentiFile     = '../XML/utenti.xml';
 
-if (!$doc->load($xmlPath)) {
-    die("Errore nel caricamento del file XML");
-}
+$docRec = new DOMDocument();
+$docRec->preserveWhiteSpace = false;
+$docRec->formatOutput = true;
+$docRec->load($recensioniFile);
 
-// Trova la recensione
-$recensioni = $doc->getElementsByTagName("recensione");
-foreach ($recensioni as $recensione) {
-    if ($recensione->getAttribute("id") == $id_recensione) {
-        $votiLike = $recensione->getElementsByTagName("voti_like")->item(0);
-        $votiDislike = $recensione->getElementsByTagName("voti_dislike")->item(0);
+$xpath = new DOMXPath($docRec);
 
-        // Crea nodo voto_utenti se non esiste
-        $votiUtenti = $recensione->getElementsByTagName("voto_utenti")->item(0);
-        if (!$votiUtenti) {
-            $votiUtenti = $doc->createElement("voto_utenti");
-            $recensione->appendChild($votiUtenti);
-        }
-
-        // Controlla se l’utente ha già votato
-        $votoEsistente = null;
-        foreach ($votiUtenti->getElementsByTagName("voto") as $v) {
-            if ($v->getAttribute("id_utente") == $id_utente) {
-                $votoEsistente = $v;
-                break;
-            }
-        }
-
-        if ($votoEsistente) {
-            $tipoAttuale = $votoEsistente->getAttribute("tipo");
-
-            if ($tipoAttuale == $voto) {
-                // stesso voto → annulla
-                $votiUtenti->removeChild($votoEsistente);
-                if ($voto == "like") $votiLike->nodeValue--;
-                else $votiDislike->nodeValue--;
-            } else {
-                // voto diverso → cambio
-                if ($tipoAttuale == "like") {
-                    $votiLike->nodeValue--;
-                    $votiDislike->nodeValue++;
-                } else {
-                    $votiDislike->nodeValue--;
-                    $votiLike->nodeValue++;
-                }
-                $votoEsistente->setAttribute("tipo", $voto);
-            }
-        } else {
-            // Nuovo voto
-            $nuovoVoto = $doc->createElement("voto");
-            $nuovoVoto->setAttribute("id_utente", $id_utente);
-            $nuovoVoto->setAttribute("tipo", $voto);
-            $votiUtenti->appendChild($nuovoVoto);
-
-            if ($voto == "like") $votiLike->nodeValue++;
-            else $votiDislike->nodeValue++;
-        }
-
+// trova la recensione da votare
+$recensioneNode = null;
+foreach ($docRec->getElementsByTagName('recensione') as $rec) {
+    if ((int)$rec->getAttribute('id') === $idRecensione) {
+        $recensioneNode = $rec;
         break;
     }
 }
 
-// Salva modifiche
-$doc->save($xmlPath);
+if (!$recensioneNode) {
+    $_SESSION['errore_voto'] = "Recensione non trovata.";
+    header("Location: ../../recensioni.php?id_prodotto=$idProdotto");
+    exit;
+}
 
-// Redirect alla pagina recensioni
-header("Location: ../../recensioni.php?id_prodotto=" . $id_prodotto);
-exit();
+// autore della recensione
+$idAutore = (int)$recensioneNode->getElementsByTagName('id_utente')[0]->nodeValue;
+
+// Impedisce autovoto
+if ($idAutore === $idUtente) {
+    $_SESSION['errore_voto'] = "Non puoi votare la tua recensione.";
+    header("Location: ../../recensioni.php?id_prodotto=$idProdotto");
+    exit;
+}
+
+// Se l'utente ha gia' votato non permette di votare di nuovo
+$votoUtentiNode = $recensioneNode->getElementsByTagName('voto_utenti')->item(0);
+
+if ($votoUtentiNode) {
+    foreach ($votoUtentiNode->getElementsByTagName('voto') as $v) {
+        if ((int)$v->getAttribute('id_utente') === $idUtente) {
+            $_SESSION['errore_voto'] = "Hai già votato questa recensione.";
+            header("Location: ../../recensioni.php?id_prodotto=$idProdotto");
+            exit;
+        }
+    }
+}
+
+// Creo un nuovo nodo voto
+$nuovoVoto = $docRec->createElement('voto');
+$nuovoVoto->setAttribute('id_utente', $idUtente);
+$nuovoVoto->setAttribute('tipo', $azione);
+$votoUtentiNode->appendChild($nuovoVoto);
+
+// Aggiorno i contatori like/dislike
+if ($azione === 'like') {
+    $votiLikeNode = $recensioneNode->getElementsByTagName('voti_like')->item(0);
+    $votiLikeNode->nodeValue = (int)$votiLikeNode->nodeValue + 1;
+    $incremento = 1.5;
+} elseif ($azione === 'dislike') {
+    $votiDislikeNode = $recensioneNode->getElementsByTagName('voti_dislike')->item(0);
+    $votiDislikeNode->nodeValue = (int)$votiDislikeNode->nodeValue + 1;
+    $incremento = -1.2;
+} else {
+    $_SESSION['errore_voto'] = "Tipo di voto non valido.";
+    header("Location: ../../recensioni.php?id_prodotto=$idProdotto");
+    exit;
+}
+
+// Salva le modifiche in recensioni.xml
+$docRec->save($recensioniFile);
+
+// aggiorno la reputazione dell'autore della recensione
+$docUtenti = new DOMDocument();
+$docUtenti->preserveWhiteSpace = false;
+$docUtenti->formatOutput = true;
+$docUtenti->load($utentiFile);
+
+foreach ($docUtenti->getElementsByTagName('utente') as $utente) {
+    if ((int)$utente->getAttribute('id') === $idAutore) {
+        $reputazioneNode = $utente->getElementsByTagName('reputazione')->item(0);
+        $reputazioneNode->nodeValue = (float)$reputazioneNode->nodeValue + $incremento;
+        break;
+    }
+}
+
+$docUtenti->save($utentiFile);
+
+// Messaggio di successo
+$_SESSION['msg_voto'] = ($azione === 'like')
+    ? "Hai messo un like alla recensione. (+1.5 reputazione all'autore)"
+    : "Hai messo un dislike alla recensione. (-1.2 reputazione all'autore)";
+
+header("Location: ../../recensioni.php?id_prodotto=$idProdotto");
+exit;
 ?>

@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -54,15 +53,20 @@ session_start();
 
   <?php
 
+
   $nessunRisultato = false;
   $query = '';
   $tipo = '';
+
+  // Carico le funzioni per calcolare e assegnare lo sconto più alto tra le promozioni attive del cliente
+  require_once("risorse/PHP/funzioni_sconti.php");
+
   // Carica XML
-  $xmlUtenti = simplexml_load_file("risorse/XML/utenti.xml");
-  $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
+  $xmlProdotti   = simplexml_load_file("risorse/XML/prodotti.xml");
+  $xmlUtenti     = simplexml_load_file("risorse/XML/utenti.xml");
+  $xmlSconti     = simplexml_load_file("risorse/XML/sconti.xml");
   $xmlRecensioni = simplexml_load_file("risorse/XML/recensioni.xml");
-  $xmlStorico = simplexml_load_file("risorse/XML/storico_acquisti.xml");
-  $xmlSconti = simplexml_load_file("risorse/XML/sconti.xml");
+  $xmlStorico    = simplexml_load_file("risorse/XML/storico_acquisti.xml");
 
   $oggi = date('Y-m-d');
 
@@ -101,6 +105,7 @@ session_start();
 
   <div class="content">
     <h1>Catalogo Prodotti</h1>
+
     <?php if ($nessunRisultato): ?>
       <p style="color:red; text-align:center; margin-top:30px; font-size:18px;">
         Nessun prodotto trovato per "<strong><?= htmlspecialchars($query) ?></strong>"
@@ -109,8 +114,9 @@ session_start();
         elseif ($tipo === 'categoria') echo '(ricerca per categoria)';
         ?>
       </p>
-      <?php else:
-      if ($query !== ''): ?>
+
+    <?php else: ?>
+      <?php if ($query !== ''): ?>
         <p style="color:#ffeb00; text-align:center; margin-bottom:15px;">
           Risultati per "<strong><?= htmlspecialchars($query) ?></strong>"
           <?php
@@ -119,106 +125,72 @@ session_start();
           ?>
         </p>
       <?php endif; ?>
-      <div class="box_prodotto">
 
+      <div class="box_prodotto">
         <?php
+        $oggi = date('Y-m-d');
+
         foreach ($prodottiFiltrati as $prodotto):
+          $idProdotto = (string)$prodotto['id'];
           $nome = (string)$prodotto->nome;
           $descrizione = (string)$prodotto->descrizione;
           $prezzo = (float)$prodotto->prezzo;
           $bonus = (float)$prodotto->bonus;
           $dataInserimento = (string)$prodotto->data_inserimento;
           $immagine = "risorse/IMG/prodotti/" . (string)$prodotto->immagine;
-          $id = (string)$prodotto['id'];
 
           $percentualeScontoPromo = 0;
-          $condizioneScontoPromo = '';
-          $condizioneScontoCrediti = '';
-          // --- Calcolo sconto promozionale
-          if ($xmlSconti && count($xmlSconti->sconto) > 0) {
-            foreach ($xmlSconti->sconto as $sconto) {
-              foreach ($sconto->id_prodotto as $idScontato) {
-                if ((string)$idScontato === $id) {
-                  $dataInizio = (string)$sconto->data_inizio;
-                  $dataFine = (string)$sconto->data_fine;
+          $descrizioneCondizione = "";
 
-                  if ($oggi >= $dataInizio && $oggi <= $dataFine) {
-                    $percentualeCorrentePromo = (float)$sconto->percentuale;
-                    if ($percentualeCorrentePromo > $percentualeScontoPromo) {
-                      $percentualeScontoPromo = $percentualeCorrentePromo;
-                      $condizioneScontoPromo = (string)$sconto->condizione;
-                    }
-                  }
-                }
-              }
-            }
-          }
-
-          // --- 🔹 Calcolo sconto da crediti utente
-          $percentualeScontoCrediti = 0;
-
-          if (isset($_SESSION['id_utente']) && isset($xmlUtenti)) {
-            foreach ($xmlUtenti->utente as $utente) {
-              if ((string)$utente['id'] === (string)$_SESSION['id_utente']) {
-                $crediti = (float)$utente->crediti;
-
-                if ($crediti >= 100) {
-                  // 5% ogni 100 crediti → es. 200 crediti = 10%
-                  $percentualeScontoCrediti = 5.0 * floor($crediti / 100); // con floor arrotondo per difetto
-                  // Limite massimo sconto da crediti al 20%
-                  if ($percentualeScontoCrediti > 20) {
-                    $percentualeScontoCrediti = 20;
-                  }
-                }
+          // --- Applica sconti solo a utenti loggati ---
+          if (
+            isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' &&
+            isset($_SESSION['id_utente']) && $_SESSION['ruolo'] === 'cliente'
+          ) {
+            $utenteLoggato = null;
+            foreach ($xmlUtenti->utente as $u) {
+              if ((string)$u['id'] === (string)$_SESSION['id_utente']) {
+                $utenteLoggato = $u;
                 break;
               }
             }
+
+            if ($utenteLoggato) {
+              $result = calcolaScontoUtente($xmlSconti, $utenteLoggato, $idProdotto, $oggi, $xmlStorico);
+              $percentualeScontoPromo = $result['sconto'];
+              $descrizioneCondizione = $result['condizione'];
+            }
           }
 
-          // Calcolo prezzo finale combinato
+          // --- Sconto da crediti (max 20%) ---
+          $percentualeScontoCrediti = 0;
+          if (isset($utenteLoggato)) {
+            $crediti = (float)$utenteLoggato->crediti;
+            if ($crediti >= 100) {
+              $percentualeScontoCrediti = 1.5 * floor($crediti / 100);
+              if ($percentualeScontoCrediti > 20) $percentualeScontoCrediti = 10;
+            }
+          }
+
+          // --- Calcolo prezzo finale ---
           $prezzoFinale = $prezzo;
-
-          // 🔹 Applica prima lo sconto promozionale
-          if ($percentualeScontoPromo > 0) {
+          if ($percentualeScontoPromo > 0)
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoPromo / 100);
-          }
-
-          // 🔹 Poi lo sconto da crediti
-          if ($percentualeScontoCrediti > 0) {
+          if ($percentualeScontoCrediti > 0)
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoCrediti / 100);
-            $condizioneScontoCrediti = "Sconto da crediti";
-          }
 
-
-          // Calcolo valutazione media
+          // --- Calcolo valutazione media ---
           $valutazioneTotale = 0;
           $countValutazioni = 0;
-          foreach ($xmlRecensioni->recensione as $recensione) {
-            if ((string)$recensione->id_prodotto === $id) {
-              $valutazioneTotale += (float)$recensione->valutazione;
+          foreach ($xmlRecensioni->recensione as $rec) {
+            if ((string)$rec->id_prodotto === $idProdotto) {
+              $valutazioneTotale += (float)$rec->valutazione;
               $countValutazioni++;
             }
           }
           $valutazioneMedia = $countValutazioni > 0 ? round($valutazioneTotale / $countValutazioni, 1) : 0;
-
-          // Se ha acquistato il prodotto sara' possibile scrivere una recensione
-          $haAcquistato = false;
-          if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente') {
-            $idUtente = $_SESSION['id_utente'] ?? '';
-            if ($xmlStorico && $idUtente !== '') {
-              foreach ($xmlStorico->storico as $storico) {
-                if ((string)$storico->id_utente === (string)$idUtente) {
-                  foreach ($storico->prodotti->prodotto as $p) {
-                    if ((string)$p->id_prodotto === (string)$id) {
-                      $haAcquistato = true;
-                      break 2;
-                    }
-                  }
-                }
-              }
-            }
-          }
         ?>
+
           <div class="contenuto_prodotto">
             <div class="immagine_box">
               <img src="<?= $immagine ?>" alt="<?= htmlspecialchars($nome) ?>" />
@@ -233,17 +205,20 @@ session_start();
               <h3><?= htmlspecialchars($nome) ?></h3>
               <p><?= htmlspecialchars($descrizione) ?></p>
 
-              <?php if ($percentualeScontoPromo > 0): ?>
+              <?php if ($percentualeScontoPromo > 0 || $percentualeScontoCrediti > 0): ?>
                 <p>
-                  <span style="text-decoration: line-through; color: #888;">
-                    Prezzo: €<?= number_format($prezzo, 2, ',', '.') ?>
-                  </span><br />
-                  <span style="color: #ffcc00; font-weight: bold;">
-                    Prezzo scontato: €<?= number_format($prezzoFinale, 2, ',', '.') ?>
-                  </span>
-                  <small style="color:#aaa;">(<?= number_format($percentualeScontoPromo, 1, ',', '.') ?>% <?= htmlspecialchars($condizioneScontoPromo) ?>)</small>
+                  <span style="text-decoration: line-through; color: #888;">Prezzo: €<?= number_format($prezzo, 2, ',', '.') ?></span><br />
+                  <span style="color:#ffcc00; font-weight:bold;">Prezzo scontato: €<?= number_format($prezzoFinale, 2, ',', '.') ?></span><br />
+                  <?php if ($percentualeScontoPromo > 0): ?>
+                    <small style="color:#aaa;">
+                      (<?= $percentualeScontoPromo ?>% promozionale)
+                      <?php if (!empty($descrizioneCondizione)): ?>
+                        — <?= htmlspecialchars($descrizioneCondizione) ?>
+                      <?php endif; ?>
+                    </small><br />
+                  <?php endif; ?>
                   <?php if ($percentualeScontoCrediti > 0): ?>
-                  <small style="color:#aaa;">(<?= number_format($percentualeScontoCrediti, 1, ',', '.') ?>% <?= htmlspecialchars($condizioneScontoCrediti) ?>)</small>
+                    <small style="color:#aaa;">(+<?= $percentualeScontoCrediti ?>% sconto da crediti)</small>
                   <?php endif; ?>
                 </p>
               <?php else: ?>
@@ -255,46 +230,67 @@ session_start();
               <?php endif; ?>
               <p>Data di inserimento: <?= htmlspecialchars($dataInserimento) ?></p>
 
-              <p class="valutazione" style="text-align: center;">
+              <p class="valutazione" style="text-align:center;">
                 Valutazione: <?= $valutazioneMedia ?>
                 <img src="risorse/IMG/stella.png" alt="★" style="width:22px;height:22px;vertical-align:middle;" />
               </p>
 
-              <!-- Pulsanti recensioni -->
-              <div style="display:flex; justify-content:left; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap;">
+              <?php
+              $haAcquistato = false;
+              if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente') {
+                $idUtente = $_SESSION['id_utente'] ?? '';
+                if ($xmlStorico && $idUtente !== '') {
+                  foreach ($xmlStorico->storico as $storico) {
+                    if ((string)$storico->id_utente === (string)$idUtente) {
+                      foreach ($storico->prodotti->prodotto as $p) {
+                        if ((string)$p->id_prodotto === (string)$idProdotto) {
+                          $haAcquistato = true;
+                          break 2;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              ?>
+
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
                 <form action="recensioni.php" method="GET" style="margin:0;">
-                  <input type="hidden" name="id_prodotto" value="<?= $id ?>" />
-                  <button type="submit" style="background-color:#1E90FF; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:14px;">Leggi le recensioni</button>
+                  <input type="hidden" name="id_prodotto" value="<?= $idProdotto ?>" />
+                  <button type="submit" style="background-color:#1E90FF; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Leggi recensioni</button>
                 </form>
 
                 <?php if ($haAcquistato): ?>
                   <form action="scrivi_recensione.php" method="GET" style="margin:0;">
-                    <input type="hidden" name="id_prodotto" value="<?= $id ?>" />
-                    <button type="submit" style="background-color:#32CD32; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:14px;">Scrivi una recensione</button>
+                    <input type="hidden" name="id_prodotto" value="<?= $idProdotto ?>" />
+                    <button type="submit" style="background-color:#32CD32; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer;">Scrivi recensione</button>
                   </form>
                 <?php endif; ?>
               </div>
 
-              <!-- Form carrello -->
               <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && $_SESSION['ruolo'] === 'cliente'): ?>
                 <form action="risorse/PHP/aggiungi_nel_carrello.php" method="post"
                   style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:6px;">
-                  <input type="hidden" name="id" value="<?= $id ?>" />
-                  <label for="quantita_<?= $id ?>" style="font-weight:500;">Quantità:</label>
-                  <input type="number" id="quantita_<?= $id ?>" name="quantita" min="1" value="1" step="1" required
+                  <input type="hidden" name="id" value="<?= $idProdotto ?>" />
+                  <input type="hidden" name="prezzo_finale" value="<?= number_format($prezzoFinale, 2, '.', '') ?>" />
+
+                  <label for="quantita_<?= $idProdotto ?>" style="font-weight:500;">Quantità:</label>
+                  <input type="number" id="quantita_<?= $idProdotto ?>" name="quantita" min="1" value="1" step="1" required
                     style="width:60px; text-align:center; border-radius:4px; border:1px solid #aaa; padding:4px;" />
+
                   <button type="submit"
-                    style="background-color:#FF8C00; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:14px;">Aggiungi nel carrello</button>
+                    style="background-color:#FF8C00; color:white; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:14px;">
+                    Aggiungi nel carrello
+                  </button>
                 </form>
               <?php endif; ?>
-            </div>
-          </div>
+            </div> <!-- fine .dettagli_box -->
+          </div> <!-- fine .contenuto_prodotto -->
+
         <?php endforeach; ?>
-      <?php endif; ?>
-      </div>
-  </div>
-
-
+      </div> <!-- fine .box_prodotto -->
+    <?php endif; ?>
+  </div> <!-- fine .content -->
 
 
 

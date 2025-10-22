@@ -15,18 +15,17 @@ if (empty($id_utente)) {
     exit();
 }
 
-// --- FILE XML ---
+
 $recensioniFile = '../XML/recensioni.xml';
 $utentiFile = '../XML/utenti.xml';
 
-// --- CONTROLLO FILE ---
+
 if (!file_exists($recensioniFile) || !file_exists($utentiFile)) {
     $_SESSION['errore_msg'] = "File XML mancanti.";
     header("Location: ../../profilo.php");
     exit();
 }
 
-// --- CARICA RECENSIONI ---
 $xmlRec = simplexml_load_file($recensioniFile);
 
 $numRecensioni = 0;
@@ -42,11 +41,11 @@ foreach ($xmlRec->recensione as $rec) {
     }
 }
 
-// --- CALCOLO REPUTAZIONE ---
+// calcolo reputazione
 $reputazione = 10 * $numRecensioni + 1.2 * $numLikes - 1.0 * $numDislikes;
 $reputazione = max(0, round($reputazione, 2)); // non scendere sotto 0 e arrotonda a 2 decimali
 
-// --- AGGIORNA UTENTI.XML ---
+
 $doc = new DOMDocument();
 $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
@@ -69,7 +68,6 @@ foreach ($utenti as $utente) {
             $newRep = $doc->createElement('reputazione', $reputazione);
             $utente->appendChild($newRep);
         }
-
         break;
     }
 }

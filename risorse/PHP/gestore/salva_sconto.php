@@ -5,25 +5,32 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
     exit();
 }
 
-// Percorsi file
 $xmlFile = "../../XML/sconti.xml";
 
-// Dati del form
-$prodotti = $_POST['prodotti'] ?? [];
-$condizione = trim($_POST['condizione'] ?? '');
-$percentuale = trim($_POST['percentuale'] ?? '');
-$data_inizio = trim($_POST['data_inizio'] ?? '');
-$data_fine = trim($_POST['data_fine'] ?? '');
+// --- Recupero dati dal form ---
+$prodotti         = $_POST['prodotti'] ?? [];
+$tipo_condizione  = $_POST['tipo_condizione'] ?? '';
+$valore           = trim($_POST['valore'] ?? '');
+$data_riferimento = trim($_POST['data_riferimento'] ?? '');
+$evento           = trim($_POST['evento'] ?? '');
+$id_prodotto_rif  = trim($_POST['id_prodotto_rif'] ?? '');
+$percentuale      = trim($_POST['percentuale'] ?? '');
+$data_inizio      = trim($_POST['data_inizio'] ?? '');
+$data_fine        = trim($_POST['data_fine'] ?? '');
+$destinatari      = $_POST['utenti'] ?? []; // array di ID utente selezionati
 
-// Verifica dati obbligatori
-if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
-    !empty($prodotti) && !empty($percentuale) &&
-    !empty($data_inizio) && !empty($data_fine)) {
-
-    $doc = new DOMDocument('1.0', 'UTF-8');
+// --- Controllo campi obbligatori ---
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+    && !empty($prodotti)
+    && !empty($percentuale)
+    && !empty($data_inizio)
+    && !empty($data_fine)
+) {
+    $doc = new DOMDocument();
     $doc->preserveWhiteSpace = false;
     $doc->formatOutput = true;
 
+    // --- Carica o crea root ---
     if (file_exists($xmlFile)) {
         $doc->load($xmlFile);
         $root = $doc->documentElement;
@@ -32,44 +39,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
         $doc->appendChild($root);
     }
 
-    // Calcolo ID progressivo
+    // --- Calcolo ID progressivo ---
     $lastId = 0;
     foreach ($doc->getElementsByTagName('sconto') as $s) {
         $id = (int)$s->getAttribute('id');
         if ($id > $lastId) $lastId = $id;
     }
 
-    // Nuovo sconto
+    // --- Creazione nuovo sconto ---
     $sconto = $doc->createElement('sconto');
     $sconto->setAttribute('id', $lastId + 1);
 
-    foreach ($prodotti as $idProdotto) {
-        $sconto->appendChild($doc->createElement('id_prodotto', (int)$idProdotto));
+    // Aggiunta prodotti
+    foreach ($prodotti as $idProd) {
+        $sconto->appendChild($doc->createElement('id_prodotto', (int)$idProd));
     }
 
-    if (!empty($condizione)) {
-        $sconto->appendChild($doc->createElement('condizione', htmlspecialchars($condizione)));
+    // --- Creazione condizione, se presente ---
+    if (!empty($tipo_condizione)) {
+        $condizione = $doc->createElement('condizione');
+        $condizione->setAttribute('tipo', htmlspecialchars($tipo_condizione));
+
+        if (!empty($valore))
+            $condizione->appendChild($doc->createElement('valore', htmlspecialchars($valore)));
+
+        if (!empty($data_riferimento))
+            $condizione->appendChild($doc->createElement('data_riferimento', htmlspecialchars($data_riferimento)));
+
+        if (!empty($evento))
+            $condizione->appendChild($doc->createElement('evento', htmlspecialchars($evento)));
+
+        if (!empty($id_prodotto_rif))
+            $condizione->appendChild($doc->createElement('id_prodotto_rif', (int)$id_prodotto_rif));
+
+        $sconto->appendChild($condizione);
     }
 
-    $sconto->appendChild($doc->createElement('percentuale', number_format((float)$percentuale, 1, '.', '')));
+    // --- Percentuale e date ---
+    $sconto->appendChild($doc->createElement('percentuale', (int)$percentuale));
     $sconto->appendChild($doc->createElement('data_inizio', htmlspecialchars($data_inizio)));
     $sconto->appendChild($doc->createElement('data_fine', htmlspecialchars($data_fine)));
 
+    // --- Aggiunta destinatari ---
+    if (!empty($destinatari)) {
+        $dest = $doc->createElement('destinatari');
+        foreach ($destinatari as $idUtente) {
+            $dest->appendChild($doc->createElement('id_utente', (int)$idUtente));
+        }
+        $sconto->appendChild($dest);
+    }
+
+    // --- Salvataggio finale ---
     $root->appendChild($sconto);
 
-
-
-    // Salvataggio
     if ($doc->save($xmlFile)) {
-        $_SESSION['successo_msg'] = "✅ Sconto aggiunto correttamente! In attesa di validazione o utilizzo.";
+        $_SESSION['successo_msg'] = "Sconto aggiunto correttamente!";
     } else {
-        $_SESSION['errore_msg'] = "❌ Errore durante il salvataggio dello sconto.";
+        $_SESSION['errore_msg'] = "Errore durante il salvataggio dello sconto.";
     }
 
     header("Location: ../../../aggiungi_sconti.php");
     exit();
+
 } else {
-    $_SESSION['errore_msg'] = "⚠️ Compila tutti i campi obbligatori.";
+    $_SESSION['errore_msg'] = "Compila tutti i campi obbligatori.";
     header("Location: ../../../aggiungi_sconti.php");
     exit();
 }

@@ -61,6 +61,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
         <h2 style="text-align: left;">Gestione Sconti</h2>
 
         <?php
+
         $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
         $xmlSconti   = simplexml_load_file("risorse/XML/sconti.xml");
 
@@ -69,22 +70,43 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
 
             foreach ($xmlSconti->sconto as $sconto) {
                 $idSconto = (int)$sconto['id'];
-                $condizione = (string)$sconto->condizione ?: '(senza nome)';
                 $percentuale = (float)$sconto->percentuale;
                 $dataInizio = (string)$sconto->data_inizio;
                 $dataFine = (string)$sconto->data_fine;
                 $attivo = ($oggi >= $dataInizio && $oggi <= $dataFine);
-                $stato = $attivo ? "<span style='color:limegreen;'>Attivo</span>" : "<span style='color:red;'>Scaduto</span>";
+                $stato = $attivo
+                    ? "<span style='color:limegreen;'>Attivo</span>"
+                    : "<span style='color:red;'>Scaduto</span>";
+
+                // --- Lettura condizione ---
+                $condizioneEl = $sconto->condizione;
+                if ($condizioneEl) {
+                    $tipo = (string)$condizioneEl['tipo'];
+                    $valore = (string)$condizioneEl->valore;
+                    $dataRif = (string)$condizioneEl->data_riferimento;
+                    $evento = (string)$condizioneEl->evento;
+                    $idProdRif = (string)$condizioneEl->id_prodotto_rif;
+
+                    $descrizioneCond = "<strong>{$tipo}</strong>";
+                    if ($valore !== "") $descrizioneCond .= " → valore: {$valore}";
+                    if ($dataRif !== "") $descrizioneCond .= " | da data: {$dataRif}";
+                    if ($evento !== "") $descrizioneCond .= " | evento: {$evento}";
+                    if ($idProdRif !== "") $descrizioneCond .= " | prodotto rif: {$idProdRif}";
+                } else {
+                    $descrizioneCond = "(nessuna condizione)";
+                }
 
                 echo "
             <div style='margin-bottom:40px; position:relative;'>
                 <div style='display:flex; justify-content:space-between; align-items:center;'>
                     <h3 style='margin-bottom:8px;'>
-                        Sconto #{$idSconto} — <strong>{$condizione}</strong> ({$percentuale}%)
+                        Sconto #{$idSconto} — {$descrizioneCond} ({$percentuale}%)
                         <small style='color:#aaa;'>[dal {$dataInizio} al {$dataFine}]</small> — {$stato}
                     </h3>
 
-                    <form action='risorse/PHP/gestore/elimina_sconto.php' method='GET' onsubmit=\"return confirm('Vuoi davvero annullare lo sconto \"{$condizione}\"?');\" style='margin:0;'>
+                    <form action='risorse/PHP/gestore/elimina_sconto.php' method='GET'
+                          onsubmit=\"return confirm('Vuoi davvero annullare lo sconto #{$idSconto}?');\"
+                          style='margin:0;'>
                         <input type='hidden' name='id_sconto' value='{$idSconto}'>
                         <button type='submit' style='
                             background-color:#b30000;
@@ -100,6 +122,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     </form>
                 </div>";
 
+                // --- Tabella prodotti scontati ---
                 echo "
                 <table border='1' cellpadding='6' style='width:100%; margin-top:10px;'>
                     <tr>
@@ -108,12 +131,11 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                         <th>Nome</th>
                         <th>Categoria</th>
                         <th>Descrizione</th>
-                        <th>Prezzo Unitario (€)</th>
+                        <th>Prezzo (€)</th>
                         <th>Prezzo Scontato (€)</th>
                         <th>Data Inserimento</th>
                     </tr>";
 
-                // Mostra solo i prodotti inclusi nello sconto
                 foreach ($sconto->id_prodotto as $idProdottoScontato) {
                     $idProd = (string)$idProdottoScontato;
 
@@ -138,7 +160,8 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     <tr>
                         <td>{$idProd}</td>
                         <td style='text-align:center;'>
-                            <img src='{$immagine}' alt='{$nome}' style='width:70px; height:70px; object-fit:contain; border-radius:6px; background:#111;'>
+                            <img src='{$immagine}' alt='{$nome}'
+                                 style='width:70px; height:70px; object-fit:contain; border-radius:6px; background:#111;'>
                         </td>
                         <td>{$nome}</td>
                         <td>{$categoria}</td>
@@ -150,9 +173,23 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     }
                 }
 
-                echo "</table></div>";
+                echo "</table>";
+
+                // --- Mostra destinatari ---
+                if (isset($sconto->destinatari->id_utente)) {
+                    echo "<p style='margin-top:10px;'><strong>Destinatari:</strong> ";
+                    $idUtenti = [];
+                    foreach ($sconto->destinatari->id_utente as $idUtente) {
+                        $idUtenti[] = (string)$idUtente;
+                    }
+                    echo implode(', ', $idUtenti);
+                    echo "</p>";
+                }
+
+                echo "</div>"; // chiude blocco sconto
             }
 
+            // --- Pulsante per aggiungere un nuovo sconto ---
             echo "<div style='margin-top:20px;'>
             <a href='aggiungi_sconti.php' style='
                 display:inline-block;
@@ -167,9 +204,8 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
             echo "<p>Nessuno sconto registrato.</p>
               <a href='aggiungi_sconti.php' style='color:#007BFF;'>Aggiungi il primo sconto</a>";
         }
-        ?>
-        
-        <?php
+
+        // --- Messaggi di successo / errore ---
         if (isset($_SESSION['successo_msg'])) {
             echo "<div class='sconto-msg sconto-success'>{$_SESSION['successo_msg']}</div>";
             unset($_SESSION['successo_msg']);
@@ -178,8 +214,8 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
             unset($_SESSION['errore_msg']);
         }
         ?>
-        
     </div>
+
 
 
     <div class="pdp">
