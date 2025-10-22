@@ -224,6 +224,10 @@ session_start();
               echo '<p style="color:red;">' . htmlspecialchars($_SESSION['errore_voto']) . '</p>';
               unset($_SESSION['errore_voto']);
             }
+            if (isset($_SESSION['successo_msg'])) {
+              echo '<p style="color: green;">' . htmlspecialchars($_SESSION['successo_msg']) . '</p>';
+              unset($_SESSION['successo_msg']);
+            }
             ?>
 
             <!-- RISPOSTE -->

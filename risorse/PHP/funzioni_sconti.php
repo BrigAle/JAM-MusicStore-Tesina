@@ -56,66 +56,88 @@ function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = 
     $dataIscr    = (string)$utente->data_iscrizione;
 
     switch ($tipo) {
+        // --- Condizione: mesi di iscrizione ---
         case 'mesi_iscrizione':
             $mesi = (strtotime($oggi) - strtotime($dataIscr)) / (60 * 60 * 24 * 30);
             return $mesi >= $valore;
 
+            // --- Condizione: crediti minimi ---
         case 'crediti_minimi':
             return $crediti >= $valore;
 
+            // --- Condizione: crediti accumulati dopo una certa data ---
         case 'crediti_da_data':
-            // L'utente deve avere almeno $valore crediti entro la data di riferimento $dataRif
             $dataRif = (string)$condizione->data_riferimento;
             $valore  = (float)$condizione->valore;
             $idUtente = (string)$utente['id'];
 
             $xmlCrediti = simplexml_load_file("risorse/XML/storico_crediti.xml");
-            $creditiAllaData = 0;
+            $creditiIniziali = null;
+            $creditiFinali = null;
+            $ultimaDataPrima = null;
+            $ultimaDataDopo = null;
 
             if ($xmlCrediti) {
-                $creditiTrovati = [];
-
                 foreach ($xmlCrediti->record as $r) {
                     $id = (string)$r->id_utente;
                     $data = (string)$r->data;
                     $cred = (float)$r->crediti;
 
-                    // Considera solo i record dell’utente fino alla data richiesta
-                    if ($id === $idUtente && $data <= $dataRif) {
-                        // Se ci sono più record per la stessa data, prendiamo il valore massimo
-                        if (!isset($creditiTrovati[$data]) || $cred > $creditiTrovati[$data]) {
-                            $creditiTrovati[$data] = $cred;
+                    if ($id === $idUtente) {
+                        // --- Trova il valore più recente PRIMA della data di riferimento ---
+                        if ($data < $dataRif) {
+                            if ($ultimaDataPrima === null || $data > $ultimaDataPrima) {
+                                $ultimaDataPrima = $data;
+                                $creditiIniziali = $cred;
+                            }
+                        }
+
+                        // --- Trova il valore più recente DOPO la data di riferimento ---
+                        if ($data >= $dataRif) {
+                            if ($ultimaDataDopo === null || $data > $ultimaDataDopo) {
+                                $ultimaDataDopo = $data;
+                                $creditiFinali = $cred;
+                            }
                         }
                     }
                 }
-
-                // Prende l’ultimo record valido (data più vicina) e massimo valore in quella data
-                if (!empty($creditiTrovati)) {
-                    ksort($creditiTrovati); // ordina per data
-                    $creditiAllaData = end($creditiTrovati); // valore finale massimo
-                }
             }
 
-            return ($creditiAllaData >= $valore);
+            // Nessun record dopo la data → condizione non soddisfatta
+            if ($creditiFinali === null) return false;
 
+            // Nessun valore prima → utente nuovo, quindi partenza da 0
+            if ($creditiIniziali === null) $creditiIniziali = 0;
+
+            // Calcolo crediti guadagnati nel periodo
+            $creditiAccumulati = $creditiFinali - $creditiIniziali;
+
+            return ($creditiAccumulati >= $valore);
+
+            // --- Condizione: reputazione minima ---
         case 'reputazione_minima':
             return $reputazione >= $valore;
 
+            // --- Condizione: acquisto specifico ---
         case 'acquisto_specifico':
             if ($xmlStorico) {
                 foreach ($xmlStorico->storico as $storico) {
                     if ((string)$storico->id_utente === $idUtente) {
                         foreach ($storico->prodotti->prodotto as $p) {
-                            if ((string)$p->id_prodotto === $idProdRif) return true;
+                            if ((string)$p->id_prodotto === $idProdRif) {
+                                return true;
+                            }
                         }
                     }
                 }
             }
             return false;
 
+            // --- Condizione: offerta speciale (sempre valida se attiva nel periodo) ---
         case 'offerta_speciale':
             return true;
 
+            // --- Default: condizione non riconosciuta ---
         default:
             return false;
     }
@@ -164,7 +186,7 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
                             $condizioneScelta = "Crediti ≥ {$valore}";
                             break;
                         case 'crediti_da_data':
-                            $condizioneScelta = "{$valore} crediti entro {$dataRif}";
+                            $condizioneScelta = "{$valore} crediti da {$dataRif}";
                             break;
                         case 'reputazione_minima':
                             $condizioneScelta = "Reputazione ≥ {$valore}";

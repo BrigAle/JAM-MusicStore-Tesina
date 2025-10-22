@@ -1,4 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FAQs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FAQs.xsd">
 
+  <!-- FAQ 1: Pagamenti -->
+  <faq id="1">
+    <domanda>Quali metodi di pagamento accettate?</domanda>
+    <risposta>Accettiamo pagamenti con carta di credito, PayPal e tramite il portafoglio digitale del sito. Tutte le transazioni sono protette da crittografia SSL.</risposta>
+    <categoria>Pagamenti</categoria>
+  </faq>
+
+  <!-- FAQ 2: Ordini -->
+  <faq id="2">
+    <domanda>Come posso visualizzare lo stato del mio ordine?</domanda>
+    <risposta>Puoi accedere alla sezione “Storico Ordini” dal tuo profilo utente per monitorare lo stato e la data di consegna prevista.</risposta>
+    <categoria>Ordini</categoria>
+  </faq>
+
+  <!-- FAQ 3: Prodotti -->
+  <faq id="3">
+    <domanda>I componenti aerospaziali sono certificati?</domanda>
+    <risposta>Sì, tutti i nostri prodotti rispettano le normative internazionali ESA e NASA per l’uso in applicazioni spaziali e aeronautiche.</risposta>
+    <categoria>Prodotti</categoria>
+  </faq>
+
+  <!-- FAQ 4: Bonus -->
+  <faq id="4">
+    <domanda>Come vengono calcolati i crediti bonus?</domanda>
+    <risposta>I crediti vengono assegnati automaticamente dopo ogni acquisto e possono essere utilizzati per ottenere sconti futuri o offerte speciali.</risposta>
+    <categoria>Bonus</categoria>
+  </faq>
+
+  <!-- FAQ 5: Registrazione -->
+  <faq id="5">
+    <domanda>È necessario registrarsi per acquistare un prodotto?</domanda>
+    <risposta>Sì, la registrazione è obbligatoria per poter completare un ordine, gestire i propri crediti e accedere alle promozioni dedicate.</risposta>
+    <categoria>Registrazione</categoria>
+  </faq>
+
+  <!-- FAQ 6: Ordini -->
+  <faq id="6">
+    <domanda>Posso annullare un ordine dopo il pagamento?</domanda>
+    <risposta>Sì, puoi richiedere l’annullamento entro 24 ore dall’acquisto, purché l’ordine non sia già stato processato per la spedizione.</risposta>
+    <categoria>Ordini</categoria>
+  </faq>
+
+  <!-- FAQ 7: Bonus -->
+  <faq id="7">
+    <domanda>I crediti bonus hanno una scadenza?</domanda>
+    <risposta>No, i crediti accumulati rimangono validi finché il tuo account rimane attivo sul sito.</risposta>
+    <categoria>Bonus</categoria>
+  </faq>
+
 </FAQs>

@@ -89,7 +89,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
 
                     $descrizioneCond = "<strong>{$tipo}</strong>";
                     if ($valore !== "") $descrizioneCond .= " → valore: {$valore}";
-                    if ($dataRif !== "") $descrizioneCond .= " | entro la data: {$dataRif}";
+                    if ($dataRif !== "") $descrizioneCond .= " | da data: {$dataRif}";
                     if ($evento !== "") $descrizioneCond .= " | evento: {$evento}";
                     if ($idProdRif !== "") $descrizioneCond .= " | prodotto rif: {$idProdRif}";
                 } else {

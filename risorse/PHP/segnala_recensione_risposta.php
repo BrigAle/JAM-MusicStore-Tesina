@@ -10,20 +10,25 @@ $id_utente_risposta   = $_POST['id_utente_risposta'] ?? null;
 $id_risposta          = $_POST['id_risposta'] ?? null;
 $id_recensione        = $_POST['id_recensione'] ?? null;
 $motivo               = $_POST['motivo'] ?? 'Non specificato';
+$id_prodotto          = $_POST['id_prodotto'] ?? '';
 
 $xmlFile = '../XML/segnalazioni.xml';
-$doc = new DOMDocument();
-$doc->preserveWhiteSpace = false;
-$doc->formatOutput = true;
-$doc->load($xmlFile);
 
-if ($doc === false) {
-    die("Errore nel caricamento del file XML");
+// --- Carica o crea il file XML ---
+$doc = new DOMDocument('1.0', 'UTF-8');
+$doc->preserveWhiteSpace = false; // importante: rimuove spazi bianchi inutili
+$doc->formatOutput = true;        // ✅ rende il file leggibile con rientri
+
+if (file_exists($xmlFile)) {
+    $doc->load($xmlFile);
+    $root = $doc->documentElement;
+} else {
+    // se non esiste, crea la struttura base
+    $root = $doc->createElement("segnalazioni");
+    $doc->appendChild($root);
 }
 
-$root = $doc->documentElement;
-
-// ✅ 1️⃣ Calcola nuovo ID segnalazione
+// --- Calcola nuovo ID ---
 $ultimoId = 0;
 foreach ($doc->getElementsByTagName("segnalazione") as $s) {
     $id = (int)$s->getAttribute("id");
@@ -31,19 +36,16 @@ foreach ($doc->getElementsByTagName("segnalazione") as $s) {
 }
 $nuovo_id = $ultimoId + 1;
 
-// ✅ 2️⃣ Crea la nuova segnalazione
+// --- Crea nuova segnalazione ---
 $segnalazione = $doc->createElement("segnalazione");
 $segnalazione->setAttribute("id", $nuovo_id);
 
-// ✅ 3️⃣ Decidi se si tratta di recensione o risposta
-
+// Distinzione tra recensione e risposta
 if (!empty($id_recensione)) {
-    // caso recensione
     $id_contenuto = $doc->createElement("id_contenuto", $id_recensione);
     $id_contenuto->setAttribute("tipo", "recensione");
     $id_utente = $doc->createElement("id_utente", $id_utente_recensione);
 } elseif (!empty($id_risposta)) {
-    // caso risposta
     $id_contenuto = $doc->createElement("id_contenuto", $id_risposta);
     $id_contenuto->setAttribute("tipo", "risposta");
     $id_utente = $doc->createElement("id_utente", $id_utente_risposta);
@@ -51,18 +53,18 @@ if (!empty($id_recensione)) {
     die("Errore: dati segnalazione mancanti");
 }
 
-
-// ✅ 4️⃣ Aggiungi nodi alla segnalazione
+// --- Aggiungi nodi alla segnalazione ---
 $segnalazione->appendChild($id_contenuto);
 $segnalazione->appendChild($id_utente);
 $segnalazione->appendChild($doc->createElement("motivo", htmlspecialchars($motivo)));
 $segnalazione->appendChild($doc->createElement("data", date("Y-m-d\TH:i:s")));
 
-// ✅ 5️⃣ Salva nel file
+// --- Aggiungi e salva con formattazione ---
 $root->appendChild($segnalazione);
 $doc->save($xmlFile);
 
-// ✅ 6️⃣ Redirect
-header("Location: ../../recensioni.php?id_prodotto=" . $_POST['id_prodotto']);
+$_SESSION['successo_msg'] = "Segnalazione inviata con successo!";
+// --- Redirect ---
+header("Location: ../../recensioni.php?id_prodotto=" . urlencode($id_prodotto));
 exit();
 ?>

@@ -150,7 +150,7 @@ session_start();
             }
             echo "</table>";
         } else {
-            echo "Nessuna segnalazione trovata.";
+            echo "<h2 style='text-align: left; color: darkorange;'>Nessuna segnalazione trovata.</h2>";
         }
 
         echo "<br /><br />";

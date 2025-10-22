@@ -26,7 +26,7 @@
     <id_prodotto>1</id_prodotto>
     <condizione tipo="crediti_da_data">
       <valore>50</valore>
-      <data_riferimento>2025-10-25</data_riferimento>
+      <data_riferimento>2025-10-10</data_riferimento>
     </condizione>
     <percentuale>30</percentuale>
     <data_inizio>2025-10-13</data_inizio>
