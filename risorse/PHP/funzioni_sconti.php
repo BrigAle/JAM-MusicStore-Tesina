@@ -51,7 +51,6 @@ function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = 
     $valore     = (float)$condizione->valore;
     $dataRif    = (string)$condizione->data_riferimento;
     $idProdRif  = (string)$condizione->id_prodotto_rif;
-
     $crediti     = (float)$utente->crediti;
     $reputazione = (float)$utente->reputazione;
     $dataIscr    = (string)$utente->data_iscrizione;
@@ -65,7 +64,39 @@ function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = 
             return $crediti >= $valore;
 
         case 'crediti_da_data':
-            return ($crediti >= $valore && $dataIscr >= $dataRif);
+            // L'utente deve avere almeno $valore crediti entro la data di riferimento $dataRif
+            $dataRif = (string)$condizione->data_riferimento;
+            $valore  = (float)$condizione->valore;
+            $idUtente = (string)$utente['id'];
+
+            $xmlCrediti = simplexml_load_file("risorse/XML/storico_crediti.xml");
+            $creditiAllaData = 0;
+
+            if ($xmlCrediti) {
+                $creditiTrovati = [];
+
+                foreach ($xmlCrediti->record as $r) {
+                    $id = (string)$r->id_utente;
+                    $data = (string)$r->data;
+                    $cred = (float)$r->crediti;
+
+                    // Considera solo i record dell’utente fino alla data richiesta
+                    if ($id === $idUtente && $data <= $dataRif) {
+                        // Se ci sono più record per la stessa data, prendiamo il valore massimo
+                        if (!isset($creditiTrovati[$data]) || $cred > $creditiTrovati[$data]) {
+                            $creditiTrovati[$data] = $cred;
+                        }
+                    }
+                }
+
+                // Prende l’ultimo record valido (data più vicina) e massimo valore in quella data
+                if (!empty($creditiTrovati)) {
+                    ksort($creditiTrovati); // ordina per data
+                    $creditiAllaData = end($creditiTrovati); // valore finale massimo
+                }
+            }
+
+            return ($creditiAllaData >= $valore);
 
         case 'reputazione_minima':
             return $reputazione >= $valore;
@@ -111,7 +142,7 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
     foreach ($xmlSconti->sconto as $sconto) {
         if (verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico)) {
             $percentuale = (float)$sconto->percentuale;
-            
+
             // se questo sconto è più grande, aggiorniamo sia la percentuale che la descrizione
             if ($percentuale > $scontoMassimo) {
                 $scontoMassimo = $percentuale;
@@ -133,7 +164,7 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
                             $condizioneScelta = "Crediti ≥ {$valore}";
                             break;
                         case 'crediti_da_data':
-                            $condizioneScelta = "{$valore} crediti dal {$dataRif}";
+                            $condizioneScelta = "{$valore} crediti entro {$dataRif}";
                             break;
                         case 'reputazione_minima':
                             $condizioneScelta = "Reputazione ≥ {$valore}";
@@ -151,5 +182,43 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
     }
 
     return ['sconto' => $scontoMassimo, 'condizione' => $condizioneScelta];
+}
+
+
+
+function aggiornaStoricoCrediti($idUtente, $nuoviCrediti, $fileXML)
+{
+    $dom = new DOMDocument();
+    $dom->preserveWhiteSpace = false;
+    $dom->formatOutput = true;
+
+    // Se il file non esiste, crealo con il nodo radice
+    if (!file_exists($fileXML)) {
+        $root = $dom->createElement("storici_crediti");
+        $dom->appendChild($root);
+        $dom->save($fileXML);
+    }
+
+    // Carica il file XML
+    if (!$dom->load($fileXML)) {
+        return false;
+    }
+
+    $root = $dom->documentElement;
+
+    // Crea un nuovo record (append-only)
+    $record = $dom->createElement("record");
+    $idNode = $dom->createElement("id_utente", $idUtente);
+    $dataNode = $dom->createElement("data", date('Y-m-d'));
+    $creditiNode = $dom->createElement("crediti", $nuoviCrediti);
+
+    $record->appendChild($idNode);
+    $record->appendChild($dataNode);
+    $record->appendChild($creditiNode);
+
+    $root->appendChild($record);
+
+    $dom->save($fileXML);
+    return true;
 }
 ?>

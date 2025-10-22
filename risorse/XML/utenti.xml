@@ -8,7 +8,7 @@
     <reputazione>0</reputazione>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-14</data_iscrizione>
+    <data_iscrizione>2025-01-02</data_iscrizione>
   </utente>
   <utente id="2">
     <nome>Alessandro</nome>
@@ -18,7 +18,7 @@
     <reputazione>0</reputazione>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-14</data_iscrizione>
+    <data_iscrizione>2025-01-02</data_iscrizione>
   </utente>
   <utente id="3">
     <nome>Giovanni</nome>
@@ -28,26 +28,26 @@
     <reputazione>0</reputazione>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
-    <data_iscrizione>2025-10-14</data_iscrizione>
+    <data_iscrizione>2025-01-02</data_iscrizione>
   </utente>
   <utente id="4">
     <nome>Mattia</nome>
     <cognome>Aquilina</cognome>
     <telefono>1122334455</telefono>
     <indirizzo>Via Roma, 2</indirizzo>
-    <reputazione>10</reputazione>
-    <portafoglio>0</portafoglio>
-    <crediti>458</crediti>
-    <data_iscrizione>2025-09-14</data_iscrizione>
+    <reputazione>20</reputazione>
+    <portafoglio>2624.89</portafoglio>
+    <crediti>598</crediti>
+    <data_iscrizione>2025-01-02</data_iscrizione>
   </utente>
   <utente id="5">
-    <nome>Franco</nome>
-    <cognome>Pontarollo</cognome>
-    <telefono>1234321</telefono>
-    <indirizzo>Via Molise 2</indirizzo>
-    <reputazione>10</reputazione>
-    <portafoglio>250.04</portafoglio>
-    <crediti>250</crediti>
-    <data_iscrizione>2025-10-15</data_iscrizione>
+    <nome>Denis</nome>
+    <cognome>Boitor</cognome>
+    <telefono>343434343</telefono>
+    <indirizzo>Via Firenze 25, LT</indirizzo>
+    <reputazione>0</reputazione>
+    <portafoglio>0</portafoglio>
+    <crediti>0</crediti>
+    <data_iscrizione>2025-01-02</data_iscrizione>
   </utente>
 </utenti>

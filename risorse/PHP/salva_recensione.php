@@ -16,7 +16,7 @@ $commento    = trim($_POST['commento'] ?? '');
 
 if (empty($id_utente) || empty($id_prodotto) || empty($valutazione) || empty($commento)) {
   $_SESSION['errore_msg'] = "Tutti i campi sono obbligatori.";
-  header("Location: ../../scrivi_recensione.php?id_prodotto={$id_prodotto}");
+  header("Location: ../../scrivi_recensioni.php?id_prodotto={$id_prodotto}");
   exit();
 }
 
@@ -44,7 +44,7 @@ foreach ($doc->getElementsByTagName('recensione') as $rec) {
     (string)$rec->getElementsByTagName('id_prodotto')[0]->nodeValue === $id_prodotto
   ) {
     $_SESSION['errore_msg'] = "Hai già recensito questo prodotto.";
-    header("Location: ../../recensione.php?id_prodotto={$id_prodotto}");
+    header("Location: ../../recensioni.php?id_prodotto={$id_prodotto}");
     exit();
   }
 }
@@ -83,6 +83,6 @@ $xmlUtenti->asXML($utentiFile);
 
 // === REDIRECT CON MESSAGGIO DI SUCCESSO ===
 $_SESSION['successo_msg'] = "Recensione inviata con successo! (+10 reputazione) ✅";
-header("Location: ../../recensione.php?id_prodotto={$id_prodotto}");
+header("Location: ../../recensioni.php?id_prodotto={$id_prodotto}");
 exit();
 ?>

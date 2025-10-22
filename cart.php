@@ -113,10 +113,20 @@ session_start();
                          style='width:70px; height:70px; object-fit:contain; border-radius:6px; background:#111;'>
                 </td>
                 <td style='text-align:center;'>{$quantita}</td>
+                ";
+        if ($prezzoNonscontato === $prezzoUnitario) {
+          echo "<td style='text-align:center; font-weight:bold;'>
+                          " . number_format($prezzoUnitario, 2, ',', '.') . "
+                        </td>";
+        } else {
+          echo "
                 <td style='text-align:center; color:#ffcc00; font-weight:bold;'>
                   <span style='text-decoration:line-through; color:#888;'>" . number_format($prezzoNonscontato, 2, ',', '.') . "</span>
                   <span style='font-size:0.9em; color:#aaa;'></span>" . number_format($prezzoUnitario, 2, ',', '.') . "
                 </td>
+                ";
+        }
+        echo "
                 <td style='text-align:center; font-weight:bold;'>
                     " . number_format($prezzoTotale, 2, ',', '.') . "
                 </td>
@@ -136,8 +146,7 @@ session_start();
       echo "
             <tr style='background:#000; font-weight:bold; color:white;'>
                 <td colspan='5' style='text-align:right;'>Totale Carrello:</td>
-                <td style='text-align:center; color:#ffcc00;'>" . number_format($totaleCarrelloAggiornato, 2, ',', '.') . " €</td>
-                <td></td>
+                <td style='text-align:center; color:#ffcc00;'>" . number_format($totaleCarrelloAggiornato, 2, ',', '.') . " €</td>                
             </tr>
         </table>
         <br>

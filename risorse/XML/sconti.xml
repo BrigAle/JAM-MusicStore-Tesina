@@ -1,87 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sconti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="sconti.xsd">
-<!-- test su  utente 4 orione-->
-  <!--ISCRIZIONE: almeno 6 mesi -->
-  <sconto id="1">
-    <id_prodotto>1</id_prodotto>
-    <condizione tipo="mesi_iscrizione">
-      <valore>1</valore>
-    </condizione>
-    <percentuale>15</percentuale>
-    <data_inizio>2025-01-01</data_inizio>
-    <data_fine>2025-12-31</data_fine>
-    <destinatari>
-      <id_utente>4</id_utente>
-    </destinatari>
-  </sconto>
-  <!-- applicabile  -->
-
-  <!-- CREDITI MINIMI -->
-  <sconto id="2">
-    <id_prodotto>1</id_prodotto>
-    <id_prodotto>2</id_prodotto>
-    <condizione tipo="crediti_minimi">
-      <valore>200</valore>
-    </condizione>
-    <percentuale>8</percentuale>
-    <data_inizio>2025-10-01</data_inizio>
-    <data_fine>2025-12-31</data_fine>
-    <destinatari>
-      <id_utente>4</id_utente>
-    </destinatari>
-  </sconto>
-  <!--  applicabile (235 >= 200) -->
-
-  <!-- CREDITI DA DATA -->
-  <sconto id="3">
-    <id_prodotto>3</id_prodotto>
-    <condizione tipo="crediti_da_data">
-      <valore>200</valore>
-      <data_riferimento>2025-01-01</data_riferimento>
-    </condizione>
-    <percentuale>6</percentuale>
-    <data_inizio>2025-09-01</data_inizio>
-    <data_fine>2025-12-31</data_fine>
-    <destinatari>
-      <id_utente>4</id_utente>
-    </destinatari>
-  </sconto>
-  <!-- applicabile (crediti 235 >= 200 e data_iscrizione 2025-10-14 ≥ 2025-01-01) -->
-
-  <!--  REPUTAZIONE MINIMA -->
-  <sconto id="4">
-    <id_prodotto>4</id_prodotto>
-    <condizione tipo="reputazione_minima">
-      <valore>8</valore>
-    </condizione>
-    <percentuale>8</percentuale>
-    <data_inizio>2025-09-01</data_inizio>
-    <data_fine>2025-12-31</data_fine>
-    <destinatari>
-      <id_utente>4</id_utente>
-    </destinatari>
-  </sconto>
-  <!-- applicabile (reputazione 10 ≥ 8) -->
-
-  <!--  ACQUISTO SPECIFICO -->
-  <sconto id="5">
-    <id_prodotto>5</id_prodotto>
-    <condizione tipo="acquisto_specifico">
-      <id_prodotto_rif>2</id_prodotto_rif>
-    </condizione>
-    <percentuale>13</percentuale>
-    <data_inizio>2025-10-01</data_inizio>
-    <data_fine>2025-12-31</data_fine>
-    <destinatari>
-      <id_utente>4</id_utente>
-    </destinatari>
-  </sconto>
-  <!-- dipende dallo storico_acquisti.xml (se ha comprato prodotto #2  allora e' applicabile) -->
-
-  <!--  OFFERTA SPECIALE "BLACK FRIDAY" -->
-  <sconto id="6">
-    <id_prodotto>1</id_prodotto>
+<sconti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="sconti.xsd">
+  <sconto id="7">
     <id_prodotto>2</id_prodotto>
     <id_prodotto>3</id_prodotto>
     <id_prodotto>4</id_prodotto>
@@ -97,9 +16,24 @@
     </condizione>
     <percentuale>5</percentuale>
     <data_inizio>2025-10-20</data_inizio>
-    <data_fine>2025-10-30</data_fine>
+    <data_fine>2025-10-26</data_fine>
     <destinatari>
       <id_utente>4</id_utente>
+      <id_utente>5</id_utente>
+    </destinatari>
+  </sconto>
+  <sconto id="8">
+    <id_prodotto>1</id_prodotto>
+    <condizione tipo="crediti_da_data">
+      <valore>50</valore>
+      <data_riferimento>2025-10-25</data_riferimento>
+    </condizione>
+    <percentuale>30</percentuale>
+    <data_inizio>2025-10-13</data_inizio>
+    <data_fine>2025-10-26</data_fine>
+    <destinatari>
+      <id_utente>4</id_utente>
+      <id_utente>5</id_utente>
     </destinatari>
   </sconto>
 </sconti>

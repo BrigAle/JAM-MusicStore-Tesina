@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FAQs xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FAQs.xsd">
-  <faq id="1">
-    <domanda>Come posso ottenere crediti bonus?</domanda>
-    <risposta>I crediti bonus vengono automaticamente aggiunti al tuo profilo quando acquisti determinati prodotti che li prevedono. L'importo del bonus e' calcolato come percentuale del prezzo del prodotto. E' inoltre possibile effettuare una richiesta di acquisto di crediti.</risposta>
-    <categoria>Pagamenti</categoria>
-  </faq>
-  <faq id="2">
-    <domanda>E' necessario registrarsi per acquistare?</domanda>
-    <risposta>Si', solo gli utenti registrati possono completare un ordine. La registrazione permette anche di visualizzare lo storico acquisti, accumulare bonus e accedere a promozioni riservate.</risposta>
-    <categoria>Registrazione</categoria>
-  </faq>
+
 </FAQs>

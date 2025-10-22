@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<segnalazioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="segnalazioni.xsd">
+<segnalazioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="segnalazioni.xsd">
 
-    <segnalazione id="1">
-        <id_contenuto tipo="risposta">1</id_contenuto>
-        <id_utente>5</id_utente>
-        <motivo>inaduegato</motivo>
-        <data>2025-10-15T17:21:40</data>
-    </segnalazione>
 </segnalazioni>

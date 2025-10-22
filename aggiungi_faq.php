@@ -62,6 +62,16 @@ session_start();
         'categoria' => ''
     ];
     ?>
+    <?php
+
+    // Se esistono dati precedenti in sessione (es. dopo errore di validazione)
+    $old = $_SESSION['old_data'] ?? [];
+
+    // Inizializza i campi mancanti per evitare warning
+    $old['domanda'] = $old['domanda'] ?? '';
+    $old['risposta'] = $old['risposta'] ?? '';
+    $old['categoria'] = $old['categoria'] ?? '';
+    ?>
     <div class="content user-profile">
         <div class="profile-card" style="max-width:700px; margin:auto; padding:40px;">
             <h2 class="profile-title" style="text-align:center; color:#ffeb00; margin-bottom:25px;">Aggiungi una nuova FAQ</h2>
@@ -127,7 +137,7 @@ session_start();
                     . htmlspecialchars($_SESSION['errore_msg']) . "</p>";
                 unset($_SESSION['errore_msg']);
             }
-            unset($_SESSION['old_data']); 
+            unset($_SESSION['old_data']);
             ?>
 
 </body>

@@ -24,6 +24,10 @@ $utentiFile = '../XML/utenti.xml';
 $prodottiFile = '../XML/prodotti.xml';
 $scontiFile = '../XML/sconti.xml';
 $storiciFile = '../XML/storico_acquisti.xml';
+$storicoCreditiFile = '../XML/storico_crediti.xml';
+
+// ✅ Include la funzione aggiornaStoricoCrediti
+require_once('../PHP/funzioni_sconti.php');
 
 // --- Caricamento carrello ---
 $docCarrelli = new DOMDocument();
@@ -71,7 +75,7 @@ foreach ($docUtenti->getElementsByTagName('utente') as $utente) {
         $saldoAttuale = $portafoglioNode ? floatval($portafoglioNode->nodeValue) : 0.00;
         $creditiAttuali = $creditiNode ? floatval($creditiNode->nodeValue) : 0.00;
 
-        // Calcolo bonus totale
+        // Calcolo bonus totale (crediti guadagnati)
         foreach ($carrelloUtente->getElementsByTagName('prodotto') as $p) {
             $idProd = (string)$p->getElementsByTagName('id_prodotto')->item(0)->nodeValue;
             foreach ($xmlProdotti->prodotto as $prod) {
@@ -82,7 +86,7 @@ foreach ($docUtenti->getElementsByTagName('utente') as $utente) {
             }
         }
 
-        // Pagamento
+        // --- Pagamento con portafoglio ---
         if ($metodo === "Portafoglio") {
             if ($saldoAttuale < $totaleOrdine) {
                 $_SESSION['errore_msg'] = "❌ Fondi insufficienti nel portafoglio. Ricarica per completare l'acquisto.";
@@ -95,12 +99,21 @@ foreach ($docUtenti->getElementsByTagName('utente') as $utente) {
             else $utente->appendChild($docUtenti->createElement('portafoglio', $nuovoSaldo));
         }
 
-        // Aggiorna crediti
+        // --- Aggiorna crediti utente ---
         $nuoviCrediti = round($creditiAttuali + $bonusTotale, 2);
-        if ($creditiNode) $creditiNode->nodeValue = $nuoviCrediti;
-        else $utente->appendChild($docUtenti->createElement('crediti', $nuoviCrediti));
+        if ($creditiNode) {
+            $creditiNode->nodeValue = $nuoviCrediti;
+        } else {
+            $utente->appendChild($docUtenti->createElement('crediti', $nuoviCrediti));
+        }
 
+
+        // Salva modifiche su utenti.xml
         $docUtenti->save($utentiFile);
+
+        // ✅ Aggiorna anche lo storico crediti (funzione in funzioni_sconti.php)
+        aggiornaStoricoCrediti($id_utente, $nuoviCrediti, $storicoCreditiFile);
+
         break;
     }
 }
@@ -139,30 +152,25 @@ $newStorico->appendChild($docStorico->createElement('data', $oggi));
 $prodottiNode = $docStorico->createElement('prodotti');
 $totaleEffettivo = 0.00;
 
-
 foreach ($carrelloUtente->getElementsByTagName('prodotto') as $p) {
     $idProd    = (string)$p->getElementsByTagName('id_prodotto')->item(0)->nodeValue;
     $quantita  = (int)$p->getElementsByTagName('quantita')->item(0)->nodeValue;
 
-    // Normalizza separatore decimale (es. "19,95" -> "19.95")
     $rawUnit   = (string)$p->getElementsByTagName('prezzo_unitario')->item(0)->nodeValue;
     $rawTot    = (string)$p->getElementsByTagName('prezzo_totale')->item(0)->nodeValue;
 
     $prezzoUnitario = (float) str_replace(',', '.', $rawUnit);
     $prezzoTotale   = (float) str_replace(',', '.', $rawTot);
-
     $totaleEffettivo += $prezzoTotale;
 
-    // Scrivi nello storico con punto come separatore (valore "pulito")
     $newProd = $docStorico->createElement('prodotto');
     $newProd->appendChild($docStorico->createElement('id_prodotto', $idProd));
     $newProd->appendChild($docStorico->createElement('quantita', $quantita));
     $newProd->appendChild($docStorico->createElement('prezzo_unitario', number_format($prezzoUnitario, 2, '.', '')));
-    $newProd->appendChild($docStorico->createElement('prezzo_totale',   number_format($prezzoTotale,   2, '.', '')));
+    $newProd->appendChild($docStorico->createElement('prezzo_totale', number_format($prezzoTotale, 2, '.', '')));
     $prodottiNode->appendChild($newProd);
 }
 
-// --- Totale ordine aggiornato con sconti ---
 $newStorico->appendChild($prodottiNode);
 $newStorico->appendChild($docStorico->createElement('prezzo_totale_ordine', number_format($totaleEffettivo, 2, '.', '')));
 $root->appendChild($newStorico);
@@ -173,9 +181,8 @@ $carrelloUtente->parentNode->removeChild($carrelloUtente);
 $docCarrelli->save($carrelliFile);
 
 // --- Messaggio finale ---
-$_SESSION['successo_msg'] = "Acquisto completato con successo! Totale: €" . number_format($totaleEffettivo, 2, ',', '.') .
-                            ". Bonus ricevuti: +" . number_format($bonusTotale, 2) . " crediti.";
+$_SESSION['successo_msg'] = "✅ Acquisto completato con successo! Totale: €" . number_format($totaleEffettivo, 2, ',', '.') .
+    ". Bonus ricevuti: +" . number_format($bonusTotale, 2) . " crediti.";
 
 header("Location: ../../cart.php");
 exit();
-?>

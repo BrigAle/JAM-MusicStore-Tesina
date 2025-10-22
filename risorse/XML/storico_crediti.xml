@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<storici_crediti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="storico_crediti.xsd">
+  <record>
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <crediti>193</crediti>
+  </record>
+  <record>
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <crediti>213</crediti>
+  </record>
+  <record>
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <crediti>263</crediti>
+  </record>
+  <record>
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <crediti>363</crediti>
+  </record>
+  <record>
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <crediti>393</crediti>
+  </record>
+  <record>
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <crediti>398</crediti>
+  </record>
+  <record>
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <crediti>598</crediti>
+  </record>
+</storici_crediti>

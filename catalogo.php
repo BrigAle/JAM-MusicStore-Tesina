@@ -105,7 +105,16 @@ session_start();
 
   <div class="content">
     <h1>Catalogo Prodotti</h1>
-
+    <?php
+    // 🔹 Messaggi di sessione
+    if (isset($_SESSION['successo_msg'])) {
+      echo "<p style='color:green; font-weight:bold;'>" . $_SESSION['successo_msg'] . "</p>";
+      unset($_SESSION['successo_msg']);
+    } elseif (isset($_SESSION['errore_msg'])) {
+      echo "<p style='color:red; font-weight:bold;'>" . $_SESSION['errore_msg'] . "</p>";
+      unset($_SESSION['errore_msg']);
+    }
+    ?>
     <?php if ($nessunRisultato): ?>
       <p style="color:red; text-align:center; margin-top:30px; font-size:18px;">
         Nessun prodotto trovato per "<strong><?= htmlspecialchars($query) ?></strong>"

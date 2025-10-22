@@ -89,7 +89,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
 
                     $descrizioneCond = "<strong>{$tipo}</strong>";
                     if ($valore !== "") $descrizioneCond .= " → valore: {$valore}";
-                    if ($dataRif !== "") $descrizioneCond .= " | da data: {$dataRif}";
+                    if ($dataRif !== "") $descrizioneCond .= " | entro la data: {$dataRif}";
                     if ($evento !== "") $descrizioneCond .= " | evento: {$evento}";
                     if ($idProdRif !== "") $descrizioneCond .= " | prodotto rif: {$idProdRif}";
                 } else {
@@ -178,13 +178,44 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                 // --- Mostra destinatari ---
                 if (isset($sconto->destinatari->id_utente)) {
                     echo "<p style='margin-top:10px;'><strong>Destinatari:</strong> ";
+
+                    // Crea array con tutti gli ID destinatari
                     $idUtenti = [];
                     foreach ($sconto->destinatari->id_utente as $idUtente) {
                         $idUtenti[] = (string)$idUtente;
                     }
-                    echo implode(', ', $idUtenti);
+
+                    // Connessione al database
+                    require_once('risorse/PHP/connection.php');
+                    $conn = new mysqli($host, $user, $password, $db);
+                    if ($conn->connect_error) {
+                        die("Connessione fallita: " . $conn->connect_error);
+                    }
+
+                    // Prepara la query per ottenere i nomi corrispondenti agli ID
+                    $idList = implode(',', array_map('intval', $idUtenti)); // es: 3,4,5
+                    $query = "SELECT username, id FROM utente WHERE id IN ($idList)";
+                    $result = $conn->query($query);
+
+                    $nomiUtenti = [];
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            $nomiUtenti[$row['id']] = $row['username'];
+                        }
+                    }
+
+                    // Sostituisci gli ID con i nomi utente
+                    $outputUtenti = [];
+                    foreach ($idUtenti as $id) {
+                        $outputUtenti[] = isset($nomiUtenti[$id]) ? $nomiUtenti[$id] : "Utente ID $id";
+                    }
+
+                    echo implode(', ', $outputUtenti);
                     echo "</p>";
+
+                    $conn->close();
                 }
+
 
                 echo "</div>"; // chiude blocco sconto
             }

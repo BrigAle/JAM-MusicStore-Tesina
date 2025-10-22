@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <risposte xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="risposte.xsd">
-  <risposta id="1">
-    <id_recensione>1</id_recensione>
-    <id_utente>5</id_utente>
-    <commento>blabla</commento>
-    <data>2025-10-15</data>
-    <ora>11:37</ora>
-  </risposta>
-  <risposta id="2">
-    <id_recensione>1</id_recensione>
-    <id_utente>2</id_utente>
-    <commento>confermo</commento>
-    <data>2025-10-15</data>
-    <ora>17:21</ora>
-  </risposta>
+
 </risposte>

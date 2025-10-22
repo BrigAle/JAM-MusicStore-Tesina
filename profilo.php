@@ -145,6 +145,12 @@ session_start();
         }
         $connection->close();
         ?>
+        <?php if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])): ?>
+                <p class="msg success" style="margin-top:15px;">
+                    <?= htmlspecialchars($_SESSION['pwd_change_message']); ?>
+                </p>
+                <?php unset($_SESSION['pwd_change_message']); ?>
+            <?php endif; ?>
     </div>
 
 

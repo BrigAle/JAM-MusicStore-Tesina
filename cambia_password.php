@@ -75,13 +75,6 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true') {
                     </div>
                 </div>
             </form>
-
-            <?php if (isset($_SESSION['pwd_change_message']) && !empty($_SESSION['pwd_change_message'])): ?>
-                <p class="msg error" style="margin-top:15px;">
-                    <?= htmlspecialchars($_SESSION['pwd_change_message']); ?>
-                </p>
-                <?php unset($_SESSION['pwd_change_message']); ?>
-            <?php endif; ?>
         </div>
     </div>
 

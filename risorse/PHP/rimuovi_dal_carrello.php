@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== 'true' || $_SESSION['ruolo'] !== 'cliente') {
-    $_SESSION['errore'] = 'Accesso negato.';
+    $_SESSION['errore_msg'] = 'Accesso negato.';
     header("Location: ../../catalogo.php");
     exit();
 }
@@ -11,7 +11,7 @@ $id_utente = $_SESSION['id_utente'] ?? '';
 $id_prodotto = $_POST['id_prodotto'] ?? '';
 
 if (empty($id_utente) || empty($id_prodotto)) {
-    $_SESSION['errore'] = 'Dati non validi.';
+    $_SESSION['errore_msg'] = 'Dati non validi.';
     header("Location: ../../cart.php");
     exit();
 }
@@ -23,7 +23,7 @@ $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
 
 if (!$doc->load($carrelliFile)) {
-    $_SESSION['errore'] = 'Errore nel caricamento del file carrelli.';
+    $_SESSION['errore_msg'] = 'Errore nel caricamento del file carrelli.';
     header("Location: ../../cart.php");
     exit();
 }
@@ -41,14 +41,14 @@ foreach ($doc->getElementsByTagName('carrello') as $c) {
 }
 
 if (!$carrelloUtente) {
-    $_SESSION['errore'] = 'Nessun carrello trovato per questo utente.';
+    $_SESSION['errore_msg'] = 'Nessun carrello trovato per questo utente.';
     header("Location: ../../cart.php");
     exit();
 }
 
 $prodottiNode = $carrelloUtente->getElementsByTagName('prodotti')->item(0);
 if (!$prodottiNode) {
-    $_SESSION['errore'] = 'Carrello vuoto.';
+    $_SESSION['errore_msg'] = 'Carrello vuoto.';
     header("Location: ../../cart.php");
     exit();
 }
@@ -75,9 +75,9 @@ if ($prodottoDaRimuovere) {
     $carrelloUtente->getElementsByTagName('prezzo_totale_carrello')->item(0)->nodeValue = number_format($totaleCarrello, 2, '.', '');
     $doc->save($carrelliFile);
 
-    $_SESSION['successo_rimozione'] = 'Prodotto rimosso dal carrello.';
+    $_SESSION['successo_msg'] = 'Prodotto rimosso dal carrello.';
 } else {
-    $_SESSION['errore'] = 'Prodotto non trovato nel carrello.';
+    $_SESSION['errore_msg'] = 'Prodotto non trovato nel carrello.';
 }
 
 header("Location: ../../cart.php");

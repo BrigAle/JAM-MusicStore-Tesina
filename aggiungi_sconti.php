@@ -63,10 +63,10 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
         <?php
         // Mostra messaggi di successo/errore
         if (isset($_SESSION['successo_msg'])) {
-            echo "<div class='sconto-msg sconto-success'>{$_SESSION['successo_msg']}</div>";
+            echo "<div class='msg success'>{$_SESSION['successo_msg']}</div>";
             unset($_SESSION['successo_msg']);
         } elseif (isset($_SESSION['errore_msg'])) {
-            echo "<div class='sconto-msg sconto-error'>{$_SESSION['errore_msg']}</div>";
+            echo "<div class='msg error'>{$_SESSION['errore_msg']}</div>";
             unset($_SESSION['errore_msg']);
         }
 
@@ -82,6 +82,19 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
         ?>
             <form class="sconto-form" action="" method="post">
                 <div class="sconto-field">
+                    <label for="tipo_condizione">Tipo di condizione:</label>
+                    <select id="tipo_condizione" name="tipo_condizione" class="sconto-input" required onchange="this.form.submit()">
+                        <option value="">-- Seleziona condizione --</option>
+                        <option value="mesi_iscrizione" <?php if ($tipo_condizione == 'mesi_iscrizione') echo 'selected'; ?>>Clienti iscritti da almeno X mesi</option>
+                        <option value="crediti_da_data" <?php if ($tipo_condizione == 'crediti_da_data') echo 'selected'; ?>>Clienti con almeno M crediti da una data</option>
+                        <option value="crediti_minimi" <?php if ($tipo_condizione == 'crediti_minimi') echo 'selected'; ?>>Clienti con almeno N crediti complessivi</option>
+                        <option value="acquisto_specifico" <?php if ($tipo_condizione == 'acquisto_specifico') echo 'selected'; ?>>Clienti che hanno acquistato prodotti specifici</option>
+                        <option value="reputazione_minima" <?php if ($tipo_condizione == 'reputazione_minima') echo 'selected'; ?>>Clienti con reputazione minima</option>
+                        <option value="offerta_speciale" <?php if ($tipo_condizione == 'offerta_speciale') echo 'selected'; ?>>Offerta promozionale senza vincoli</option>
+                    </select>
+                    <noscript><input type="submit" value="Seleziona"></noscript>
+                </div>
+                <div class="sconto-field">
                     <label>Seleziona Prodotti:</label>
                     <div class="sconto-checkbox-group">
                         <?php
@@ -95,21 +108,6 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                         ?>
                     </div>
                 </div>
-
-                <div class="sconto-field">
-                    <label for="tipo_condizione">Tipo di condizione:</label>
-                    <select id="tipo_condizione" name="tipo_condizione" class="sconto-input" required onchange="this.form.submit()">
-                        <option value="">-- Seleziona condizione --</option>
-                        <option value="mesi_iscrizione" <?php if ($tipo_condizione == 'mesi_iscrizione') echo 'selected'; ?>>Clienti iscritti da almeno X mesi</option>
-                        <option value="crediti_da_data" <?php if ($tipo_condizione == 'crediti_da_data') echo 'selected'; ?>>Clienti con almeno M crediti da una data</option>
-                        <option value="crediti_minimi" <?php if ($tipo_condizione == 'crediti_minimi') echo 'selected'; ?>>Clienti con almeno N crediti complessivi</option>
-                        <option value="acquisto_specifico" <?php if ($tipo_condizione == 'acquisto_specifico') echo 'selected'; ?>>Clienti che hanno acquistato prodotti specifici</option>
-                        <option value="reputazione_minima" <?php if ($tipo_condizione == 'reputazione_minima') echo 'selected'; ?>>Clienti con reputazione minima</option>
-                        <option value="offerta_speciale" <?php if ($tipo_condizione == 'offerta_speciale') echo 'selected'; ?>>Tutti gli utenti (offerta promozionale)</option>
-                    </select>
-                    <noscript><input type="submit" value="Seleziona"></noscript>
-                </div>
-
                 <?php
                 // Campi dinamici lato PHP in base alla condizione
                 if ($tipo_condizione) {
@@ -167,21 +165,52 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     </div>
                 </div>
 
+                <?php
+                require_once('risorse/PHP/connection.php');
+                $conn = new mysqli($host, $user, $password, $db);
+                if ($conn->connect_error) {
+                    die("Connessione fallita: " . $conn->connect_error);
+                }
+
+                // Recupera solo gli ID degli utenti con ruolo = 'cliente' dal DB
+                $query = "SELECT id FROM utente WHERE ruolo = 'cliente'";
+                $result = $conn->query($query);
+
+                // Salva gli ID dei clienti in un array
+                $idClienti = [];
+                if ($result && $result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $idClienti[] = $row['id'];
+                    }
+                }
+                ?>
+
                 <div class="sconto-field">
                     <label>Seleziona Utenti Destinatari:</label>
                     <div class="sconto-checkbox-group" style="max-height:200px; overflow-y:auto; border:1px solid #aaa; padding:8px;">
                         <?php
-                        if ($xmlUtenti && count($xmlUtenti->utente) > 0) {
+                        if ($xmlUtenti && count($xmlUtenti->utente) > 0 && !empty($idClienti)) {
+                            $trovato = false;
                             foreach ($xmlUtenti->utente as $u) {
                                 $idU = (string)$u['id'];
-                                $nomeU = (string)$u->nome;
-                                $cognomeU = (string)$u->cognome;
-                                echo "<label class='sconto-checkbox-item'>
-                                    <input type='checkbox' name='utenti[]' value='{$idU}'> {$nomeU} {$cognomeU}
-                                  </label>";
+
+                                // Mostra solo se l'id è tra quelli che hanno ruolo 'cliente'
+                                if (in_array($idU, $idClienti)) {
+                                    $trovato = true;
+                                    $nomeU = (string)$u->nome;
+                                    $cognomeU = (string)$u->cognome;
+                                    echo "  
+                                        <label class='sconto-checkbox-item'>
+                                        <input type='checkbox' name='utenti[]' value='{$idU}'> {$nomeU} {$cognomeU}
+                                        </label>";
+                                }
+                            }
+
+                            if (!$trovato) {
+                                echo "<p>Nessun cliente trovato nel file XML corrispondente agli utenti nel database.</p>";
                             }
                         } else {
-                            echo "<p>Nessun utente disponibile.</p>";
+                            echo "<p>Nessun utente disponibile o nessun cliente trovato.</p>";
                         }
                         ?>
                     </div>

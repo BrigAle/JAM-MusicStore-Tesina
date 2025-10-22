@@ -19,7 +19,11 @@ if (empty($idRichiesta) || !in_array($azione, ['approvata', 'rifiutata'])) {
 
 $xmlCrediti = "../../../risorse/XML/richiesteCrediti.xml";
 $xmlUtenti = "../../../risorse/XML/utenti.xml";
+$xmlStorico = "../../../risorse/XML/storico_crediti.xml";
 
+require_once '../../../risorse/PHP/funzioni_sconti.php';
+
+// --- Carica richieste crediti ---
 $doc = new DOMDocument();
 $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
@@ -43,7 +47,7 @@ foreach ($doc->getElementsByTagName('richiesta') as $richiesta) {
             $stato->nodeValue = 'rifiutata';
         }
 
-        // Se approvata aggiorna crediti utente
+        // --- Se approvata, aggiorna crediti utente ---
         if ($azione === 'approvata') {
             $idUtente = $richiesta->getElementsByTagName('id_utente')->item(0)->nodeValue;
             $importo = (int)$richiesta->getElementsByTagName('importo')->item(0)->nodeValue;
@@ -52,13 +56,19 @@ foreach ($doc->getElementsByTagName('richiesta') as $richiesta) {
             $utDoc->preserveWhiteSpace = false;
             $utDoc->formatOutput = true;
 
-            if ($utDoc->load($utentiFile)) {
+            if ($utDoc->load($xmlUtenti)) {
                 foreach ($utDoc->getElementsByTagName('utente') as $utente) {
                     if ($utente->getAttribute('id') == $idUtente) {
                         $creditiNode = $utente->getElementsByTagName('crediti')->item(0);
                         $creditiAttuali = (int)$creditiNode->nodeValue;
-                        $creditiNode->nodeValue = $creditiAttuali + $importo;
-                        $utDoc->save($utentiFile);
+                        $nuoviCrediti = $creditiAttuali + $importo;
+
+                        // Aggiorna il file utenti
+                        $creditiNode->nodeValue = $nuoviCrediti;
+                        $utDoc->save($xmlUtenti);
+
+                        // ✅ Aggiorna anche lo storico crediti
+                        aggiornaStoricoCrediti($idUtente, $nuoviCrediti, $xmlStorico);
                         break;
                     }
                 }
@@ -69,6 +79,7 @@ foreach ($doc->getElementsByTagName('richiesta') as $richiesta) {
     }
 }
 
+// --- Salvataggio finale ---
 if ($richiestaTrovata) {
     $doc->save($xmlCrediti);
     $_SESSION['successo_msg'] = "Richiesta aggiornata con successo.";
@@ -78,3 +89,4 @@ if ($richiestaTrovata) {
 
 header("Location: ../../../gestione_crediti_admin.php");
 exit();
+?>

@@ -1,33 +1,15 @@
 <?xml version="1.0"?>
 <richiesteCrediti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="richiesteCrediti.xsd">
   <richiesta id="1">
-    <id_utente>5</id_utente>
-    <importo>30</importo>
-    <data>2025-10-15</data>
+    <id_utente>4</id_utente>
+    <importo>100</importo>
+    <data>2025-10-23</data>
     <stato>approvata</stato>
   </richiesta>
   <richiesta id="2">
-    <id_utente>5</id_utente>
-    <importo>9</importo>
-    <data>2025-10-15</data>
-    <stato>rifiutata</stato>
-  </richiesta>
-  <richiesta id="3">
-    <id_utente>5</id_utente>
-    <importo>25</importo>
-    <data>2025-10-15</data>
-    <stato>approvata</stato>
-  </richiesta>
-  <richiesta id="4">
     <id_utente>4</id_utente>
-    <importo>134</importo>
-    <data>2025-10-17</data>
+    <importo>200</importo>
+    <data>2025-10-23</data>
     <stato>approvata</stato>
-  </richiesta>
-  <richiesta id="5">
-    <id_utente>5</id_utente>
-    <importo>10</importo>
-    <data>2025-10-17</data>
-    <stato>rifiutata</stato>
   </richiesta>
 </richiesteCrediti>
