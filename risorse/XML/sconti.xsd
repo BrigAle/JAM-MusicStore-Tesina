@@ -22,6 +22,8 @@
                 <xsd:element ref="destinatari" minOccurs="0" maxOccurs="1" />
             </xsd:sequence>
             <xsd:attribute name="id" type="xsd:integer" use="required" />
+            <!-- NUOVO: indica se lo sconto si applica a tutti gli utenti -->
+            <xsd:attribute name="applicazione_globale" type="xsd:boolean" use="optional" default="false" />
         </xsd:complexType>
     </xsd:element>
 

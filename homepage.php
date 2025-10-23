@@ -131,18 +131,7 @@ session_start();
         echo '<p class="valutazione">Valutazione: ' . number_format((float)$valutazioneMedia, 1, ',', '') .
           ' <img src="risorse/IMG/stella.png" alt="Stella valutazione" /></p>';
 
-        if (isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' && isset($_SESSION['ruolo']) && $_SESSION['ruolo'] === 'cliente') {
-          $form  = '<form action="risorse/PHP/aggiungi_nel_carrello.php" method="post" ';
-          $form .= 'style="margin-top:10px; display:flex; flex-direction:column; align-items:center; gap:6px;">';
-          $form .= '<div><input type="hidden" name="id" value="' . $id_value . '" /></div>';
-          $form .= '<div><label for="' . $domId . '" style="font-weight:500;">Quantità:</label>';
-          $form .= '<input type="text" id="' . $domId . '" name="quantita" value="1" size="3" maxlength="3" ';
-          $form .= 'style="width:60px; text-align:center; border-radius:4px; border:1px solid #aaa; padding:4px;" /></div>';
-          $form .= '<div><button type="submit" style="background-color:#FF8C00; color:white; border:none; ';
-          $form .= 'padding:6px 14px; border-radius:6px; cursor:pointer; font-size:14px;">Aggiungi nel carrello</button></div>';
-          $form .= '</form>';
-          echo $form;
-        }
+      
 
         echo '</div></div>';
         $count++;

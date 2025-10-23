@@ -1,2 +1,15 @@
 <?xml version="1.0"?>
-<carrelli xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="carrelli.xsd"/>
+<carrelli xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="carrelli.xsd">
+  <carrello id="1">
+    <id_utente>4</id_utente>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>3</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>113.77</prezzo_unitario>
+        <prezzo_totale>113.77</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_carrello>113.77</prezzo_totale_carrello>
+  </carrello>
+</carrelli>

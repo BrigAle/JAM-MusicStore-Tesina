@@ -99,4 +99,22 @@
     <data_inserimento>2025-05-05</data_inserimento>
     <immagine>Abbey_Road.jpg</immagine>
   </prodotto>
+  <prodotto id="12">
+    <nome>Roland Td 11-kv batteria elettronica</nome>
+    <categoria>batteria elettronica</categoria>
+    <descrizione>Kit di batteria elettronica facile da usare che offre un'esperienza esecutiva più naturale e realistica ai batteristi di qualsiasi livello.</descrizione>
+    <prezzo>1099</prezzo>
+    <bonus>110</bonus>
+    <data_inserimento>2025-10-23</data_inserimento>
+    <immagine>roland.jpg</immagine>
+  </prodotto>
+  <prodotto id="13">
+    <nome>Fender Standard P Bass LRL WPG BLK</nome>
+    <categoria>Basso elettrico</categoria>
+    <descrizione>Basso elettrico dallo stile classico e dal suono potente. Offre toni profondi, attacco deciso e grande versatilità grazie ai pickup split single-coil Fender. Perfetto per ogni genere musicale.</descrizione>
+    <prezzo>549.9</prezzo>
+    <bonus>54</bonus>
+    <data_inserimento>2025-10-23</data_inserimento>
+    <immagine>fender_bass.jpg</immagine>
+  </prodotto>
 </prodotti>

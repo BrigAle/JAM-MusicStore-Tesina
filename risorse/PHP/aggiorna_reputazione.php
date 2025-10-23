@@ -42,7 +42,7 @@ foreach ($xmlRec->recensione as $rec) {
 }
 
 // calcolo reputazione
-$reputazione = 10 * $numRecensioni + 1.2 * $numLikes - 1.0 * $numDislikes;
+$reputazione = 10 * $numRecensioni + 1.5 * $numLikes - 1.2 * $numDislikes;
 $reputazione = max(0, round($reputazione, 2)); // non scendere sotto 0 e arrotonda a 2 decimali
 
 

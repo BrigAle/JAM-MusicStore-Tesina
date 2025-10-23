@@ -17,10 +17,12 @@ $id_prodotto_rif  = trim($_POST['id_prodotto_rif'] ?? '');
 $percentuale      = trim($_POST['percentuale'] ?? '');
 $data_inizio      = trim($_POST['data_inizio'] ?? '');
 $data_fine        = trim($_POST['data_fine'] ?? '');
-$destinatari      = $_POST['utenti'] ?? []; // array di ID utente selezionati
+$destinatari      = $_POST['utenti'] ?? [];
+$appGlobale       = isset($_POST['applicazione_globale']) ? true : false; // ✅ nuovo flag
 
 // --- Controllo campi obbligatori ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST'
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
     && !empty($prodotti)
     && !empty($percentuale)
     && !empty($data_inizio)
@@ -50,12 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $sconto = $doc->createElement('sconto');
     $sconto->setAttribute('id', $lastId + 1);
 
-    // Aggiunta prodotti
+    // ✅ se offerta speciale → applicazione_globale = true
+    if ($appGlobale || $tipo_condizione === 'offerta_speciale') {
+        $sconto->setAttribute('applicazione_globale', 'true');
+    } else {
+        $sconto->setAttribute('applicazione_globale', 'false');
+    }
+
+    // --- Aggiunta prodotti ---
     foreach ($prodotti as $idProd) {
         $sconto->appendChild($doc->createElement('id_prodotto', (int)$idProd));
     }
 
-    // --- Creazione condizione, se presente ---
+    // --- Creazione condizione ---
     if (!empty($tipo_condizione)) {
         $condizione = $doc->createElement('condizione');
         $condizione->setAttribute('tipo', htmlspecialchars($tipo_condizione));
@@ -80,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
     $sconto->appendChild($doc->createElement('data_inizio', htmlspecialchars($data_inizio)));
     $sconto->appendChild($doc->createElement('data_fine', htmlspecialchars($data_fine)));
 
-    // --- Aggiunta destinatari ---
-    if (!empty($destinatari)) {
+    // --- Aggiunta destinatari SOLO se non offerta speciale ---
+    if (!$appGlobale && $tipo_condizione !== 'offerta_speciale' && !empty($destinatari)) {
         $dest = $doc->createElement('destinatari');
         foreach ($destinatari as $idUtente) {
             $dest->appendChild($doc->createElement('id_utente', (int)$idUtente));
@@ -100,10 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'
 
     header("Location: ../../../aggiungi_sconti.php");
     exit();
-
 } else {
     $_SESSION['errore_msg'] = "Compila tutti i campi obbligatori.";
     header("Location: ../../../aggiungi_sconti.php");
     exit();
 }
-?>

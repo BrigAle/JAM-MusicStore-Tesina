@@ -64,6 +64,12 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] != 'gestore') {
             'prezzo' => '',
             'bonus' => ''
         ];
+        $old['nome'] = $old['nome'] ?? '';
+        $old['categoria'] = $old['categoria'] ?? '';
+        $old['descrizione'] = $old['descrizione'] ?? '';
+        $old['prezzo'] = $old['prezzo'] ?? '';
+        $old['bonus'] = $old['bonus'] ?? '';
+        
         ?>
 
         <div class="profile-card" style="max-width:700px; margin:auto; padding:40px;">

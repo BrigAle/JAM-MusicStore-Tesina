@@ -22,4 +22,17 @@
     <voto_utenti/>
     <data>2025-10-23</data>
   </recensione>
+  <recensione id="3">
+    <id_prodotto>12</id_prodotto>
+    <id_utente>8</id_utente>
+    <commento>E-drum compatta e affidabile con suoni realistici e risposta dinamica eccellente. I pad mesh offrono un feeling naturale, mentre il modulo TD-11 garantisce preset di alta qualità e personalizzazione completa. Ottimo equilibrio tra prestazioni e portabilità.</commento>
+    <valutazione>5</valutazione>
+    <voti_like>2</voti_like>
+    <voti_dislike>0</voti_dislike>
+    <voto_utenti>
+      <voto id_utente="7" tipo="like"/>
+      <voto id_utente="1" tipo="like"/>
+    </voto_utenti>
+    <data>2025-10-23</data>
+  </recensione>
 </recensioni>

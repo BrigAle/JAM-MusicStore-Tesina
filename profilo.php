@@ -136,6 +136,7 @@ session_start();
                         <?php if ($_SESSION['ruolo'] === 'cliente'): ?>
                             <a href="storico_acquisti.php" class="profile-btn">Storico Acquisti</a>
                         <?php endif; ?>
+                        <a href="storico_crediti.php" class="profile-btn">Storico Crediti</a>
                     </div>
                 </div>
             </div>

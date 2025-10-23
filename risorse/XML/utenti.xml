@@ -50,4 +50,44 @@
     <crediti>0</crediti>
     <data_iscrizione>2025-01-02</data_iscrizione>
   </utente>
+  <utente id="6">
+    <nome>Andrea</nome>
+    <cognome>Mattarelli</cognome>
+    <telefono>324234232</telefono>
+    <indirizzo>Via monte terminillo 48, LT 04100</indirizzo>
+    <reputazione>0</reputazione>
+    <portafoglio>5000</portafoglio>
+    <crediti>0</crediti>
+    <data_iscrizione>2025-10-23</data_iscrizione>
+  </utente>
+  <utente id="7">
+    <nome>Vincenzo</nome>
+    <cognome>Ferrara</cognome>
+    <telefono>324232425</telefono>
+    <indirizzo>Via cavata 1, LT 04100</indirizzo>
+    <reputazione>0</reputazione>
+    <portafoglio>4000</portafoglio>
+    <crediti>200</crediti>
+    <data_iscrizione>2025-10-23</data_iscrizione>
+  </utente>
+  <utente id="8">
+    <nome>Daniele</nome>
+    <cognome>Ardovini</cognome>
+    <telefono>393465728</telefono>
+    <indirizzo>Via Sandro Pertini 11, Ceccano FR</indirizzo>
+    <reputazione>13</reputazione>
+    <portafoglio>3000</portafoglio>
+    <crediti>160</crediti>
+    <data_iscrizione>2025-10-23</data_iscrizione>
+  </utente>
+  <utente id="9">
+    <nome>Daniele</nome>
+    <cognome>Brighenti</cognome>
+    <telefono>3234455</telefono>
+    <indirizzo>VIa gaeta 49 LT 04100</indirizzo>
+    <reputazione>0</reputazione>
+    <portafoglio>0</portafoglio>
+    <crediti>0</crediti>
+    <data_iscrizione>2025-10-23</data_iscrizione>
+  </utente>
 </utenti>

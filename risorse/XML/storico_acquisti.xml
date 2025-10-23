@@ -95,4 +95,17 @@
     </prodotti>
     <prezzo_totale_ordine>10.79</prezzo_totale_ordine>
   </storico>
+  <storico id="6">
+    <id_utente>8</id_utente>
+    <data>2025-10-23</data>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>12</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>1022.07</prezzo_unitario>
+        <prezzo_totale>1022.07</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_ordine>1022.07</prezzo_totale_ordine>
+  </storico>
 </storici>

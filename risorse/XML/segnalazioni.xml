@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<segnalazioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="segnalazioni.xsd"/>
+<segnalazioni xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="segnalazioni.xsd">
+  <segnalazione id="1">
+    <id_contenuto tipo="risposta">3</id_contenuto>
+    <id_utente>7</id_utente>
+    <motivo>                    Spam</motivo>
+    <data>2025-10-23T12:39:03</data>
+  </segnalazione>
+</segnalazioni>

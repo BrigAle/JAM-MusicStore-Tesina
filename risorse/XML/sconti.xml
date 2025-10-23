@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sconti xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="sconti.xsd">
-  <sconto id="7">
-    <id_prodotto>2</id_prodotto>
-    <id_prodotto>3</id_prodotto>
-    <id_prodotto>4</id_prodotto>
-    <id_prodotto>5</id_prodotto>
-    <id_prodotto>6</id_prodotto>
-    <id_prodotto>7</id_prodotto>
-    <id_prodotto>8</id_prodotto>
-    <id_prodotto>9</id_prodotto>
-    <id_prodotto>10</id_prodotto>
-    <id_prodotto>11</id_prodotto>
-    <condizione tipo="offerta_speciale">
-      <evento>Black Friday</evento>
-    </condizione>
-    <percentuale>5</percentuale>
-    <data_inizio>2025-10-20</data_inizio>
-    <data_fine>2025-10-26</data_fine>
-    <destinatari>
-      <id_utente>4</id_utente>
-      <id_utente>5</id_utente>
-    </destinatari>
-  </sconto>
   <sconto id="8">
     <id_prodotto>1</id_prodotto>
     <condizione tipo="crediti_da_data">
@@ -34,6 +12,109 @@
     <destinatari>
       <id_utente>4</id_utente>
       <id_utente>5</id_utente>
+    </destinatari>
+  </sconto>
+  <sconto id="9">
+    <id_prodotto>7</id_prodotto>
+    <id_prodotto>12</id_prodotto>
+    <condizione tipo="crediti_minimi">
+      <valore>35</valore>
+    </condizione>
+    <percentuale>7</percentuale>
+    <data_inizio>2025-10-20</data_inizio>
+    <data_fine>2025-11-02</data_fine>
+    <destinatari>
+      <id_utente>4</id_utente>
+      <id_utente>5</id_utente>
+      <id_utente>6</id_utente>
+      <id_utente>7</id_utente>
+      <id_utente>8</id_utente>
+    </destinatari>
+  </sconto>
+  <sconto id="11" applicazione_globale="true">
+    <id_prodotto>1</id_prodotto>
+    <id_prodotto>2</id_prodotto>
+    <id_prodotto>3</id_prodotto>
+    <id_prodotto>5</id_prodotto>
+    <id_prodotto>6</id_prodotto>
+    <id_prodotto>7</id_prodotto>
+    <id_prodotto>8</id_prodotto>
+    <id_prodotto>9</id_prodotto>
+    <id_prodotto>10</id_prodotto>
+    <id_prodotto>11</id_prodotto>
+    <id_prodotto>12</id_prodotto>
+    <id_prodotto>13</id_prodotto>
+    <condizione tipo="offerta_speciale">
+      <evento>Black Friday</evento>
+    </condizione>
+    <percentuale>14</percentuale>
+    <data_inizio>2025-10-20</data_inizio>
+    <data_fine>2025-10-31</data_fine>
+  </sconto>
+  <sconto id="12" applicazione_globale="false">
+    <id_prodotto>1</id_prodotto>
+    <condizione tipo="crediti_minimi">
+      <valore>20</valore>
+    </condizione>
+    <percentuale>15</percentuale>
+    <data_inizio>2025-10-13</data_inizio>
+    <data_fine>2025-10-26</data_fine>
+    <destinatari>
+      <id_utente>4</id_utente>
+      <id_utente>5</id_utente>
+      <id_utente>6</id_utente>
+      <id_utente>7</id_utente>
+      <id_utente>8</id_utente>
+      <id_utente>9</id_utente>
+    </destinatari>
+  </sconto>
+  <sconto id="13" applicazione_globale="false">
+    <id_prodotto>12</id_prodotto>
+    <condizione tipo="acquisto_specifico">
+      <id_prodotto_rif>1</id_prodotto_rif>
+    </condizione>
+    <percentuale>15</percentuale>
+    <data_inizio>2025-10-20</data_inizio>
+    <data_fine>2025-10-26</data_fine>
+    <destinatari>
+      <id_utente>4</id_utente>
+      <id_utente>5</id_utente>
+      <id_utente>6</id_utente>
+      <id_utente>7</id_utente>
+      <id_utente>8</id_utente>
+      <id_utente>9</id_utente>
+    </destinatari>
+  </sconto>
+  <sconto id="14" applicazione_globale="false">
+    <id_prodotto>4</id_prodotto>
+    <id_prodotto>5</id_prodotto>
+    <condizione tipo="reputazione_minima">
+      <valore>10</valore>
+    </condizione>
+    <percentuale>16</percentuale>
+    <data_inizio>2025-10-13</data_inizio>
+    <data_fine>2025-10-26</data_fine>
+    <destinatari>
+      <id_utente>4</id_utente>
+      <id_utente>5</id_utente>
+      <id_utente>6</id_utente>
+      <id_utente>7</id_utente>
+      <id_utente>8</id_utente>
+      <id_utente>9</id_utente>
+    </destinatari>
+  </sconto>
+  <sconto id="15" applicazione_globale="false">
+    <id_prodotto>3</id_prodotto>
+    <id_prodotto>4</id_prodotto>
+    <id_prodotto>5</id_prodotto>
+    <condizione tipo="crediti_minimi">
+      <valore>10</valore>
+    </condizione>
+    <percentuale>18</percentuale>
+    <data_inizio>2025-10-13</data_inizio>
+    <data_fine>2025-10-26</data_fine>
+    <destinatari>
+      <id_utente>4</id_utente>
     </destinatari>
   </sconto>
 </sconti>

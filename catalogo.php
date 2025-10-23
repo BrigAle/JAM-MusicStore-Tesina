@@ -150,30 +150,56 @@ session_start();
 
           $percentualeScontoPromo = 0;
           $descrizioneCondizione = "";
+          $utenteLoggato = null;
 
-          // --- Applica sconti solo a utenti loggati ---
+          // --- Se l’utente è loggato, recupera il nodo XML utente ---
           if (
             isset($_SESSION['logged']) && $_SESSION['logged'] === 'true' &&
             isset($_SESSION['id_utente']) && $_SESSION['ruolo'] === 'cliente'
           ) {
-            $utenteLoggato = null;
             foreach ($xmlUtenti->utente as $u) {
               if ((string)$u['id'] === (string)$_SESSION['id_utente']) {
                 $utenteLoggato = $u;
                 break;
               }
             }
+          }
 
+          // --- Applica sconti ---
+          if ($xmlSconti) {
+            // Se c'è un utente loggato → sconti personalizzati + globali
             if ($utenteLoggato) {
               $result = calcolaScontoUtente($xmlSconti, $utenteLoggato, $idProdotto, $oggi, $xmlStorico);
               $percentualeScontoPromo = $result['sconto'];
               $descrizioneCondizione = $result['condizione'];
             }
+            // ✅ Se NON loggato → applica SOLO sconti globali / offerta_speciale
+            else {
+              foreach ($xmlSconti->sconto as $s) {
+                $appGlobale = ((string)$s['applicazione_globale'] === 'true');
+                $dataInizio = (string)$s->data_inizio;
+                $dataFine   = (string)$s->data_fine;
+
+                if ($oggi >= $dataInizio && $oggi <= $dataFine) {
+                  // verifica che il prodotto sia incluso
+                  foreach ($s->id_prodotto as $idS) {
+                    if ((string)$idS === $idProdotto && $appGlobale) {
+                      $perc = (float)$s->percentuale;
+                      if ($perc > $percentualeScontoPromo) {
+                        $percentualeScontoPromo = $perc;
+                        $evento = (string)$s->condizione->evento;
+                        $descrizioneCondizione = $evento ? "Offerta speciale: $evento" : "Offerta promozionale globale";
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
 
-          // --- Sconto da crediti (max 20%) ---
+          // --- Sconto da crediti (solo se loggato) ---
           $percentualeScontoCrediti = 0;
-          if (isset($utenteLoggato)) {
+          if ($utenteLoggato) {
             $crediti = (float)$utenteLoggato->crediti;
             if ($crediti >= 100) {
               $percentualeScontoCrediti = 1.5 * floor($crediti / 100);
@@ -187,18 +213,19 @@ session_start();
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoPromo / 100);
           if ($percentualeScontoCrediti > 0)
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoCrediti / 100);
+        
 
           // --- Calcolo valutazione media ---
           $valutazioneTotale = 0;
           $countValutazioni = 0;
           foreach ($xmlRecensioni->recensione as $rec) {
-            if ((string)$rec->id_prodotto === $idProdotto) {
-              $valutazioneTotale += (float)$rec->valutazione;
-              $countValutazioni++;
-            }
+          if ((string)$rec->id_prodotto === $idProdotto) {
+          $valutazioneTotale += (float)$rec->valutazione;
+          $countValutazioni++;
+          }
           }
           $valutazioneMedia = $countValutazioni > 0 ? round($valutazioneTotale / $countValutazioni, 1) : 0;
-        ?>
+          ?>
 
           <div class="contenuto_prodotto">
             <div class="immagine_box">

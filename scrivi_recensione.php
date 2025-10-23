@@ -100,7 +100,7 @@ session_start();
 
         <label for="valutazione" style="font-weight:bold;">Valutazione:</label>
         <select name="valutazione" id="valutazione" required
-                style="padding:8px; border-radius:6px; border:1px solid #555; width:120px; background-color:#222; color:#fff;">
+                style="padding:8px; border-radius:6px; border:1px solid #555; width:130px; background-color:#222; color:#fff;">
           <option value="">--</option>
           <option value="1">⭐</option>
           <option value="2">⭐⭐</option>

@@ -35,4 +35,19 @@
     <data>2025-10-23</data>
     <crediti>598</crediti>
   </record>
+  <record>
+    <id_utente>7</id_utente>
+    <data>2025-10-23</data>
+    <crediti>200</crediti>
+  </record>
+  <record>
+    <id_utente>8</id_utente>
+    <data>2025-10-23</data>
+    <crediti>50</crediti>
+  </record>
+  <record>
+    <id_utente>8</id_utente>
+    <data>2025-10-23</data>
+    <crediti>160</crediti>
+  </record>
 </storici_crediti>

@@ -94,6 +94,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     </select>
                     <noscript><input type="submit" value="Seleziona"></noscript>
                 </div>
+
                 <div class="sconto-field">
                     <label>Seleziona Prodotti:</label>
                     <div class="sconto-checkbox-group">
@@ -102,12 +103,13 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                             $id = (string)$p['id'];
                             $nome = (string)$p->nome;
                             echo "<label class='sconto-checkbox-item'>
-                                <input type='checkbox' name='prodotti[]' value='{$id}'> {$nome}
-                              </label>";
+                            <input type='checkbox' name='prodotti[]' value='{$id}'> {$nome}
+                          </label>";
                         }
                         ?>
                     </div>
                 </div>
+
                 <?php
                 // Campi dinamici lato PHP in base alla condizione
                 if ($tipo_condizione) {
@@ -115,34 +117,35 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     switch ($tipo_condizione) {
                         case 'mesi_iscrizione':
                             echo "<label>Numero di mesi:</label>
-                              <input type='number' name='valore' class='sconto-input' min='1' required>";
+                          <input type='number' name='valore' class='sconto-input' min='1' required>";
                             break;
 
                         case 'crediti_minimi':
                             echo "<label>Crediti minimi complessivi:</label>
-                              <input type='number' name='valore' class='sconto-input' min='1' required>";
+                          <input type='number' name='valore' class='sconto-input' min='1' required>";
                             break;
 
                         case 'crediti_da_data':
                             echo "<label>Crediti minimi:</label>
-                              <input type='number' name='valore' class='sconto-input' min='1' required>
-                              <label>Da data:</label>
-                              <input type='date' name='data_riferimento' class='sconto-input' required>";
+                          <input type='number' name='valore' class='sconto-input' min='1' required>
+                          <label>Da data:</label>
+                          <input type='date' name='data_riferimento' class='sconto-input' required>";
                             break;
 
                         case 'reputazione_minima':
                             echo "<label>Reputazione minima:</label>
-                              <input type='number' name='valore' class='sconto-input' min='0' max='1000' step='0.1' required>";
+                          <input type='number' name='valore' class='sconto-input' min='0' max='1000' step='0.1' required>";
                             break;
 
                         case 'offerta_speciale':
                             echo "<label>Nome evento (es. Black Friday):</label>
-                              <input type='text' name='evento' class='sconto-input' required>";
+                          <input type='text' name='evento' class='sconto-input' required>
+                          <input type='hidden' name='applicazione_globale' value='1'>"; // ✅ nuovo flag per salvataggio
                             break;
 
                         case 'acquisto_specifico':
                             echo "<label>ID prodotto già acquistato (rif):</label>
-                              <input type='number' name='id_prodotto_rif' class='sconto-input' min='1' required>";
+                          <input type='number' name='id_prodotto_rif' class='sconto-input' min='1' required>";
                             break;
                     }
                     echo "</fieldset>";
@@ -172,11 +175,10 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     die("Connessione fallita: " . $conn->connect_error);
                 }
 
-                // Recupera solo gli ID degli utenti con ruolo = 'cliente' dal DB
+                // Recupera solo gli ID degli utenti con ruolo = 'cliente'
                 $query = "SELECT id FROM utente WHERE ruolo = 'cliente'";
                 $result = $conn->query($query);
 
-                // Salva gli ID dei clienti in un array
                 $idClienti = [];
                 if ($result && $result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
@@ -185,36 +187,45 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                 }
                 ?>
 
-                <div class="sconto-field">
-                    <label>Seleziona Utenti Destinatari:</label>
-                    <div class="sconto-checkbox-group" style="max-height:200px; overflow-y:auto; border:1px solid #aaa; padding:8px;">
-                        <?php
-                        if ($xmlUtenti && count($xmlUtenti->utente) > 0 && !empty($idClienti)) {
-                            $trovato = false;
-                            foreach ($xmlUtenti->utente as $u) {
-                                $idU = (string)$u['id'];
-
-                                // Mostra solo se l'id è tra quelli che hanno ruolo 'cliente'
-                                if (in_array($idU, $idClienti)) {
-                                    $trovato = true;
-                                    $nomeU = (string)$u->nome;
-                                    $cognomeU = (string)$u->cognome;
-                                    echo "  
-                                        <label class='sconto-checkbox-item'>
+                <?php
+                // ✅ Mostra la sezione destinatari SOLO se NON è offerta_speciale
+                if ($tipo_condizione != 'offerta_speciale') {
+                ?>
+                    <div class="sconto-field">
+                        <label>Seleziona Utenti Destinatari:</label>
+                        <div class="sconto-checkbox-group" style="max-height:200px; overflow-y:auto; border:1px solid #aaa; padding:8px;">
+                            <?php
+                            if ($xmlUtenti && count($xmlUtenti->utente) > 0 && !empty($idClienti)) {
+                                $trovato = false;
+                                foreach ($xmlUtenti->utente as $u) {
+                                    $idU = (string)$u['id'];
+                                    if (in_array($idU, $idClienti)) {
+                                        $trovato = true;
+                                        $nomeU = (string)$u->nome;
+                                        $cognomeU = (string)$u->cognome;
+                                        echo "<label class='sconto-checkbox-item'>
                                         <input type='checkbox' name='utenti[]' value='{$idU}'> {$nomeU} {$cognomeU}
                                         </label>";
+                                    }
                                 }
-                            }
 
-                            if (!$trovato) {
-                                echo "<p>Nessun cliente trovato nel file XML corrispondente agli utenti nel database.</p>";
+                                if (!$trovato) {
+                                    echo "<p>Nessun cliente trovato nel file XML corrispondente agli utenti nel database.</p>";
+                                }
+                            } else {
+                                echo "<p>Nessun utente disponibile o nessun cliente trovato.</p>";
                             }
-                        } else {
-                            echo "<p>Nessun utente disponibile o nessun cliente trovato.</p>";
-                        }
-                        ?>
+                            ?>
+                        </div>
                     </div>
-                </div>
+                <?php
+                } else {
+                    // Messaggio informativo in caso di offerta speciale
+                    echo "<div class='sconto-field info'>
+                        <p><strong>Nota:</strong> L'offerta speciale verrà applicata automaticamente a tutti gli utenti registrati (presenti e futuri).</p>
+                      </div>";
+                }
+                ?>
 
                 <?php
                 // Mostra pulsante di submit solo dopo selezione condizione
@@ -231,6 +242,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
         }
         ?>
     </div>
+
 
 
 

@@ -1,18 +1,4 @@
-
-
 <?php
-/**
- * Verifica se un utente rispetta una condizione di sconto specifica.
- *
- * @param SimpleXMLElement $sconto  Nodo <sconto> del file sconti.xml
- * @param SimpleXMLElement $utente  Nodo <utente> del file utenti.xml
- * @param string $idProdotto        ID del prodotto su cui applicare la verifica
- * @param string $oggi              Data odierna (formato YYYY-MM-DD)
- * @param SimpleXMLElement|null $xmlStorico  Storico acquisti, può anche non esserci
- * @return bool True se la condizione è soddisfatta, False altrimenti
- */
-
-// funzione per verificare se uno sconto si applica a un utente e prodotto specifici
 function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = null)
 {
     // Date di validità
@@ -29,6 +15,13 @@ function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = 
         }
     }
     if (!$incluso) return false;
+
+    // ✅ Se applicazione_globale="true" → vale per tutti gli utenti
+    $appGlobale = ((string)$sconto['applicazione_globale'] === 'true');
+    if ($appGlobale) {
+        // È sufficiente che sia nel periodo di validità e che il prodotto corrisponda
+        return true;
+    }
 
     // L’utente deve essere tra i destinatari
     $idUtente = (string)$utente['id'];
@@ -47,78 +40,62 @@ function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = 
     $condizione = $sconto->condizione;
     if (!$condizione) return false;
 
-    $tipo       = (string)$condizione['tipo'];
-    $valore     = (float)$condizione->valore;
-    $dataRif    = (string)$condizione->data_riferimento;
-    $idProdRif  = (string)$condizione->id_prodotto_rif;
+    $tipo        = (string)$condizione['tipo'];
+    $valore      = (float)$condizione->valore;
+    $dataRif     = (string)$condizione->data_riferimento;
+    $idProdRif   = (string)$condizione->id_prodotto_rif;
     $crediti     = (float)$utente->crediti;
     $reputazione = (float)$utente->reputazione;
     $dataIscr    = (string)$utente->data_iscrizione;
 
     switch ($tipo) {
-        // --- Condizione: mesi di iscrizione ---
         case 'mesi_iscrizione':
             $mesi = (strtotime($oggi) - strtotime($dataIscr)) / (60 * 60 * 24 * 30);
             return $mesi >= $valore;
 
-            // --- Condizione: crediti minimi ---
         case 'crediti_minimi':
             return $crediti >= $valore;
 
-            // --- Condizione: crediti accumulati dopo una certa data ---
         case 'crediti_da_data':
-            $dataRif = (string)$condizione->data_riferimento;
-            $valore  = (float)$condizione->valore;
-            $idUtente = (string)$utente['id'];
-
             $xmlCrediti = simplexml_load_file("risorse/XML/storico_crediti.xml");
+            if (!$xmlCrediti) return false;
+
+            $idUtente = (string)$utente['id'];
             $creditiIniziali = null;
             $creditiFinali = null;
             $ultimaDataPrima = null;
             $ultimaDataDopo = null;
 
-            if ($xmlCrediti) {
-                foreach ($xmlCrediti->record as $r) {
-                    $id = (string)$r->id_utente;
-                    $data = (string)$r->data;
-                    $cred = (float)$r->crediti;
+            foreach ($xmlCrediti->record as $r) {
+                $id = (string)$r->id_utente;
+                $data = (string)$r->data;
+                $cred = (float)$r->crediti;
 
-                    if ($id === $idUtente) {
-                        // --- Trova il valore più recente PRIMA della data di riferimento ---
-                        if ($data < $dataRif) {
-                            if ($ultimaDataPrima === null || $data > $ultimaDataPrima) {
-                                $ultimaDataPrima = $data;
-                                $creditiIniziali = $cred;
-                            }
+                if ($id === $idUtente) {
+                    if ($data < $dataRif) {
+                        if ($ultimaDataPrima === null || $data > $ultimaDataPrima) {
+                            $ultimaDataPrima = $data;
+                            $creditiIniziali = $cred;
                         }
-
-                        // --- Trova il valore più recente DOPO la data di riferimento ---
-                        if ($data >= $dataRif) {
-                            if ($ultimaDataDopo === null || $data > $ultimaDataDopo) {
-                                $ultimaDataDopo = $data;
-                                $creditiFinali = $cred;
-                            }
+                    }
+                    if ($data >= $dataRif) {
+                        if ($ultimaDataDopo === null || $data > $ultimaDataDopo) {
+                            $ultimaDataDopo = $data;
+                            $creditiFinali = $cred;
                         }
                     }
                 }
             }
 
-            // Nessun record dopo la data → condizione non soddisfatta
             if ($creditiFinali === null) return false;
-
-            // Nessun valore prima → utente nuovo, quindi partenza da 0
             if ($creditiIniziali === null) $creditiIniziali = 0;
 
-            // Calcolo crediti guadagnati nel periodo
             $creditiAccumulati = $creditiFinali - $creditiIniziali;
-
             return ($creditiAccumulati >= $valore);
 
-            // --- Condizione: reputazione minima ---
         case 'reputazione_minima':
             return $reputazione >= $valore;
 
-            // --- Condizione: acquisto specifico ---
         case 'acquisto_specifico':
             if ($xmlStorico) {
                 foreach ($xmlStorico->storico as $storico) {
@@ -133,27 +110,16 @@ function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = 
             }
             return false;
 
-            // --- Condizione: offerta speciale (sempre valida se attiva nel periodo) ---
+        // --- Condizione: offerta speciale ---
         case 'offerta_speciale':
-            return true;
+            return true; // già validata dal periodo
 
-            // --- Default: condizione non riconosciuta ---
         default:
             return false;
     }
 }
-/**
- * Calcola lo sconto totale e restituisce anche la descrizione delle condizioni soddisfatte.
- *
- * @param SimpleXMLElement $xmlSconti
- * @param SimpleXMLElement $utente
- * @param string $idProdotto
- * @param string $oggi
- * @param SimpleXMLElement|null $xmlStorico
- * @return array ['sconto' => float, 'condizioni' => array]
- */
 
-// funzione per calcolare lo sconto massimo applicabile a un utente per un prodotto specifico
+
 function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStorico = null)
 {
     $scontoMassimo = 0;
@@ -162,16 +128,21 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
     if (!$xmlSconti) return ['sconto' => 0, 'condizione' => ""];
 
     foreach ($xmlSconti->sconto as $sconto) {
-        if (verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico)) {
+        // ✅ se lo sconto è globale, non serve verificare destinatari
+        $appGlobale = ((string)$sconto['applicazione_globale'] === 'true');
+
+        if ($appGlobale || verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico)) {
             $percentuale = (float)$sconto->percentuale;
 
-            // se questo sconto è più grande, aggiorniamo sia la percentuale che la descrizione
             if ($percentuale > $scontoMassimo) {
                 $scontoMassimo = $percentuale;
 
-                // ricava la descrizione leggibile della condizione corrispondente
                 $cond = $sconto->condizione;
-                if ($cond) {
+                if ($appGlobale) {
+                    // Offerta globale: descrizione generica
+                    $evento = (string)$cond->evento;
+                    $condizioneScelta = $evento ? "Offerta speciale: {$evento}" : "Offerta promozionale globale";
+                } elseif ($cond) {
                     $tipo = (string)$cond['tipo'];
                     $valore = (string)$cond->valore;
                     $dataRif = (string)$cond->data_riferimento;
@@ -205,7 +176,6 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
 
     return ['sconto' => $scontoMassimo, 'condizione' => $condizioneScelta];
 }
-
 
 
 function aggiornaStoricoCrediti($idUtente, $nuoviCrediti, $fileXML)
