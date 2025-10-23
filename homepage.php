@@ -131,8 +131,6 @@ session_start();
         echo '<p class="valutazione">Valutazione: ' . number_format((float)$valutazioneMedia, 1, ',', '') .
           ' <img src="risorse/IMG/stella.png" alt="Stella valutazione" /></p>';
 
-      
-
         echo '</div></div>';
         $count++;
       endforeach;
