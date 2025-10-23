@@ -1,164 +1,124 @@
 <?php
 require_once('risorse/PHP/connection.php');
 
+/* Connessione al server */
 $connessione = new mysqli($host, $user, $password);
 if ($connessione->connect_error) {
     exit("Connessione al server fallita: " . $connessione->connect_error);
 }
-// creo database
+
+/* Creo database se non esiste */
 $sql_db = "CREATE DATABASE IF NOT EXISTS $db";
 if ($connessione->query($sql_db) === FALSE) {
-    echo "Errore nella creazione del database " . $connessione->error;
+    exit("Errore nella creazione del database: " . $connessione->error);
 }
-// connessione al database
+
+/* Connessione al database */
 $connessione = new mysqli($host, $user, $password, $db);
 if ($connessione->connect_error) {
     exit("Connessione al database fallita: " . $connessione->connect_error);
 }
 
-// creo tabella utente
+/* Creo tabella utente (come la tua) */
 $sql_table_utente = "CREATE TABLE IF NOT EXISTS utente(
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(30) NOT NULL,
-    email VARCHAR(50) NOT NULL,
+    username VARCHAR(30) NOT NULL UNIQUE,
+    email VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     stato BOOLEAN DEFAULT TRUE NOT NULL,
     ruolo ENUM('amministratore','cliente','gestore') DEFAULT 'cliente' NOT NULL
 );";
-
 if ($connessione->query($sql_table_utente) === FALSE) {
-    echo "Errore nella creazione della tabella utente: " . $connessione->error;
+    exit("Errore nella creazione della tabella utente: " . $connessione->error);
 }
-// controllo se gia' esiste un utente registrato con il ruolo di admin,
-// se non esiste inserisco nel database l'utente admin con hashing della password
-$check_admin = "SELECT * FROM utente WHERE ruolo = 'amministratore';";
-$result_admin = $connessione->query($check_admin);
-if ($result_admin->num_rows === 0) {
-    $pwd_admin = password_hash('admin', PASSWORD_DEFAULT);
-    $sql_admin = "  INSERT INTO utente 
-                            (username, email, password, ruolo) 
-                    VALUES  ('admin','admin@gmail.com','$pwd_admin','amministratore');";
-    if ($connessione->query($sql_admin) === FALSE) {
-        echo "Errore nell'inserimento dell'utente admin: " . $connessione->error;
+
+/* Funzione: inserisce se non esiste e restituisce SEMPRE l'id */
+function getOrCreateUserId(mysqli $conn, string $username, string $email, string $ruolo): int {
+    // c'è già?
+    $q = $conn->prepare("SELECT id FROM utente WHERE username = ? LIMIT 1");
+    $q->bind_param("s", $username);
+    $q->execute();
+    $res = $q->get_result();
+    if ($row = $res->fetch_assoc()) {
+        $q->close();
+        return (int)$row['id'];
     }
-}
+    $q->close();
 
-// voglio prendere l'id dell'admin appena creato
-$idAdmin = $connessione->insert_id;
-
-// inserisco utente brigale con hashing della password
-$check_brigale = "SELECT * FROM utente WHERE username = 'brigale';";
-$result_utente = $connessione->query($check_brigale);
-if ($result_utente->num_rows === 0) {
-    $pwd_brigale = password_hash('ale', PASSWORD_DEFAULT);
-    $sql_brigale = "INSERT INTO utente (username, email, password, ruolo) 
-                    VALUES ('brigale','brigale@gmail.com','$pwd_brigale','gestore');";
-    if ($connessione->query($sql_brigale) === FALSE) {
-        echo "Errore nell'inserimento dell'utente brigale: " . $connessione->error;
+    // crea (password = username, hash)
+    $pwd_hash = password_hash($username, PASSWORD_DEFAULT);
+    $ins = $conn->prepare("INSERT INTO utente (username, email, password, ruolo) VALUES (?, ?, ?, ?)");
+    $ins->bind_param("ssss", $username, $email, $pwd_hash, $ruolo);
+    if (!$ins->execute()) {
+        $err = $ins->error;
+        $ins->close();
+        exit("Errore nell'inserimento dell'utente $username: " . $err);
     }
+    $id = (int)$conn->insert_id;
+    $ins->close();
+    return $id;
 }
-//prendo l'id generato
-$idBrigale = $connessione->insert_id;
 
-$check_giovyears = "SELECT * FROM utente WHERE username = 'giovyears';";
-$result_utente = $connessione->query($check_giovyears);
-if ($result_utente->num_rows === 0) {
-    $pwd_giovyears = password_hash('giovyears', PASSWORD_DEFAULT);
-    $sql_giovyears = "INSERT INTO utente (username, email, password, ruolo) 
-    VALUES ('giovyears','giovyears@gmail.com','$pwd_giovyears','gestore');";
-    if ($connessione->query($sql_giovyears) === FALSE) {
-        echo "Errore nell'inserimento dell'utente giovyears: " . $connessione->error;
-    }
-}
-//prendo l'id generato
-$idGiovanni = $connessione->insert_id;
+/* --- Inserimenti (password = username) --- */
+$idAdmin   = getOrCreateUserId($connessione, 'admin',   'admin@gmail.com',         'amministratore');
+$idBrigale = getOrCreateUserId($connessione, 'brigale', 'brigale@gmail.com',       'gestore');
+$idGiov    = getOrCreateUserId($connessione, 'giovyears','giovyears@gmail.com',    'gestore');
+$idOrione  = getOrCreateUserId($connessione, 'orione',  'orione@gmail.com',        'cliente');
+$idElectro = getOrCreateUserId($connessione, 'electro', 'electro@gmail.com',       'cliente');
+$idDrew93  = getOrCreateUserId($connessione, 'drew93',  'drew93@gmail.com',        'cliente');
+$idViktor  = getOrCreateUserId($connessione, 'viktor96','viktor96@gmail.com',      'cliente');
+$idDagn    = getOrCreateUserId($connessione, 'dagnelle','dagnellejojo@gmail.com',  'cliente');
+$idBrigDan = getOrCreateUserId($connessione, 'brigdan', 'brigdan@hotmail.it',      'cliente');
 
-$check_orione = "SELECT * FROM utente WHERE username = 'orione';";
-$result_utente = $connessione->query($check_orione);
-if ($result_utente->num_rows === 0) {
-    $pwd_orione = password_hash('orione', PASSWORD_DEFAULT);
-    $sql_orione = "INSERT INTO utente (username, email, password, ruolo) VALUES ('orione','orione@gmail.com','$pwd_orione','cliente');";
-    if ($connessione->query($sql_orione) === FALSE) {
-        echo "Errore nell'inserimento dell'utente orione: " . $connessione->error;
-    }
-}
-//prendo l'id generato
-$idOrione = $connessione->insert_id;
-
-// voglio inserire nel file xml i dati degli utenti appena creati
+/* --- Costruzione utenti.xml con i dati esatti --- */
 $xmlFile = "risorse/XML/utenti.xml";
 
-// Creo il documento XML da zero
 $doc = new DOMDocument('1.0', 'UTF-8');
 $doc->preserveWhiteSpace = false;
 $doc->formatOutput = true;
 
-// Creo il root <utenti> con attributo XSD
-$utenti = $doc->createElement('utenti');
-$utenti->setAttributeNS(
+$root = $doc->createElement('utenti');
+$root->setAttributeNS(
     "http://www.w3.org/2001/XMLSchema-instance",
     "xsi:noNamespaceSchemaLocation",
     "utenti.xsd"
 );
-$doc->appendChild($utenti);
+$doc->appendChild($root);
 
-// 1) Admin
-$utenteAdmin = $doc->createElement('utente');
-$utenteAdmin->appendChild($doc->createElement('nome', 'Admin'));
-$utenteAdmin->appendChild($doc->createElement('cognome', 'Admin'));
-$utenteAdmin->appendChild($doc->createElement('telefono', '0000000000'));
-$utenteAdmin->appendChild($doc->createElement('indirizzo', 'Via Roma, 1'));
-$utenteAdmin->appendChild($doc->createElement('reputazione', 0));
-$utenteAdmin->appendChild($doc->createElement('portafoglio', 0));
-$utenteAdmin->appendChild($doc->createElement('crediti', 0));
-$utenteAdmin->appendChild($doc->createElement('data_iscrizione', date('Y-m-d')));
-$utenteAdmin->setAttribute('id', $idAdmin);
-$utenti->appendChild($utenteAdmin);
+/* helper per creare <utente> */
+function appendUtente(
+    DOMDocument $doc, DOMElement $root, int $id,
+    string $nome, string $cognome, string $tel, string $indirizzo,
+    $reputazione, $portafoglio, $crediti, string $data_iscrizione
+) {
+    $u = $doc->createElement('utente');
+    $u->setAttribute('id', (string)$id);
+    $u->appendChild($doc->createElement('nome', $nome));
+    $u->appendChild($doc->createElement('cognome', $cognome));
+    $u->appendChild($doc->createElement('telefono', $tel));
+    $u->appendChild($doc->createElement('indirizzo', $indirizzo));
+    $u->appendChild($doc->createElement('reputazione', (string)$reputazione));
+    $u->appendChild($doc->createElement('portafoglio', (string)$portafoglio));
+    $u->appendChild($doc->createElement('crediti', (string)$crediti));
+    $u->appendChild($doc->createElement('data_iscrizione', $data_iscrizione));
+    $root->appendChild($u);
+}
 
-// 2) Alessandro Brighenti
-$utenteBrigale = $doc->createElement('utente');
-$utenteBrigale->appendChild($doc->createElement('nome', 'Alessandro'));
-$utenteBrigale->appendChild($doc->createElement('cognome', 'Brighenti'));
-$utenteBrigale->appendChild($doc->createElement('telefono', '1234567890'));
-$utenteBrigale->appendChild($doc->createElement('indirizzo', 'Via Milano, 10'));
-$utenteBrigale->appendChild($doc->createElement('reputazione', 0));
-$utenteBrigale->appendChild($doc->createElement('portafoglio', 0));
-$utenteBrigale->appendChild($doc->createElement('crediti', 0));
-$utenteBrigale->appendChild($doc->createElement('data_iscrizione', date('Y-m-d')));
-$utenteBrigale->setAttribute('id', $idBrigale);
-$utenti->appendChild($utenteBrigale);
+/* mappatura dati (come da tua tabella/XML) */
+appendUtente($doc, $root, $idAdmin,   'Admin',    'Admin',     '0000000000', 'Via Roma, 1',                                 0,     0,    0,   '2025-01-02');
+appendUtente($doc, $root, $idBrigale, 'Alessandro','Brighenti','1234567890', 'Via Milano, 10',                               0,     0,    0,   '2025-01-02');
+appendUtente($doc, $root, $idGiov,    'Giovanni', 'Tagliaferri','0987654321','Via Napoli, 5',                                0,     0,    0,   '2025-01-02');
+appendUtente($doc, $root, $idOrione,  'Mattia',   'Aquilina',  '1122334455', 'Via Roma, 2',                                  21.5,  2624.89, 598,'2025-01-02');
+appendUtente($doc, $root, $idElectro, 'Denis',    'Boitor',    '343434343',  'Via Firenze 25, LT',                           0,     0,    0,   '2025-01-02');
+appendUtente($doc, $root, $idDrew93,  'Andrea',   'Mattarelli','324234232',  'Via monte terminillo 48, LT 04100',            0,     5000, 0,   '2025-10-23');
+appendUtente($doc, $root, $idViktor,  'Vincenzo', 'Ferrara',   '324232425',  'Via cavata 1, LT 04100',                       0,     4000, 200, '2025-10-23');
+appendUtente($doc, $root, $idDagn,    'Daniele',  'Ardovini',  '393465728',  'Via Sandro Pertini 11, Ceccano FR',            13,    3000, 160, '2025-10-23');
+appendUtente($doc, $root, $idBrigDan, 'Daniele',  'Brighenti', '3234455',    'VIa gaeta 49 LT 04100',                        0,     0,    0,   '2025-10-23');
 
-// 3) Giovanni Tagliaferri
-$utenteGiovanni = $doc->createElement('utente');
-$utenteGiovanni->appendChild($doc->createElement('nome', 'Giovanni'));
-$utenteGiovanni->appendChild($doc->createElement('cognome', 'Tagliaferri'));
-$utenteGiovanni->appendChild($doc->createElement('telefono', '0987654321'));
-$utenteGiovanni->appendChild($doc->createElement('indirizzo', 'Via Napoli, 5'));
-$utenteGiovanni->appendChild($doc->createElement('reputazione', 0));
-$utenteGiovanni->appendChild($doc->createElement('portafoglio', 0));
-$utenteGiovanni->appendChild($doc->createElement('crediti', 0));
-$utenteGiovanni->appendChild($doc->createElement('data_iscrizione', date('Y-m-d')));
-$utenteGiovanni->setAttribute('id', $idGiovanni);
-$utenti->appendChild($utenteGiovanni);
-
-// 4) Mattia Aquilina
-$utenteOrione = $doc->createElement('utente');
-$utenteOrione->appendChild($doc->createElement('nome', 'Mattia'));
-$utenteOrione->appendChild($doc->createElement('cognome', 'Aquilina'));
-$utenteOrione->appendChild($doc->createElement('telefono', '1122334455'));
-$utenteOrione->appendChild($doc->createElement('indirizzo', 'Via Roma, 2'));
-$utenteOrione->appendChild($doc->createElement('reputazione', 0));
-$utenteOrione->appendChild($doc->createElement('portafoglio', 0));
-$utenteOrione->appendChild($doc->createElement('crediti', 0));
-$utenteOrione->appendChild($doc->createElement('data_iscrizione', date('Y-m-d')));
-$utenteOrione->setAttribute('id', $idOrione);
-$utenti->appendChild($utenteOrione);
-
-// Salvo nel file XML
+/* Salvataggio XML */
 $doc->save($xmlFile);
 
-
-// chiudo la connessione e reindirizzo alla homepage
+/* Chiudo e reindirizzo */
 $connessione->close();
 header("Location: homepage.php");
 exit(1);
