@@ -108,4 +108,29 @@
     </prodotti>
     <prezzo_totale_ordine>1022.07</prezzo_totale_ordine>
   </storico>
+  <storico id="7">
+    <id_utente>4</id_utente>
+    <data>2025-10-23</data>
+    <prodotti>
+      <prodotto>
+        <id_prodotto>3</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>113.77</prezzo_unitario>
+        <prezzo_totale>113.77</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>13</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>437.45</prezzo_unitario>
+        <prezzo_totale>437.45</prezzo_totale>
+      </prodotto>
+      <prodotto>
+        <id_prodotto>5</id_prodotto>
+        <quantita>1</quantita>
+        <prezzo_unitario>75.84</prezzo_unitario>
+        <prezzo_totale>75.84</prezzo_totale>
+      </prodotto>
+    </prodotti>
+    <prezzo_totale_ordine>627.06</prezzo_totale_ordine>
+  </storico>
 </storici>

@@ -57,7 +57,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
     <!-- div presentazione sito -->
 
     < class="content user-profile">
-    <div class="profile-card">
+    <div class="profile-card" style="margin-top: 140px;">
         <h2 class="profile-title">Modifica Prodotto</h2>
 
         <?php

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <!-- ELEMENTO RADICE -->
+
     <xsd:element name="storici_crediti">
         <xsd:complexType>
             <xsd:sequence>
@@ -10,7 +10,7 @@
         </xsd:complexType>
     </xsd:element>
 
-    <!-- ELEMENTO RECORD -->
+
     <xsd:element name="record">
         <xsd:complexType>
             <xsd:sequence>
@@ -21,7 +21,6 @@
         </xsd:complexType>
     </xsd:element>
 
-    <!-- ELEMENTI BASE -->
     <xsd:element name="id_utente" type="xsd:integer"/>
     <xsd:element name="data" type="xsd:date"/>
     <xsd:element name="crediti">

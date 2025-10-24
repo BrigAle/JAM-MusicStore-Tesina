@@ -3,7 +3,7 @@
   <risposta id="1">
     <id_recensione>1</id_recensione>
     <id_utente>1</id_utente>
-    <commento>aaaa</commento>
+    <commento>Grazie per aver scritto un recensione nella nostra piattaforma.</commento>
     <data>2025-10-23</data>
     <ora>01:31</ora>
   </risposta>
@@ -27,5 +27,12 @@
     <commento>Grazie per aver scritto un recensione nella nostra piattaforma.</commento>
     <data>2025-10-23</data>
     <ora>12:42</ora>
+  </risposta>
+  <risposta id="5">
+    <id_recensione>3</id_recensione>
+    <id_utente>2</id_utente>
+    <commento>Grazie per avere recensito il prodotto</commento>
+    <data>2025-10-24</data>
+    <ora>15:10</ora>
   </risposta>
 </risposte>

@@ -56,7 +56,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
         </div>
     </div>
 
-    
+
     <div class="content">
         <?php
         require_once('risorse/PHP/connection.php');
@@ -89,6 +89,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     <th>Portafoglio</th>
                     <th>Crediti</th>
                     <th>Data Iscrizione</th>
+                    <th>Storico</th>
                     
                 </tr>";
 
@@ -118,8 +119,8 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     $nome = $cognome = $telefono = $indirizzo = $reputazione = $portafoglio = $crediti = $data_iscrizione = '-';
                 }
                 $stato = $row['stato'] ?? '1'; // Default a '1' se non definito
-                
-            
+
+
 
                 echo "<tr>
                     <td>{$row['id']}</td>
@@ -134,7 +135,13 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     <td>$stato</td>
                     <td>$portafoglio</td>
                     <td>$crediti</td>
-                    <td>$data_iscrizione</td>                    
+                    <td>$data_iscrizione</td>   
+                    <td style='text-align:center'>
+                        <form action='storico_utente.php' method='get' style='margin:0; display:inline;'>
+                            <input type='hidden' name='id_utente' value='{$row['id']}' />
+                            <button type='submit' class='btn-storico'>Visualizza</button>
+                        </form>
+                    </td>            
                 </tr>";
             }
             echo "</table>";
