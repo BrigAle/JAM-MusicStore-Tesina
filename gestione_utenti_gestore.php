@@ -89,7 +89,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     <th>Portafoglio</th>
                     <th>Crediti</th>
                     <th>Data Iscrizione</th>
-                    <th>Storico</th>
+                    <th>Storico Acquisti</th>
                     
                 </tr>";
 
