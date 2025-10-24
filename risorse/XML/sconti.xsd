@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <!-- ELEMENTO RADICE -->
     <xsd:element name="sconti">
         <xsd:complexType>
             <xsd:sequence>
@@ -9,8 +8,7 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-
-    <!-- ELEMENTO SCONTO -->
+ 
     <xsd:element name="sconto">
         <xsd:complexType>
             <xsd:sequence>
@@ -26,8 +24,7 @@
             <xsd:attribute name="applicazione_globale" type="xsd:boolean" use="optional" default="false" />
         </xsd:complexType>
     </xsd:element>
-
-    <!-- ELEMENTO CONDIZIONE -->
+   
     <xsd:element name="condizione">
         <xsd:complexType>
             <xsd:sequence>
@@ -50,8 +47,7 @@
             </xsd:attribute>
         </xsd:complexType>
     </xsd:element>
-
-    <!-- ELEMENTO DESTINATARI -->
+   
     <xsd:element name="destinatari">
         <xsd:complexType>
             <xsd:sequence>
@@ -60,7 +56,7 @@
         </xsd:complexType>
     </xsd:element>
 
-    <!-- ELEMENTI BASE -->
+
     <xsd:element name="id_prodotto" type="xsd:integer" />
     <xsd:element name="valore">
         <xsd:simpleType>
@@ -77,7 +73,7 @@
     <xsd:element name="data_inizio" type="xsd:date" />
     <xsd:element name="data_fine" type="xsd:date" />
 
-    <!-- Percentuale intera da 0 a 100 -->
+   
     <xsd:element name="percentuale">
         <xsd:simpleType>
             <xsd:restriction base="xsd:integer">

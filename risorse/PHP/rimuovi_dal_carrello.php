@@ -65,17 +65,25 @@ foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
 if ($prodottoDaRimuovere) {
     $prodottiNode->removeChild($prodottoDaRimuovere);
 
-    // aggiorna totale carrello
-    $totaleCarrello = 0.0;
-    foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
-        $prezzoTot = (float)$p->getElementsByTagName('prezzo_totale')->item(0)->nodeValue;
-        $totaleCarrello += $prezzoTot;
+    // controlla se il carrello è vuoto
+    if ($prodottiNode->getElementsByTagName('prodotto')->length === 0) {
+        // elimina completamente il carrello dell'utente
+        $root->removeChild($carrelloUtente);
+        $_SESSION['successo_msg'] = 'Carrello svuotato ed eliminato.';
+    } else {
+        // aggiorna totale carrello
+        $totaleCarrello = 0.0;
+        foreach ($prodottiNode->getElementsByTagName('prodotto') as $p) {
+            $prezzoTot = (float)$p->getElementsByTagName('prezzo_totale')->item(0)->nodeValue;
+            $totaleCarrello += $prezzoTot;
+        }
+
+        $carrelloUtente->getElementsByTagName('prezzo_totale_carrello')->item(0)->nodeValue = number_format($totaleCarrello, 2, '.', '');
+        $_SESSION['successo_msg'] = 'Prodotto rimosso dal carrello.';
     }
 
-    $carrelloUtente->getElementsByTagName('prezzo_totale_carrello')->item(0)->nodeValue = number_format($totaleCarrello, 2, '.', '');
+    // salva il file aggiornato
     $doc->save($carrelliFile);
-
-    $_SESSION['successo_msg'] = 'Prodotto rimosso dal carrello.';
 } else {
     $_SESSION['errore_msg'] = 'Prodotto non trovato nel carrello.';
 }
