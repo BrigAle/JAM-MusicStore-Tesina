@@ -69,7 +69,7 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] != 'gestore') {
         $old['descrizione'] = $old['descrizione'] ?? '';
         $old['prezzo'] = $old['prezzo'] ?? '';
         $old['bonus'] = $old['bonus'] ?? '';
-        
+
         ?>
 
         <div class="profile-card" style="max-width:700px; margin:auto; padding:40px;">
@@ -136,20 +136,19 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] != 'gestore') {
                     </div>
                 </div>
             </form>
-            
+
         </div>
 
         <?php unset($_SESSION['old_data']); ?>
-
-        <div class="pdp">
-            <div class="pdp-center">
-                <p>&copy; 2025 JAM Music Store</p>
-            </div>
-            <div class="pdp-right">
-                <a href="FAQs.php">FAQs</a>
-            </div>
+    </div>
+    <div class="pdp">
+        <div class="pdp-center">
+            <p>&copy; 2025 JAM Music Store</p>
         </div>
-
+        <div class="pdp-right">
+            <a href="FAQs.php">FAQs</a>
+        </div>
+    </div>
 </body>
 
 </html>
