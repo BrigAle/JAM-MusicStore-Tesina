@@ -19,7 +19,7 @@ if ($connessione->connect_error) {
     exit("Connessione al database fallita: " . $connessione->connect_error);
 }
 
-/* Creo tabella utente (come la tua) */
+/* Creo tabella utente */
 $sql_table_utente = "CREATE TABLE IF NOT EXISTS utente(
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(30) NOT NULL UNIQUE,
@@ -34,19 +34,23 @@ if ($connessione->query($sql_table_utente) === FALSE) {
 
 /* Funzione: inserisce se non esiste e restituisce SEMPRE l'id */
 function getOrCreateUserId(mysqli $conn, string $username, string $email, string $ruolo): int {
-    // c'è già?
+    // verifica esistenza
     $q = $conn->prepare("SELECT id FROM utente WHERE username = ? LIMIT 1");
-    $q->bind_param("s", $username);
+    $q->bind_param("s", $username); 
     $q->execute();
     $res = $q->get_result();
+
+    // se esiste, restituisci id e chiude la funzione
     if ($row = $res->fetch_assoc()) {
         $q->close();
         return (int)$row['id'];
     }
     $q->close();
 
-    // crea (password = username, hash)
+    // crea password hash (username come password iniziale)
     $pwd_hash = password_hash($username, PASSWORD_DEFAULT);
+
+    // inserisce nuovo utente se non esiste e recupera l'id
     $ins = $conn->prepare("INSERT INTO utente (username, email, password, ruolo) VALUES (?, ?, ?, ?)");
     $ins->bind_param("ssss", $username, $email, $pwd_hash, $ruolo);
     if (!$ins->execute()) {
@@ -59,7 +63,9 @@ function getOrCreateUserId(mysqli $conn, string $username, string $email, string
     return $id;
 }
 
-/* --- Inserimenti (password = username) --- */
+//  recupero id cosi da sincronizzare con utenti.xml
+//  se per esempio cancello un utente dal db, alla prossima esecuzione verranno ricreati
+//  con id diversi ma sincronizzati correttamente
 $idAdmin   = getOrCreateUserId($connessione, 'admin',   'admin@gmail.com',         'amministratore');
 $idBrigale = getOrCreateUserId($connessione, 'brigale', 'brigale@gmail.com',       'gestore');
 $idGiov    = getOrCreateUserId($connessione, 'giovyears','giovyears@gmail.com',    'gestore');
@@ -70,8 +76,14 @@ $idViktor  = getOrCreateUserId($connessione, 'viktor96','viktor96@gmail.com',   
 $idDagn    = getOrCreateUserId($connessione, 'dagnelle','dagnellejojo@gmail.com',  'cliente');
 $idBrigDan = getOrCreateUserId($connessione, 'brigdan', 'brigdan@hotmail.it',      'cliente');
 
-/* --- Costruzione utenti.xml con i dati esatti --- */
+
 $xmlFile = "risorse/XML/utenti.xml";
+
+$xmlDir = dirname($xmlFile);
+if (!is_dir($xmlDir)) mkdir($xmlDir, 0777, true);
+
+// rimuovo il file esistente per ricrearlo da zero
+if (file_exists($xmlFile)) unlink($xmlFile);
 
 $doc = new DOMDocument('1.0', 'UTF-8');
 $doc->preserveWhiteSpace = false;
@@ -85,7 +97,7 @@ $root->setAttributeNS(
 );
 $doc->appendChild($root);
 
-/* helper per creare <utente> */
+//  funzione di utilità per aggiungere un utente
 function appendUtente(
     DOMDocument $doc, DOMElement $root, int $id,
     string $nome, string $cognome, string $tel, string $indirizzo,
@@ -104,7 +116,7 @@ function appendUtente(
     $root->appendChild($u);
 }
 
-/* mappatura dati (come da tua tabella/XML) */
+// aggiungo utenti
 appendUtente($doc, $root, $idAdmin,   'Admin',    'Admin',     '0000000000', 'Via Roma, 1',                                 0,     0,    0,   '2025-01-02');
 appendUtente($doc, $root, $idBrigale, 'Alessandro','Brighenti','1234567890', 'Via Milano, 10',                               0,     0,    0,   '2025-01-02');
 appendUtente($doc, $root, $idGiov,    'Giovanni', 'Tagliaferri','0987654321','Via Napoli, 5',                                0,     0,    0,   '2025-01-02');
@@ -113,12 +125,15 @@ appendUtente($doc, $root, $idElectro, 'Denis',    'Boitor',    '343434343',  'Vi
 appendUtente($doc, $root, $idDrew93,  'Andrea',   'Mattarelli','324234232',  'Via monte terminillo 48, LT 04100',            0,     5000, 0,   '2025-10-23');
 appendUtente($doc, $root, $idViktor,  'Vincenzo', 'Ferrara',   '324232425',  'Via cavata 1, LT 04100',                       0,     4000, 200, '2025-10-23');
 appendUtente($doc, $root, $idDagn,    'Daniele',  'Ardovini',  '393465728',  'Via Sandro Pertini 11, Ceccano FR',            13,    3000, 160, '2025-10-23');
-appendUtente($doc, $root, $idBrigDan, 'Daniele',  'Brighenti', '3234455',    'VIa gaeta 49 LT 04100',                        0,     0,    0,   '2025-10-23');
+appendUtente($doc, $root, $idBrigDan, 'Daniele',  'Brighenti', '3234455',    'Via gaeta 49 LT 04100',                        0,     0,    0,   '2025-10-23');
 
-/* Salvataggio XML */
-$doc->save($xmlFile);
+// salvo il file XML
+if (!$doc->save($xmlFile)) {
+    exit("Errore nel salvataggio di $xmlFile");
+}
 
-/* Chiudo e reindirizzo */
+
 $connessione->close();
 header("Location: homepage.php");
-exit(1);
+exit(0);
+?>

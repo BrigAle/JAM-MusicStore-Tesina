@@ -1,43 +1,58 @@
 <?php
-// voglio creare un file php che elimini il database e il file xml associato
+// Script per eliminare il database e resettare il file utenti.xml
 require_once 'risorse/PHP/connection.php';
-$connection = new mysqli($host, $user, $password, $db);
+
+echo "<h3>Eliminazione database e XML</h3>";
+
+
+$connection = new mysqli($host, $user, $password);
 if ($connection->connect_error) {
-    die("Connessione fallita: " . $connection->connect_error);
+    die("❌ Connessione fallita: " . $connection->connect_error);
 }
-// elimino il database
-$sql_drop_db = "DROP DATABASE $db";
-if ($connection->query($sql_drop_db) === TRUE) {
-    echo "Database eliminato con successo.";
+
+// Controlla se il database esiste
+$db_exists = $connection->query("SHOW DATABASES LIKE '$db'");
+
+if ($db_exists && $db_exists->num_rows > 0) {
+    $sql_drop_db = "DROP DATABASE $db";
+    if ($connection->query($sql_drop_db) === TRUE) {
+        echo "Database <strong>$db</strong> eliminato con successo.<br>";
+    } else {
+        echo "Errore nell'eliminazione del database: " . $connection->error . "<br>";
+    }
 } else {
-    echo "Errore nell'eliminazione del database: " . $connection->error;
+    echo "Il database <strong>$db</strong> non esiste.<br>";
 }
-echo "<br>";
 $connection->close();
-// elimino il gli elemti <utente> dal file xml mantenendo la struttura e lo xsd
+
+// Reset del file utenti.xml
 $xmlFile = __DIR__ . '/risorse/XML/utenti.xml';
+$xml_eliminato = false;
 
 if (file_exists($xmlFile)) {
-    // Carico il file XML
     $dom = new DOMDocument();
     $dom->preserveWhiteSpace = false;
     $dom->formatOutput = true;
-    $dom->load($xmlFile);
 
-    // Recupero l’elemento root <utenti>
-    $root = $dom->documentElement;
-
-    // Cancello tutti i nodi <utente>
-    while ($root->hasChildNodes()) {
-        $root->removeChild($root->firstChild);
+    if ($dom->load($xmlFile)) {
+        $root = $dom->documentElement;
+        while ($root->hasChildNodes()) {
+            $root->removeChild($root->firstChild);
+        }
+        $dom->save($xmlFile);
+        echo "Elementi in <strong>utenti.xml</strong> cancellati con successo.<br>";
+        $xml_eliminato = true;
+    } else {
+        echo "⚠️ Errore nel caricamento del file XML (file non valido).<br>";
     }
-
-    // Salvo il file senza rimuovere root e attributi
-    $dom->save($xmlFile);
-
-    echo "XML resettato con successo.";
 } else {
-    echo "Il file XML non esiste.";
+    echo "Il file <strong>utenti.xml</strong> non esiste.<br>";
+}
+
+
+if ((!$db_exists || $db_exists->num_rows == 0) && !$xml_eliminato) {
+    echo "<br><strong>❌ Nessun database o file XML trovati.</strong>";
+} else {
+    echo "<br><strong>Operazione completata.</strong>";
 }
 ?>
-

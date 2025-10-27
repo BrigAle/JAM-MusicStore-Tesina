@@ -37,7 +37,7 @@
     <indirizzo>Via Roma, 2</indirizzo>
     <reputazione>21.5</reputazione>
     <portafoglio>2624.89</portafoglio>
-    <crediti>687</crediti>
+    <crediti>598</crediti>
     <data_iscrizione>2025-01-02</data_iscrizione>
   </utente>
   <utente id="5">
@@ -84,7 +84,7 @@
     <nome>Daniele</nome>
     <cognome>Brighenti</cognome>
     <telefono>3234455</telefono>
-    <indirizzo>VIa gaeta 49 LT 04100</indirizzo>
+    <indirizzo>Via gaeta 49 LT 04100</indirizzo>
     <reputazione>0</reputazione>
     <portafoglio>0</portafoglio>
     <crediti>0</crediti>
