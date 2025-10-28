@@ -80,50 +80,50 @@ session_start();
     $nome = (string)$prodotto->nome;
     $immagine = "risorse/IMG/prodotti/" . (string)$prodotto->immagine;
     ?>
-      <div class="content" 
-       style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:70vh; text-align:center;">
+    <div class="content"
+        style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:70vh; text-align:center;">
 
-    <div style="background-color:#111; border:1px solid #333; border-radius:10px; padding:30px 40px; width:90%; max-width:600px; box-shadow:0 0 10px rgba(0,0,0,0.4);">
-      
-      <h2 style="margin-bottom:20px;">Scrivi una recensione</h2>
+        <div style="background-color:#111; border:1px solid #333; border-radius:10px; padding:30px 40px; width:90%; max-width:600px; box-shadow:0 0 10px rgba(0,0,0,0.4);">
 
-      <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:25px;">
-        <img src="<?= $immagine ?>" alt="<?= htmlspecialchars($nome) ?>"
-             style="width:140px; height:140px; object-fit:contain; border-radius:6px; background:#222; padding:10px; margin-bottom:12px;">
-        <h3 style="color:#fff;"><?= htmlspecialchars($nome) ?></h3>
-      </div>
+            <h2 style="margin-bottom:20px;">Scrivi una recensione</h2>
 
-      <form action="risorse/PHP/salva_recensione.php" method="post"
-            style="display:flex; flex-direction:column; gap:14px; align-items:center; color:#ddd;">
+            <div style="display:flex; flex-direction:column; align-items:center; margin-bottom:25px;">
+                <img src="<?= $immagine ?>" alt="<?= htmlspecialchars($nome) ?>"
+                    style="width:140px; height:140px; object-fit:contain; border-radius:6px; background:#222; padding:10px; margin-bottom:12px;">
+                <h3 style="color:#fff;"><?= htmlspecialchars($nome) ?></h3>
+            </div>
 
-        <input type="hidden" name="id_prodotto" value="<?= htmlspecialchars($id_prodotto) ?>">
+            <form action="risorse/PHP/salva_recensione.php" method="post"
+                style="display:flex; flex-direction:column; gap:14px; align-items:center; color:#ddd;">
 
-        <label for="valutazione" style="font-weight:bold;">Valutazione:</label>
-        <select name="valutazione" id="valutazione" required
-                style="padding:8px; border-radius:6px; border:1px solid #555; width:130px; background-color:#222; color:#fff;">
-          <option value="">--</option>
-          <option value="1">⭐</option>
-          <option value="2">⭐⭐</option>
-          <option value="3">⭐⭐⭐</option>
-          <option value="4">⭐⭐⭐⭐</option>
-          <option value="5">⭐⭐⭐⭐⭐</option>
-        </select>
+                <input type="hidden" name="id_prodotto" value="<?= htmlspecialchars($id_prodotto) ?>">
 
-        <label for="commento" style="font-weight:bold;">Commento:</label>
-        <textarea id="commento" name="commento" rows="5" required
-                  placeholder="Scrivi qui la tua opinione..."
-                  style="width:100%; max-width:500px; padding:10px; border-radius:8px; border:1px solid #555; background-color:#222; color:#fff; resize:none;"></textarea>
+                <label for="valutazione" style="font-weight:bold;">Valutazione:</label>
+                <select name="valutazione" id="valutazione" required
+                    style="padding:8px; border-radius:6px; border:1px solid #555; width:130px; background-color:#222; color:#fff;">
+                    <option value="">--</option>
+                    <option value="1">⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                </select>
 
-        <button type="submit"
-          style="background-color:#1E90FF; color:white; border:none; padding:10px 22px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:10px; transition:0.2s;">
-          Invia recensione
-        </button>
+                <label for="commento" style="font-weight:bold;">Commento:</label>
+                <textarea id="commento" name="commento" rows="5" required
+                    placeholder="Scrivi qui la tua opinione..."
+                    style="width:100%; max-width:500px; padding:10px; border-radius:8px; border:1px solid #555; background-color:#222; color:#fff; resize:none;"></textarea>
 
-        <a href="recensioni.php?id_prodotto=<?= $id_prodotto ?>" 
-           style="margin-top:10px; text-decoration:none; color:#1E90FF;">← Torna alle recensioni</a>
-      </form>
+                <button type="submit"
+                    style="background-color:#1E90FF; color:white; border:none; padding:10px 22px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:10px; transition:0.2s;">
+                    Invia recensione
+                </button>
+
+                <a href="recensioni.php?id_prodotto=<?= $id_prodotto ?>"
+                    style="margin-top:10px; text-decoration:none; color:#1E90FF;">← Torna alle recensioni</a>
+            </form>
+        </div>
     </div>
-  </div>
 
 
     <div class="pdp">

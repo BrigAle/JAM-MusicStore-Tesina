@@ -166,14 +166,12 @@ session_start();
 
           // Applica sconti
           if ($xmlSconti) {
-            // Se c'è un utente loggato → sconti personalizzati + globali
+
             if ($utenteLoggato) {
               $result = calcolaScontoUtente($xmlSconti, $utenteLoggato, $idProdotto, $oggi, $xmlStorico);
               $percentualeScontoPromo = $result['sconto'];
               $descrizioneCondizione = $result['condizione'];
-            }
-            
-            else {
+            } else {
               foreach ($xmlSconti->sconto as $s) {
                 $appGlobale = ((string)$s['applicazione_globale'] === 'true');
                 $dataInizio = (string)$s->data_inizio;
@@ -187,7 +185,11 @@ session_start();
                       if ($perc > $percentualeScontoPromo) {
                         $percentualeScontoPromo = $perc;
                         $evento = (string)$s->condizione->evento;
-                        $descrizioneCondizione = $evento ? "Offerta speciale: $evento" : "Offerta promozionale globale";
+                        if (!empty($evento)) {
+                          $descrizioneCondizione = "Offerta speciale: {$evento}";
+                        } else {
+                          $descrizioneCondizione = "Offerta promozionale globale";
+                        }
                       }
                     }
                   }
@@ -212,19 +214,19 @@ session_start();
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoPromo / 100);
           if ($percentualeScontoCrediti > 0)
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoCrediti / 100);
-        
+
 
           // Calcolo valutazione media
           $valutazioneTotale = 0;
           $countValutazioni = 0;
           foreach ($xmlRecensioni->recensione as $rec) {
-          if ((string)$rec->id_prodotto === $idProdotto) {
-          $valutazioneTotale += (float)$rec->valutazione;
-          $countValutazioni++;
-          }
+            if ((string)$rec->id_prodotto === $idProdotto) {
+              $valutazioneTotale += (float)$rec->valutazione;
+              $countValutazioni++;
+            }
           }
           $valutazioneMedia = $countValutazioni > 0 ? round($valutazioneTotale / $countValutazioni, 1) : 0;
-          ?>
+        ?>
 
           <div class="contenuto_prodotto">
             <div class="immagine_box">

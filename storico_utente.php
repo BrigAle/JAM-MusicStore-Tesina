@@ -71,9 +71,34 @@ session_start();
                 $storiciUtente[] = $s;
             }
         }
+        // ricavo username utente dal database con require
+
+        require_once 'risorse/PHP/connection.php';
+
+        $connection = new mysqli($host, $user, $password, $db);
+        if ($connection->connect_error) {
+            $_SESSION['error_connection'] = true;
+            header('Location: ../../login.php');
+            exit();
+        }
+
+        // Recupero username dell'utente selezionato in modo sicuro
+        $usernameUtente = "Utente sconosciuto";
+        if ($stmt = $connection->prepare("SELECT username FROM utente WHERE id = ?")) {
+            $stmt->bind_param("i", $idUtente);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows === 1) {
+                $record = $result->fetch_assoc();
+                $usernameUtente = $record['username'];
+            }
+            $stmt->close();
+        }
+
+        $connection->close();
 
         echo "<div class='content'>";
-        echo "<h2>Storico Acquisti Utente ID: $idUtente</h2>";
+        echo "<h2>Storico Acquisti di: " . htmlspecialchars($usernameUtente) . "</h2>";
 
         if (count($storiciUtente) === 0) {
             echo "<p>Nessun acquisto registrato per questo utente.</p>";
