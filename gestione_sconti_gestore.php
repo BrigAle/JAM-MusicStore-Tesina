@@ -61,7 +61,6 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
         <h2 style="text-align: left;">Gestione Sconti</h2>
 
         <?php
-
         $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
         $xmlSconti   = simplexml_load_file("risorse/XML/sconti.xml");
 
@@ -91,7 +90,22 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
                     if ($valore !== "") $descrizioneCond .= " → valore: {$valore}";
                     if ($dataRif !== "") $descrizioneCond .= " | da data: {$dataRif}";
                     if ($evento !== "") $descrizioneCond .= " | evento: {$evento}";
-                    if ($idProdRif !== "") $descrizioneCond .= " | prodotto rif: {$idProdRif}";
+
+                    // 🔹 Mostra nome del prodotto invece dell’ID nel caso "acquisto_specifico"
+                    if ($idProdRif !== "") {
+                        $nomeProdRif = null;
+                        foreach ($xmlProdotti->prodotto as $p) {
+                            if ((string)$p['id'] === $idProdRif) {
+                                $nomeProdRif = (string)$p->nome;
+                                break;
+                            }
+                        }
+                        if ($nomeProdRif) {
+                            $descrizioneCond .= " | prodotto rif: <em>{$nomeProdRif}</em>";
+                        } else {
+                            $descrizioneCond .= " | prodotto rif: {$idProdRif}";
+                        }
+                    }
                 } else {
                     $descrizioneCond = "(nessuna condizione)";
                 }
@@ -124,128 +138,96 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
 
                 // --- Tabella prodotti scontati ---
                 echo "
-                <table border='1' cellpadding='6' style='width:100%; margin-top:10px;'>
-                    <tr>
-                        <th>ID</th>
-                        <th>Immagine</th>
-                        <th>Nome</th>
-                        <th>Categoria</th>
-                        <th>Descrizione</th>
-                        <th>Prezzo (€)</th>
-                        <th>Prezzo Scontato (€)</th>
-                        <th>Data Inserimento</th>
-                    </tr>";
+            <table border='1' cellpadding='6' style='width:100%; margin-top:10px;'>
+                <tr>
+                    <th>ID</th>
+                    <th>Immagine</th>
+                    <th>Nome</th>
+                    <th>Categoria</th>
+                    <th>Descrizione</th>
+                    <th>Prezzo (€)</th>
+                    <th>Prezzo Scontato (€)</th>
+                    <th>Data Inserimento</th>
+                </tr>";
 
-                foreach ($sconto->id_prodotto as $idProdottoScontato) {
-                    $idProd = (string)$idProdottoScontato;
+                // 🔹 Se ci sono prodotti specifici
+                if (count($sconto->id_prodotto) > 0) {
+                    foreach ($sconto->id_prodotto as $idProdottoScontato) {
+                        $idProd = (string)$idProdottoScontato;
+                        $prodotto = null;
+                        foreach ($xmlProdotti->prodotto as $p) {
+                            if ((string)$p['id'] === $idProd) {
+                                $prodotto = $p;
+                                break;
+                            }
+                        }
 
-                    $prodotto = null;
-                    foreach ($xmlProdotti->prodotto as $p) {
-                        if ((string)$p['id'] === $idProd) {
-                            $prodotto = $p;
-                            break;
+                        if ($prodotto) {
+                            $nome = (string)$prodotto->nome;
+                            $categoria = (string)$prodotto->categoria;
+                            $descrizione = (string)$prodotto->descrizione;
+                            $prezzo = (float)$prodotto->prezzo;
+                            $data = (string)$prodotto->data_inserimento;
+                            $immagine = "risorse/IMG/prodotti/" . (string)$prodotto->immagine;
+                            $prezzoFinale = $prezzo - ($prezzo * $percentuale / 100);
+
+                            echo "
+                        <tr>
+                            <td>{$idProd}</td>
+                            <td style='text-align:center;'>
+                                <img src='{$immagine}' alt='{$nome}'
+                                     style='width:70px; height:70px; object-fit:contain; border-radius:6px; background:#111;'>
+                            </td>
+                            <td>{$nome}</td>
+                            <td>{$categoria}</td>
+                            <td style='max-width:320px; text-align:left;'>{$descrizione}</td>
+                            <td>" . number_format($prezzo, 2, ',', '.') . "</td>
+                            <td><strong>" . number_format($prezzoFinale, 2, ',', '.') . "</strong></td>
+                            <td>{$data}</td>
+                        </tr>";
                         }
                     }
-
-                    if ($prodotto) {
-                        $nome = (string)$prodotto->nome;
-                        $categoria = (string)$prodotto->categoria;
-                        $descrizione = (string)$prodotto->descrizione;
-                        $prezzo = (float)$prodotto->prezzo;
-                        $data = (string)$prodotto->data_inserimento;
-                        $immagine = "risorse/IMG/prodotti/" . (string)$prodotto->immagine;
-                        $prezzoFinale = $prezzo - ($prezzo * $percentuale / 100);
-
-                        echo "
-                    <tr>
-                        <td>{$idProd}</td>
-                        <td style='text-align:center;'>
-                            <img src='{$immagine}' alt='{$nome}'
-                                 style='width:70px; height:70px; object-fit:contain; border-radius:6px; background:#111;'>
-                        </td>
-                        <td>{$nome}</td>
-                        <td>{$categoria}</td>
-                        <td style='max-width:320px; text-align:left;'>{$descrizione}</td>
-                        <td>" . number_format($prezzo, 2, ',', '.') . "</td>
-                        <td><strong>" . number_format($prezzoFinale, 2, ',', '.') . "</strong></td>
-                        <td>{$data}</td>
-                    </tr>";
-                    }
+                } else {
+                    // 🔹 Caso sconto globale senza prodotti specifici
+                    echo "
+                <tr>
+                    <td colspan='8' style='text-align:center; color:#0ff; font-weight:bold; background:#111;'>
+                        Sconto globale applicato su tutto il catalogo.
+                    </td>
+                </tr>";
                 }
 
                 echo "</table>";
-
-                // --- Mostra destinatari ---
-                if (isset($sconto->destinatari->id_utente)) {
-                    echo "<p style='margin-top:10px;'><strong>Destinatari:</strong> ";
-
-                    // Crea array con tutti gli ID destinatari
-                    $idUtenti = [];
-                    foreach ($sconto->destinatari->id_utente as $idUtente) {
-                        $idUtenti[] = (string)$idUtente;
-                    }
-
-                    // Connessione al database
-                    require_once('risorse/PHP/connection.php');
-                    $conn = new mysqli($host, $user, $password, $db);
-                    if ($conn->connect_error) {
-                        die("Connessione fallita: " . $conn->connect_error);
-                    }
-
-                    // Prepara la query per ottenere i nomi corrispondenti agli ID
-                    $idList = implode(',', array_map('intval', $idUtenti)); // es: 3,4,5
-                    $query = "SELECT username, id FROM utente WHERE id IN ($idList)";
-                    $result = $conn->query($query);
-
-                    $nomiUtenti = [];
-                    if ($result && $result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $nomiUtenti[$row['id']] = $row['username'];
-                        }
-                    }
-
-                    // Sostituisci gli ID con i nomi utente
-                    $outputUtenti = [];
-                    foreach ($idUtenti as $id) {
-                        $outputUtenti[] = isset($nomiUtenti[$id]) ? $nomiUtenti[$id] : "Utente ID $id";
-                    }
-
-                    echo implode(', ', $outputUtenti);
-                    echo "</p>";
-
-                    $conn->close();
-                }
-
-
                 echo "</div>"; // chiude blocco sconto
             }
 
             // --- Pulsante per aggiungere un nuovo sconto ---
             echo "<div style='margin-top:20px;'>
-            <a href='aggiungi_sconti.php' style='
-                display:inline-block;
-                padding:10px 20px;
-                background-color:#007BFF;
-                color:white;
-                border-radius:6px;
-                text-decoration:none;
-            '>➕ Inserisci Nuovo Sconto</a>
-        </div>";
+        <a href='aggiungi_sconti.php' style='
+            display:inline-block;
+            padding:10px 20px;
+            background-color:#007BFF;
+            color:white;
+            border-radius:6px;
+            text-decoration:none;
+        '>➕ Inserisci Nuovo Sconto</a>
+    </div>";
         } else {
             echo "<p>Nessuno sconto registrato.</p>
               <a href='aggiungi_sconti.php' style='color:#007BFF;'>Aggiungi il primo sconto</a>";
         }
 
-        // --- Messaggi di successo / errore ---
+        
         if (isset($_SESSION['successo_msg'])) {
-            echo "<div class='sconto-msg sconto-success'>{$_SESSION['successo_msg']}</div>";
+            echo "<div class='msg success'>{$_SESSION['successo_msg']}</div>";
             unset($_SESSION['successo_msg']);
         } elseif (isset($_SESSION['errore_msg'])) {
-            echo "<div class='sconto-msg sconto-error'>{$_SESSION['errore_msg']}</div>";
+            echo "<div class='msg error'>{$_SESSION['errore_msg']}</div>";
             unset($_SESSION['errore_msg']);
         }
         ?>
     </div>
+
 
 
 

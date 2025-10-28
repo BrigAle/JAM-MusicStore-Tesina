@@ -17,13 +17,11 @@ $id_prodotto_rif  = trim($_POST['id_prodotto_rif'] ?? '');
 $percentuale      = trim($_POST['percentuale'] ?? '');
 $data_inizio      = trim($_POST['data_inizio'] ?? '');
 $data_fine        = trim($_POST['data_fine'] ?? '');
-$destinatari      = $_POST['utenti'] ?? [];
-$appGlobale       = isset($_POST['applicazione_globale']) ? true : false; // ✅ nuovo flag
+$appGlobale       = isset($_POST['applicazione_globale']); // ✅ checkbox applicazione globale
 
 // --- Controllo campi obbligatori ---
 if (
     $_SERVER['REQUEST_METHOD'] === 'POST'
-    && !empty($prodotti)
     && !empty($percentuale)
     && !empty($data_inizio)
     && !empty($data_fine)
@@ -51,17 +49,13 @@ if (
     // --- Creazione nuovo sconto ---
     $sconto = $doc->createElement('sconto');
     $sconto->setAttribute('id', $lastId + 1);
+    $sconto->setAttribute('applicazione_globale', $appGlobale ? 'true' : 'false');
 
-    // ✅ se offerta speciale → applicazione_globale = true
-    if ($appGlobale || $tipo_condizione === 'offerta_speciale') {
-        $sconto->setAttribute('applicazione_globale', 'true');
-    } else {
-        $sconto->setAttribute('applicazione_globale', 'false');
-    }
-
-    // --- Aggiunta prodotti ---
-    foreach ($prodotti as $idProd) {
-        $sconto->appendChild($doc->createElement('id_prodotto', (int)$idProd));
+    // --- Aggiunta prodotti solo se NON globale ---
+    if (!$appGlobale && !empty($prodotti)) {
+        foreach ($prodotti as $idProd) {
+            $sconto->appendChild($doc->createElement('id_prodotto', (int)$idProd));
+        }
     }
 
     // --- Creazione condizione ---
@@ -69,16 +63,16 @@ if (
         $condizione = $doc->createElement('condizione');
         $condizione->setAttribute('tipo', htmlspecialchars($tipo_condizione));
 
-        if (!empty($valore))
+        if ($valore !== '')
             $condizione->appendChild($doc->createElement('valore', htmlspecialchars($valore)));
 
-        if (!empty($data_riferimento))
+        if ($data_riferimento !== '')
             $condizione->appendChild($doc->createElement('data_riferimento', htmlspecialchars($data_riferimento)));
 
-        if (!empty($evento))
+        if ($evento !== '')
             $condizione->appendChild($doc->createElement('evento', htmlspecialchars($evento)));
 
-        if (!empty($id_prodotto_rif))
+        if ($id_prodotto_rif !== '')
             $condizione->appendChild($doc->createElement('id_prodotto_rif', (int)$id_prodotto_rif));
 
         $sconto->appendChild($condizione);
@@ -89,16 +83,7 @@ if (
     $sconto->appendChild($doc->createElement('data_inizio', htmlspecialchars($data_inizio)));
     $sconto->appendChild($doc->createElement('data_fine', htmlspecialchars($data_fine)));
 
-    // --- Aggiunta destinatari SOLO se non offerta speciale ---
-    if (!$appGlobale && $tipo_condizione !== 'offerta_speciale' && !empty($destinatari)) {
-        $dest = $doc->createElement('destinatari');
-        foreach ($destinatari as $idUtente) {
-            $dest->appendChild($doc->createElement('id_utente', (int)$idUtente));
-        }
-        $sconto->appendChild($dest);
-    }
-
-    // --- Salvataggio finale ---
+    // --- Aggiunta al documento e salvataggio ---
     $root->appendChild($sconto);
 
     if ($doc->save($xmlFile)) {
@@ -107,10 +92,11 @@ if (
         $_SESSION['errore_msg'] = "Errore durante il salvataggio dello sconto.";
     }
 
-    header("Location: ../../../aggiungi_sconti.php");
+    header("Location: ../../../gestione_sconti_gestore.php");
     exit();
 } else {
     $_SESSION['errore_msg'] = "Compila tutti i campi obbligatori.";
     header("Location: ../../../aggiungi_sconti.php");
     exit();
 }
+?>

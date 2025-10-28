@@ -1,70 +1,55 @@
 <?php
 function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = null)
 {
-    // Date di validità
     $dataInizio = (string)$sconto->data_inizio;
     $dataFine   = (string)$sconto->data_fine;
     if ($oggi < $dataInizio || $oggi > $dataFine) return false;
 
-    // Il prodotto deve essere incluso nello sconto
-    $incluso = false;
-    foreach ($sconto->id_prodotto as $idS) {
-        if ((string)$idS === $idProdotto) {
-            $incluso = true;
-            break;
-        }
-    }
-    if (!$incluso) return false;
-
-    // ✅ Se applicazione_globale="true" → vale per tutti gli utenti
     $appGlobale = ((string)$sconto['applicazione_globale'] === 'true');
-    if ($appGlobale) {
-        // È sufficiente che sia nel periodo di validità e che il prodotto corrisponda
-        return true;
-    }
 
-    // L’utente deve essere tra i destinatari
-    $idUtente = (string)$utente['id'];
-    $destinatario = false;
-    if (isset($sconto->destinatari->id_utente)) {
-        foreach ($sconto->destinatari->id_utente as $idDest) {
-            if ((string)$idDest === $idUtente) {
-                $destinatario = true;
+    if (!$appGlobale) {
+        $incluso = false;
+        foreach ($sconto->id_prodotto as $idS) {
+            if ((string)$idS === $idProdotto) {
+                $incluso = true;
                 break;
             }
         }
+        if (!$incluso) return false;
     }
-    if (!$destinatario) return false;
 
-    // Analisi della condizione
     $condizione = $sconto->condizione;
-    if (!$condizione) return false;
+    if (!$condizione) return true; // se non ci sono condizioni → valido per tutti
 
     $tipo        = (string)$condizione['tipo'];
     $valore      = (float)$condizione->valore;
     $dataRif     = (string)$condizione->data_riferimento;
     $idProdRif   = (string)$condizione->id_prodotto_rif;
+
+    // dati utenti
     $crediti     = (float)$utente->crediti;
     $reputazione = (float)$utente->reputazione;
     $dataIscr    = (string)$utente->data_iscrizione;
 
     switch ($tipo) {
+
         case 'mesi_iscrizione':
+            // Verifica che l’utente sia iscritto da almeno X mesi
             $mesi = (strtotime($oggi) - strtotime($dataIscr)) / (60 * 60 * 24 * 30);
             return $mesi >= $valore;
 
         case 'crediti_minimi':
+            // Verifica che l’utente abbia almeno X crediti
             return $crediti >= $valore;
 
         case 'crediti_da_data':
+            // Controlla crediti accumulati da una certa data
             $xmlCrediti = simplexml_load_file("risorse/XML/storico_crediti.xml");
             if (!$xmlCrediti) return false;
 
             $idUtente = (string)$utente['id'];
-            $creditiIniziali = null;
-            $creditiFinali = null;
-            $ultimaDataPrima = null;
-            $ultimaDataDopo = null;
+            $creditiPrima = null;
+            $creditiDopo  = null;
 
             foreach ($xmlCrediti->record as $r) {
                 $id = (string)$r->id_utente;
@@ -73,46 +58,43 @@ function verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico = 
 
                 if ($id === $idUtente) {
                     if ($data < $dataRif) {
-                        if ($ultimaDataPrima === null || $data > $ultimaDataPrima) {
-                            $ultimaDataPrima = $data;
-                            $creditiIniziali = $cred;
-                        }
+                        $creditiPrima = $cred;
                     }
                     if ($data >= $dataRif) {
-                        if ($ultimaDataDopo === null || $data > $ultimaDataDopo) {
-                            $ultimaDataDopo = $data;
-                            $creditiFinali = $cred;
-                        }
+                        $creditiDopo = $cred;
                     }
                 }
             }
 
-            if ($creditiFinali === null) return false;
-            if ($creditiIniziali === null) $creditiIniziali = 0;
+            if ($creditiDopo === null) return false;
+            if ($creditiPrima === null) $creditiPrima = 0;
 
-            $creditiAccumulati = $creditiFinali - $creditiIniziali;
-            return ($creditiAccumulati >= $valore);
+            $accumulati = $creditiDopo - $creditiPrima;
+            return $accumulati >= $valore;
 
         case 'reputazione_minima':
+            // Verifica reputazione utente
             return $reputazione >= $valore;
 
         case 'acquisto_specifico':
-            if ($xmlStorico) {
-                foreach ($xmlStorico->storico as $storico) {
-                    if ((string)$storico->id_utente === $idUtente) {
-                        foreach ($storico->prodotti->prodotto as $p) {
-                            if ((string)$p->id_prodotto === $idProdRif) {
-                                return true;
-                            }
+            // Controlla se l’utente ha acquistato un prodotto specifico
+            if (!$xmlStorico) return false;
+            $idUtente = (string)$utente['id'];
+
+            foreach ($xmlStorico->storico as $storico) {
+                if ((string)$storico->id_utente === $idUtente) {
+                    foreach ($storico->prodotti->prodotto as $p) {
+                        if ((string)$p->id_prodotto === $idProdRif) {
+                            return true;
                         }
                     }
                 }
             }
             return false;
 
-        // --- Condizione: offerta speciale ---
         case 'offerta_speciale':
-            return true; // già validata dal periodo
+            // Valida per tutti durante il periodo
+            return true;
 
         default:
             return false;
@@ -124,25 +106,46 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
 {
     $scontoMassimo = 0;
     $condizioneScelta = "";
-
+    $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
+    // se non ci sono sconti validi, ritorna $result['sconto'] = 0; $result['condizione'] = "";
     if (!$xmlSconti) return ['sconto' => 0, 'condizione' => ""];
 
     foreach ($xmlSconti->sconto as $sconto) {
-        // ✅ se lo sconto è globale, non serve verificare destinatari
+        // verifico se sia applicato a tutti i prodotti
         $appGlobale = ((string)$sconto['applicazione_globale'] === 'true');
 
+        // Verifica la condizione per l'utente e il prodotto corrente
         if ($appGlobale || verificaCondizione($sconto, $utente, $idProdotto, $oggi, $xmlStorico)) {
             $percentuale = (float)$sconto->percentuale;
 
+            // Mantiene solo lo sconto più alto
             if ($percentuale > $scontoMassimo) {
                 $scontoMassimo = $percentuale;
 
                 $cond = $sconto->condizione;
-                if ($appGlobale) {
-                    // Offerta globale: descrizione generica
-                    $evento = (string)$cond->evento;
-                    $condizioneScelta = $evento ? "Offerta speciale: {$evento}" : "Offerta promozionale globale";
-                } elseif ($cond) {
+
+                // Caso 1: sconto globale per tutti i prodotti
+                //  se non ci sono condizioni o è un'offerta speciale
+                // allora descrivo come offerta promozionale
+                // altrimenti se e' un offerta speciale ma non e' stato scritto un evento
+                // lo descrivo come promozione valida per tutti i prodotti
+                if ($appGlobale && (!$cond || (string)$cond['tipo'] === 'offerta_speciale')) {
+                    if ($cond) {
+                        $evento = (string)$cond->evento;
+                    } else {
+                        $evento = "";
+                    }
+                    if (!empty($evento)) {
+                        $condizioneScelta = "Offerta Promozionale: {$evento}";
+                    } else {
+                        $condizioneScelta = "Sconto valido su tutti i prodotti";
+                    }
+                }
+
+                // Caso 2: sconto con condizione specifica
+                // se il campo della condizione non e' vuoto
+                // allora descrivo la condizione scelta in base alla tipologia
+                elseif ($cond) {
                     $tipo = (string)$cond['tipo'];
                     $valore = (string)$cond->valore;
                     $dataRif = (string)$cond->data_riferimento;
@@ -151,23 +154,57 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
 
                     switch ($tipo) {
                         case 'mesi_iscrizione':
-                            $condizioneScelta = "Iscritto da almeno {$valore} mesi";
+                            $condizioneScelta = "Utenti iscritti da almeno {$valore} mesi";
                             break;
+
                         case 'crediti_minimi':
-                            $condizioneScelta = "Crediti ≥ {$valore}";
+                            $condizioneScelta = "Utenti con almeno {$valore} crediti";
                             break;
+
                         case 'crediti_da_data':
-                            $condizioneScelta = "{$valore} crediti da {$dataRif}";
+                            $condizioneScelta = "Utenti con {$valore} crediti da {$dataRif}";
                             break;
+
                         case 'reputazione_minima':
-                            $condizioneScelta = "Reputazione ≥ {$valore}";
+                            $condizioneScelta = "Utenti con reputazione ≥ {$valore}";
                             break;
+
                         case 'acquisto_specifico':
-                            $condizioneScelta = "Acquisto prodotto #{$idProdRif}";
+                            $nomeProdRif = null;
+                            if ($idProdRif !== "") {
+                                foreach ($xmlProdotti->prodotto as $p) {
+                                    if ((string)$p['id'] === $idProdRif) {
+                                        $nomeProdRif = (string)$p->nome;
+                                        break;
+                                    }
+                                }
+                            }
+                            if ($nomeProdRif) {
+                                $condizioneScelta = "Clienti che hanno acquistato: {$nomeProdRif}";
+                            } else {
+                                $condizioneScelta = "Clienti che hanno acquistato il prodotto #{$idProdRif}";
+                            }
                             break;
+
                         case 'offerta_speciale':
-                            $condizioneScelta = "Offerta: {$evento}";
+                            if (!empty($evento)) {
+                                $condizioneScelta = "Offerta speciale: {$evento}";
+                            } else {
+                                $condizioneScelta = "Promozione valida per tutti";
+                            }
                             break;
+
+                        default:
+                            $condizioneScelta = "Sconto valido per utenti che soddisfano la condizione: {$tipo}";
+                    }
+                }
+
+                //Caso 3: sconto senza condizione
+                else {
+                    if ($appGlobale) {
+                        $condizioneScelta = "Sconto applicato a tutti i prodotti";
+                    } else {
+                        $condizioneScelta = "Sconto valido per il prodotto selezionato";
                     }
                 }
             }
@@ -176,6 +213,7 @@ function calcolaScontoUtente($xmlSconti, $utente, $idProdotto, $oggi, $xmlStoric
 
     return ['sconto' => $scontoMassimo, 'condizione' => $condizioneScelta];
 }
+
 
 
 function aggiornaStoricoCrediti($idUtente, $nuoviCrediti, $fileXML)
@@ -213,4 +251,3 @@ function aggiornaStoricoCrediti($idUtente, $nuoviCrediti, $fileXML)
     $dom->save($fileXML);
     return true;
 }
-?>

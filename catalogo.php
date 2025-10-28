@@ -53,7 +53,6 @@ session_start();
 
   <?php
 
-
   $nessunRisultato = false;
   $query = '';
   $tipo = '';
@@ -106,7 +105,7 @@ session_start();
   <div class="content">
     <h1>Catalogo Prodotti</h1>
     <?php
-    // 🔹 Messaggi di sessione
+    // Messaggi di sessione
     if (isset($_SESSION['successo_msg'])) {
       echo "<p style='color:green; font-weight:bold;'>" . $_SESSION['successo_msg'] . "</p>";
       unset($_SESSION['successo_msg']);
@@ -165,7 +164,7 @@ session_start();
             }
           }
 
-          // --- Applica sconti ---
+          // Applica sconti
           if ($xmlSconti) {
             // Se c'è un utente loggato → sconti personalizzati + globali
             if ($utenteLoggato) {
@@ -173,7 +172,7 @@ session_start();
               $percentualeScontoPromo = $result['sconto'];
               $descrizioneCondizione = $result['condizione'];
             }
-            // ✅ Se NON loggato → applica SOLO sconti globali / offerta_speciale
+            
             else {
               foreach ($xmlSconti->sconto as $s) {
                 $appGlobale = ((string)$s['applicazione_globale'] === 'true');
@@ -197,7 +196,7 @@ session_start();
             }
           }
 
-          // --- Sconto da crediti (solo se loggato) ---
+          // Sconto da crediti (solo se loggato)
           $percentualeScontoCrediti = 0;
           if ($utenteLoggato) {
             $crediti = (float)$utenteLoggato->crediti;
@@ -207,7 +206,7 @@ session_start();
             }
           }
 
-          // --- Calcolo prezzo finale ---
+          // Calcolo prezzo finale
           $prezzoFinale = $prezzo;
           if ($percentualeScontoPromo > 0)
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoPromo / 100);
@@ -215,7 +214,7 @@ session_start();
             $prezzoFinale -= ($prezzoFinale * $percentualeScontoCrediti / 100);
         
 
-          // --- Calcolo valutazione media ---
+          // Calcolo valutazione media
           $valutazioneTotale = 0;
           $countValutazioni = 0;
           foreach ($xmlRecensioni->recensione as $rec) {

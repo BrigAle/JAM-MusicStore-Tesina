@@ -58,190 +58,148 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
 
 
     <div class="content">
-        <h2 style="text-align:left;">Aggiungi Sconto</h2>
+    <h2 style="text-align:left;">Aggiungi Sconto</h2>
 
-        <?php
-        // Mostra messaggi di successo/errore
-        if (isset($_SESSION['successo_msg'])) {
-            echo "<div class='msg success'>{$_SESSION['successo_msg']}</div>";
-            unset($_SESSION['successo_msg']);
-        } elseif (isset($_SESSION['errore_msg'])) {
-            echo "<div class='msg error'>{$_SESSION['errore_msg']}</div>";
-            unset($_SESSION['errore_msg']);
-        }
+    <?php
 
-        // Caricamento XML prodotti e utenti
-        $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
-        $xmlUtenti = simplexml_load_file("risorse/XML/utenti.xml");
+    // --- Messaggi di feedback ---
+    if (isset($_SESSION['successo_msg'])) {
+        echo "<div class='msg success'>{$_SESSION['successo_msg']}</div>";
+        unset($_SESSION['successo_msg']);
+    } elseif (isset($_SESSION['errore_msg'])) {
+        echo "<div class='msg error'>{$_SESSION['errore_msg']}</div>";
+        unset($_SESSION['errore_msg']);
+    }
 
-        $tipo_condizione = $_POST['tipo_condizione'] ?? '';
+    // --- Caricamento XML prodotti ---
+    $xmlProdotti = simplexml_load_file("risorse/XML/prodotti.xml");
+    $tipo_condizione = $_POST['tipo_condizione'] ?? '';
 
-        if (!$xmlProdotti || count($xmlProdotti->prodotto) == 0) {
-            echo "<p>Nessun prodotto trovato.</p>";
-        } else {
-        ?>
-            <form class="sconto-form" action="" method="post">
-                <div class="sconto-field">
-                    <label for="tipo_condizione">Tipo di condizione:</label>
-                    <select id="tipo_condizione" name="tipo_condizione" class="sconto-input" required onchange="this.form.submit()">
-                        <option value="">-- Seleziona condizione --</option>
-                        <option value="mesi_iscrizione" <?php if ($tipo_condizione == 'mesi_iscrizione') echo 'selected'; ?>>Clienti iscritti da almeno X mesi</option>
-                        <option value="crediti_da_data" <?php if ($tipo_condizione == 'crediti_da_data') echo 'selected'; ?>>Clienti con almeno M crediti da una data</option>
-                        <option value="crediti_minimi" <?php if ($tipo_condizione == 'crediti_minimi') echo 'selected'; ?>>Clienti con almeno N crediti complessivi</option>
-                        <option value="acquisto_specifico" <?php if ($tipo_condizione == 'acquisto_specifico') echo 'selected'; ?>>Clienti che hanno acquistato prodotti specifici</option>
-                        <option value="reputazione_minima" <?php if ($tipo_condizione == 'reputazione_minima') echo 'selected'; ?>>Clienti con reputazione minima</option>
-                        <option value="offerta_speciale" <?php if ($tipo_condizione == 'offerta_speciale') echo 'selected'; ?>>Offerta promozionale senza vincoli</option>
-                    </select>
-                    <noscript><input type="submit" value="Seleziona"></noscript>
+    if (!$xmlProdotti || count($xmlProdotti->prodotto) == 0) {
+        echo "<p>Nessun prodotto trovato.</p>";
+    } else {
+    ?>
+        <form class="sconto-form" action="" method="post">
+            
+            <!-- Selezione condizione -->
+            <div class="sconto-field">
+                <label for="tipo_condizione">Tipo di condizione:</label>
+                <select id="tipo_condizione" name="tipo_condizione" class="sconto-input" required onchange="this.form.submit()">
+                    <option value="">-- Seleziona condizione --</option>
+                    <option value="mesi_iscrizione" <?php if ($tipo_condizione == 'mesi_iscrizione') echo 'selected'; ?>>Clienti iscritti da almeno X mesi</option>
+                    <option value="crediti_da_data" <?php if ($tipo_condizione == 'crediti_da_data') echo 'selected'; ?>>Clienti con almeno X crediti da una data</option>
+                    <option value="crediti_minimi" <?php if ($tipo_condizione == 'crediti_minimi') echo 'selected'; ?>>Clienti con almeno X crediti complessivi</option>
+                    <option value="acquisto_specifico" <?php if ($tipo_condizione == 'acquisto_specifico') echo 'selected'; ?>>Clienti che hanno acquistato un prodotto specifico</option>
+                    <option value="reputazione_minima" <?php if ($tipo_condizione == 'reputazione_minima') echo 'selected'; ?>>Clienti con reputazione minima</option>
+                    <option value="offerta_speciale" <?php if ($tipo_condizione == 'offerta_speciale') echo 'selected'; ?>>Offerta promozionale senza vincoli</option>
+                </select>
+                <noscript><input type="submit" value="Seleziona"></noscript>
+            </div>
+
+            <!-- Checkbox per applicazione globale -->
+            <div class="sconto-field">
+                <label style="display:flex; align-items:center; gap:8px;">
+                    <input type="checkbox" name="applicazione_globale" value="true">
+                    <span>Applica a tutti i prodotti (se selezionato ignora le selezioni specifiche)</span>
+                </label>
+            </div>
+
+            <!-- Selezione prodotti -->
+            <div class="sconto-field">
+                <label>Seleziona Prodotti:</label>
+                <div class="sconto-checkbox-group">
+                    <?php
+                    foreach ($xmlProdotti->prodotto as $p) {
+                        $id = (string)$p['id'];
+                        $nome = (string)$p->nome;
+                        echo "<label class='sconto-checkbox-item'>
+                                <input type='checkbox' name='prodotti[]' value='{$id}'> {$nome}
+                              </label>";
+                    }
+                    ?>
                 </div>
+            </div>
 
-                <div class="sconto-field">
-                    <label>Seleziona Prodotti:</label>
-                    <div class="sconto-checkbox-group">
-                        <?php
+            <?php
+            // --- Campi dinamici in base alla condizione ---
+            if ($tipo_condizione) {
+                echo "<fieldset class='sconto-condizione'>";
+                switch ($tipo_condizione) {
+                    case 'mesi_iscrizione':
+                        echo "<label>Mesi di iscrizione richiesti:</label>
+                              <input type='number' name='valore' class='sconto-input' min='1' required>";
+                        break;
+
+                    case 'crediti_minimi':
+                        echo "<label>Crediti minimi richiesti:</label>
+                              <input type='number' name='valore' class='sconto-input' min='1' required>";
+                        break;
+
+                    case 'crediti_da_data':
+                        echo "<label>Crediti minimi:</label>
+                              <input type='number' name='valore' class='sconto-input' min='1' required>
+                              <label>Da data:</label>
+                              <input type='date' name='data_riferimento' class='sconto-input' required>";
+                        break;
+
+                    case 'reputazione_minima':
+                        echo "<label>Reputazione minima richiesta:</label>
+                              <input type='number' name='valore' class='sconto-input' min='0' max='1000' step='0.1' required>";
+                        break;
+
+                    case 'offerta_speciale':
+                        echo "<label>Nome evento (es. Black Friday):</label>
+                              <input type='text' name='evento' class='sconto-input' required>
+                              <input type='hidden' name='applicazione_globale' value='true'>";
+                        break;
+
+                    case 'acquisto_specifico':
+                        echo "<label>Prodotto acquistato (riferimento):</label>
+                              <select name='id_prodotto_rif' class='sconto-input' required>
+                                  <option value=''>-- Seleziona un prodotto --</option>";
                         foreach ($xmlProdotti->prodotto as $p) {
                             $id = (string)$p['id'];
                             $nome = (string)$p->nome;
-                            echo "<label class='sconto-checkbox-item'>
-                            <input type='checkbox' name='prodotti[]' value='{$id}'> {$nome}
-                          </label>";
+                            echo "<option value='{$id}'>{$nome}</option>";
                         }
-                        ?>
-                    </div>
-                </div>
-
-                <?php
-                // Campi dinamici lato PHP in base alla condizione
-                if ($tipo_condizione) {
-                    echo "<fieldset class='sconto-condizione'>";
-                    switch ($tipo_condizione) {
-                        case 'mesi_iscrizione':
-                            echo "<label>Numero di mesi:</label>
-                          <input type='number' name='valore' class='sconto-input' min='1' required>";
-                            break;
-
-                        case 'crediti_minimi':
-                            echo "<label>Crediti minimi complessivi:</label>
-                          <input type='number' name='valore' class='sconto-input' min='1' required>";
-                            break;
-
-                        case 'crediti_da_data':
-                            echo "<label>Crediti minimi:</label>
-                          <input type='number' name='valore' class='sconto-input' min='1' required>
-                          <label>Da data:</label>
-                          <input type='date' name='data_riferimento' class='sconto-input' required>";
-                            break;
-
-                        case 'reputazione_minima':
-                            echo "<label>Reputazione minima:</label>
-                          <input type='number' name='valore' class='sconto-input' min='0' max='1000' step='0.1' required>";
-                            break;
-
-                        case 'offerta_speciale':
-                            echo "<label>Nome evento (es. Black Friday):</label>
-                          <input type='text' name='evento' class='sconto-input' required>
-                          <input type='hidden' name='applicazione_globale' value='1'>"; // ✅ nuovo flag per salvataggio
-                            break;
-
-                        case 'acquisto_specifico':
-                            echo "<label>ID prodotto già acquistato (rif):</label>
-                          <input type='number' name='id_prodotto_rif' class='sconto-input' min='1' required>";
-                            break;
-                    }
-                    echo "</fieldset>";
+                        echo "</select>";
+                        break;
                 }
-                ?>
+                echo "</fieldset>";
+            }
+            ?>
 
+            <!-- Percentuale di sconto -->
+            <div class="sconto-field">
+                <label for="percentuale">Percentuale di Sconto (%):</label>
+                <input type="number" id="percentuale" name="percentuale" class="sconto-input" min="1" max="100" required>
+            </div>
+
+            <!-- Date -->
+            <div class="sconto-date-group">
                 <div class="sconto-field">
-                    <label for="percentuale">Percentuale di Sconto (%):</label>
-                    <input type="number" id="percentuale" name="percentuale" class="sconto-input" min="1" max="100" step="1" required>
+                    <label for="data_inizio">Data Inizio:</label>
+                    <input type="date" id="data_inizio" name="data_inizio" class="sconto-input" required>
                 </div>
-
-                <div class="sconto-date-group">
-                    <div class="sconto-field">
-                        <label for="data_inizio">Data Inizio:</label>
-                        <input type="date" id="data_inizio" name="data_inizio" class="sconto-input" required>
-                    </div>
-                    <div class="sconto-field">
-                        <label for="data_fine">Data Fine:</label>
-                        <input type="date" id="data_fine" name="data_fine" class="sconto-input" required>
-                    </div>
+                <div class="sconto-field">
+                    <label for="data_fine">Data Fine:</label>
+                    <input type="date" id="data_fine" name="data_fine" class="sconto-input" required>
                 </div>
+            </div>
 
-                <?php
-                require_once('risorse/PHP/connection.php');
-                $conn = new mysqli($host, $user, $password, $db);
-                if ($conn->connect_error) {
-                    die("Connessione fallita: " . $conn->connect_error);
-                }
+            <!-- Pulsante submit -->
+            <?php
+            if ($tipo_condizione) {
+                echo '<button type="submit" formaction="risorse/PHP/gestore/salva_sconto.php" class="sconto-btn"> Salva Sconto</button>';
+            } else {
+                echo '<input type="submit" value="Continua" class="sconto-btn">';
+            }
+            ?>
+        </form>
 
-                // Recupera solo gli ID degli utenti con ruolo = 'cliente'
-                $query = "SELECT id FROM utente WHERE ruolo = 'cliente'";
-                $result = $conn->query($query);
-
-                $idClienti = [];
-                if ($result && $result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $idClienti[] = $row['id'];
-                    }
-                }
-                ?>
-
-                <?php
-                // ✅ Mostra la sezione destinatari SOLO se NON è offerta_speciale
-                if ($tipo_condizione != 'offerta_speciale') {
-                ?>
-                    <div class="sconto-field">
-                        <label>Seleziona Utenti Destinatari:</label>
-                        <div class="sconto-checkbox-group" style="max-height:200px; overflow-y:auto; border:1px solid #aaa; padding:8px;">
-                            <?php
-                            if ($xmlUtenti && count($xmlUtenti->utente) > 0 && !empty($idClienti)) {
-                                $trovato = false;
-                                foreach ($xmlUtenti->utente as $u) {
-                                    $idU = (string)$u['id'];
-                                    if (in_array($idU, $idClienti)) {
-                                        $trovato = true;
-                                        $nomeU = (string)$u->nome;
-                                        $cognomeU = (string)$u->cognome;
-                                        echo "<label class='sconto-checkbox-item'>
-                                        <input type='checkbox' name='utenti[]' value='{$idU}'> {$nomeU} {$cognomeU}
-                                        </label>";
-                                    }
-                                }
-
-                                if (!$trovato) {
-                                    echo "<p>Nessun cliente trovato nel file XML corrispondente agli utenti nel database.</p>";
-                                }
-                            } else {
-                                echo "<p>Nessun utente disponibile o nessun cliente trovato.</p>";
-                            }
-                            ?>
-                        </div>
-                    </div>
-                <?php
-                } else {
-                    // Messaggio informativo in caso di offerta speciale
-                    echo "<div class='sconto-field info'>
-                        <p><strong>Nota:</strong> L'offerta speciale verrà applicata automaticamente a tutti gli utenti registrati (presenti e futuri).</p>
-                      </div>";
-                }
-                ?>
-
-                <?php
-                // Mostra pulsante di submit solo dopo selezione condizione
-                if ($tipo_condizione) {
-                    echo '<button type="submit" formaction="risorse/PHP/gestore/salva_sconto.php" class="sconto-btn">Salva Sconto</button>';
-                } else {
-                    echo '<input type="submit" value="Continua" class="sconto-btn">';
-                }
-                ?>
-            </form>
-
-            <p><a href="gestione_sconti_gestore.php" class="sconto-back">Torna alla gestione sconti</a></p>
-        <?php
-        }
-        ?>
-    </div>
+        <p><a href="gestione_sconti_gestore.php" class="sconto-back"> Torna alla gestione sconti</a></p>
+    <?php } ?>
+</div>
 
 
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
+
     <xsd:element name="sconti">
         <xsd:complexType>
             <xsd:sequence>
@@ -8,23 +9,20 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
- 
+
     <xsd:element name="sconto">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="id_prodotto" minOccurs="1" maxOccurs="unbounded" />
+                <xsd:element ref="id_prodotto" minOccurs="0" maxOccurs="unbounded" />
                 <xsd:element ref="condizione" minOccurs="0" maxOccurs="1" />
                 <xsd:element ref="percentuale" minOccurs="1" maxOccurs="1" />
                 <xsd:element ref="data_inizio" minOccurs="1" maxOccurs="1" />
                 <xsd:element ref="data_fine" minOccurs="1" maxOccurs="1" />
-                <xsd:element ref="destinatari" minOccurs="0" maxOccurs="1" />
             </xsd:sequence>
             <xsd:attribute name="id" type="xsd:integer" use="required" />
-            <!-- NUOVO: indica se lo sconto si applica a tutti gli utenti -->
             <xsd:attribute name="applicazione_globale" type="xsd:boolean" use="optional" default="false" />
         </xsd:complexType>
     </xsd:element>
-   
     <xsd:element name="condizione">
         <xsd:complexType>
             <xsd:sequence>
@@ -47,15 +45,6 @@
             </xsd:attribute>
         </xsd:complexType>
     </xsd:element>
-   
-    <xsd:element name="destinatari">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element ref="id_utente" minOccurs="1" maxOccurs="unbounded" />
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-
 
     <xsd:element name="id_prodotto" type="xsd:integer" />
     <xsd:element name="valore">
@@ -69,11 +58,8 @@
     <xsd:element name="data_riferimento" type="xsd:date" />
     <xsd:element name="evento" type="xsd:string" />
     <xsd:element name="id_prodotto_rif" type="xsd:integer" />
-    <xsd:element name="id_utente" type="xsd:integer" />
     <xsd:element name="data_inizio" type="xsd:date" />
     <xsd:element name="data_fine" type="xsd:date" />
-
-   
     <xsd:element name="percentuale">
         <xsd:simpleType>
             <xsd:restriction base="xsd:integer">
