@@ -56,98 +56,98 @@ if (!isset($_SESSION['username']) || $_SESSION['ruolo'] !== 'gestore') {
     </div>
     <!-- div presentazione sito -->
 
-    < class="content user-profile">
-    <div class="profile-card" style="margin-top: 140px;">
-        <h2 class="profile-title">Modifica Prodotto</h2>
+    <div class="content user-profile">
+        <div class="profile-card" style="margin-top: 140px;">
+            <h2 class="profile-title">Modifica Prodotto</h2>
 
-        <?php
-        // Caricamento XML prodotti
-        $xmlFile = 'risorse/XML/prodotti.xml';
-        $xml = simplexml_load_file($xmlFile);
+            <?php
+            // Caricamento XML prodotti
+            $xmlFile = 'risorse/XML/prodotti.xml';
+            $xml = simplexml_load_file($xmlFile);
 
-        // Ottieni ID prodotto da GET
-        if (!isset($_GET['id_prodotto'])) {
-            die("<p class='msg error'>ID prodotto non specificato.</p>");
-        }
-
-        $id_prodotto = $_GET['id_prodotto'];
-        $prodottoTrovato = null;
-
-        // Trova prodotto nel file XML
-        foreach ($xml->prodotto as $p) {
-            if ((int)$p['id'] === (int)$id_prodotto) {
-                $prodottoTrovato = $p;
-                break;
+            // Ottieni ID prodotto da GET
+            if (!isset($_GET['id_prodotto'])) {
+                die("<p class='msg error'>ID prodotto non specificato.</p>");
             }
-        }
 
-        if ($prodottoTrovato):
-            $nome = (string)$prodottoTrovato->nome;
-            $categoria = (string)$prodottoTrovato->categoria;
-            $descrizione = (string)$prodottoTrovato->descrizione;
-            $prezzo = (float)$prodottoTrovato->prezzo;
-            $bonus = (float)$prodottoTrovato->bonus;
-            $data_inserimento = (string)$prodottoTrovato->data_inserimento;
-            $immagine = (string)$prodottoTrovato->immagine;
-        ?>
+            $id_prodotto = $_GET['id_prodotto'];
+            $prodottoTrovato = null;
 
-            <!-- DATI ATTUALI -->
-            <div class="profile-details">
-                <h3 style="color:#ffeb00; margin-bottom:10px;">Dati attuali</h3>
-                <div class="profile-row"><strong>ID:</strong> <?= htmlspecialchars($id_prodotto); ?></div>
-                <div class="profile-row"><strong>Nome:</strong> <?= htmlspecialchars($nome); ?></div>
-                <div class="profile-row"><strong>Categoria:</strong> <?= htmlspecialchars($categoria); ?></div>
-                <div class="profile-row"><strong>Descrizione:</strong> <?= htmlspecialchars($descrizione); ?></div>
-                <div class="profile-row"><strong>Prezzo:</strong> €<?= number_format($prezzo, 2, ',', '.'); ?></div>
-                <div class="profile-row"><strong>Bonus:</strong> <?= number_format($bonus, 2, ',', '.'); ?> punti</div>
-                <div class="profile-row"><strong>Data inserimento:</strong> <?= htmlspecialchars($data_inserimento); ?></div>
-                <div class="profile-row"><strong>Immagine attuale:</strong></div>
-                <img src="risorse/IMG/prodotti/<?= htmlspecialchars($immagine); ?>"
-                     alt="<?= htmlspecialchars($nome); ?>"
-                     style="width:150px; height:150px; object-fit:contain; border-radius:8px;
-                            background:#111; margin-bottom:15px; box-shadow:0 0 8px rgba(255,235,0,0.4);" />
-            </div>
+            // Trova prodotto nel file XML
+            foreach ($xml->prodotto as $p) {
+                if ((int)$p['id'] === (int)$id_prodotto) {
+                    $prodottoTrovato = $p;
+                    break;
+                }
+            }
 
-            <!-- FORM DI MODIFICA -->
-            <form action="risorse/PHP/gestore/aggiorna_prodotto.php" method="POST" enctype="multipart/form-data"
-                  class="profile-form" style="margin-top:30px;">
-                <h3 style="color:#ffeb00; margin-bottom:10px;">Modifica dati prodotto</h3>
-                <p style="color:#aaa;">Lascia un campo vuoto per non modificarlo.</p>
+            if ($prodottoTrovato):
+                $nome = (string)$prodottoTrovato->nome;
+                $categoria = (string)$prodottoTrovato->categoria;
+                $descrizione = (string)$prodottoTrovato->descrizione;
+                $prezzo = (float)$prodottoTrovato->prezzo;
+                $bonus = (float)$prodottoTrovato->bonus;
+                $data_inserimento = (string)$prodottoTrovato->data_inserimento;
+                $immagine = (string)$prodottoTrovato->immagine;
+            ?>
 
-                <input type="hidden" name="id" value="<?= htmlspecialchars($id_prodotto); ?>" />
-
+                <!-- DATI ATTUALI -->
                 <div class="profile-details">
-                    <label for="nome"><strong>Nome:</strong></label>
-                    <input type="text" id="nome" name="nome" class="wallet-input" placeholder="Nuovo nome prodotto" />
-
-                    <label for="categoria"><strong>Categoria:</strong></label>
-                    <input type="text" id="categoria" name="categoria" class="wallet-input" placeholder="Nuova categoria" />
-
-                    <label for="descrizione"><strong>Descrizione:</strong></label>
-                    <textarea id="descrizione" name="descrizione" rows="4" class="wallet-input"
-                              placeholder="Nuova descrizione"></textarea>
-
-                    <label for="prezzo"><strong>Prezzo (€):</strong></label>
-                    <input type="number" step="0.01" id="prezzo" name="prezzo" class="wallet-input" placeholder="Es. 999.99" />
-
-                    <label for="bonus"><strong>Bonus punti:</strong></label>
-                    <input type="number" step="0.01" id="bonus" name="bonus" class="wallet-input" placeholder="Es. 50.00" />
-
-                    <label for="immagine"><strong>Nuova immagine:</strong></label>
-                    <input type="file" id="immagine" name="immagine" class="wallet-input" accept="image/*" />
-
-                    <div style="text-align:center; margin-top:20px;">
-                        <button type="submit" class="wallet-btn">Aggiorna Prodotto</button>
-                        <a href="gestione_prodotti_gestore.php" class="profile-btn">Annulla</a>
-                    </div>
+                    <h3 style="color:#ffeb00; margin-bottom:10px;">Dati attuali</h3>
+                    <div class="profile-row"><strong>ID:</strong> <?= htmlspecialchars($id_prodotto); ?></div>
+                    <div class="profile-row"><strong>Nome:</strong> <?= htmlspecialchars($nome); ?></div>
+                    <div class="profile-row"><strong>Categoria:</strong> <?= htmlspecialchars($categoria); ?></div>
+                    <div class="profile-row"><strong>Descrizione:</strong> <?= htmlspecialchars($descrizione); ?></div>
+                    <div class="profile-row"><strong>Prezzo:</strong> €<?= number_format($prezzo, 2, ',', '.'); ?></div>
+                    <div class="profile-row"><strong>Bonus:</strong> <?= number_format($bonus, 2, ',', '.'); ?> punti</div>
+                    <div class="profile-row"><strong>Data inserimento:</strong> <?= htmlspecialchars($data_inserimento); ?></div>
+                    <div class="profile-row"><strong>Immagine attuale:</strong></div>
+                    <img src="risorse/IMG/prodotti/<?= htmlspecialchars($immagine); ?>"
+                        alt="<?= htmlspecialchars($nome); ?>"
+                        style="width:150px; height:150px; object-fit:contain; border-radius:8px;
+                            background:#111; margin-bottom:15px; box-shadow:0 0 8px rgba(255,235,0,0.4);" />
                 </div>
-            </form>
 
-        <?php else: ?>
-            <p class="msg error"> Prodotto non trovato.</p>
-        <?php endif; ?>
+                <!-- FORM DI MODIFICA -->
+                <form action="risorse/PHP/gestore/aggiorna_prodotto.php" method="POST" enctype="multipart/form-data"
+                    class="profile-form" style="margin-top:30px;">
+                    <h3 style="color:#ffeb00; margin-bottom:10px;">Modifica dati prodotto</h3>
+                    <p style="color:#aaa;">Lascia un campo vuoto per non modificarlo.</p>
+
+                    <input type="hidden" name="id" value="<?= htmlspecialchars($id_prodotto); ?>" />
+
+                    <div class="profile-details">
+                        <label for="nome"><strong>Nome:</strong></label>
+                        <input type="text" id="nome" name="nome" class="wallet-input" placeholder="Nuovo nome prodotto" />
+
+                        <label for="categoria"><strong>Categoria:</strong></label>
+                        <input type="text" id="categoria" name="categoria" class="wallet-input" placeholder="Nuova categoria" />
+
+                        <label for="descrizione"><strong>Descrizione:</strong></label>
+                        <textarea id="descrizione" name="descrizione" rows="4" class="wallet-input"
+                            placeholder="Nuova descrizione"></textarea>
+
+                        <label for="prezzo"><strong>Prezzo (€):</strong></label>
+                        <input type="number" step="0.01" id="prezzo" name="prezzo" class="wallet-input" placeholder="Es. 999.99" />
+
+                        <label for="bonus"><strong>Bonus punti:</strong></label>
+                        <input type="number" step="0.01" id="bonus" name="bonus" class="wallet-input" placeholder="Es. 50.00" />
+
+                        <label for="immagine"><strong>Nuova immagine:</strong></label>
+                        <input type="file" id="immagine" name="immagine" class="wallet-input" accept="image/*" />
+
+                        <div style="text-align:center; margin-top:20px;">
+                            <button type="submit" class="wallet-btn">Aggiorna Prodotto</button>
+                            <a href="gestione_prodotti_gestore.php" class="profile-btn">Annulla</a>
+                        </div>
+                    </div>
+                </form>
+
+            <?php else: ?>
+                <p class="msg error"> Prodotto non trovato.</p>
+            <?php endif; ?>
+        </div>
     </div>
-</div>
 
 
     <div class="pdp">
